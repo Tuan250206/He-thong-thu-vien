@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gia hạn mượn - Hệ thống quản lý thư viện</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/user.css">
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo"><i class="fas fa-book-open"></i><span>Thư Viện</span></div>
+    <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">TỔNG QUAN</div>
+      <a href="../dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></div>
+    <div class="nav-section"><div class="nav-section-title">QUẢN LÝ</div>
+      <a href="../doc-gia/danh-sach.html" class="nav-item"><i class="fas fa-users"></i><span>Độc giả</span></a>
+      <a href="../sach/danh-sach.html" class="nav-item"><i class="fas fa-book"></i><span>Sách</span></a></div>
+    <div class="nav-section"><div class="nav-section-title">DỊCH VỤ</div>
+      <a href="cho-muon.html" class="nav-item"><i class="fas fa-hand-holding-heart"></i><span>Cho mượn</span></a>
+      <a href="tra-sach.html" class="nav-item"><i class="fas fa-undo-alt"></i><span>Trả sách</span></a>
+      <a href="gia-han.html" class="nav-item active"><i class="fas fa-calendar-plus"></i><span>Gia hạn</span></a>
+      <a href="xu-ly-phat.html" class="nav-item"><i class="fas fa-gavel"></i><span>Xử lý phạt</span></a>
+      <a href="dat-cho.html" class="nav-item"><i class="fas fa-bookmark"></i><span>Đặt chỗ</span></a></div>
+    <div class="nav-section"><div class="nav-section-title">BÁO CÁO</div>
+      <a href="../bao-cao/lich-su.html" class="nav-item"><i class="fas fa-history"></i><span>Lịch sử</span></a>
+      <a href="../bao-cao/thong-ke.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Thống kê</span></a></div>
+  </nav>
+  <div class="sidebar-footer"><button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></button></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <div class="header-left">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+      <h1 class="page-title">Gia hạn mượn sách</h1>
+    </div>
+    <div class="header-right">
+      <div class="user-menu">
+        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <div class="user-info"><span class="user-name" id="userName">Loading...</span><span class="user-role">Thủ Thư</span></div>
+      </div>
+    </div>
+  </header>
+  <main class="content">
+    <div class="card" style="max-width:700px;margin:0 auto;">
+      <div class="card-header"><h2><i class="fas fa-calendar-plus"></i> Tra cứu phiếu mượn</h2></div>
+      <div class="card-body">
+        <div class="form-group" style="display:flex;gap:8px;">
+          <input type="text" id="searchInput" class="form-control" placeholder="Nhập mã phiếu (PM0001) hoặc mã độc giả (SV001)...">
+          <button class="btn btn-primary" onclick="searchPhieu()"><i class="fas fa-search"></i> Tìm</button>
+        </div>
+        <div id="resultArea" style="display:none;margin-top:20px;">
+          <div class="card" style="background:#f0f9ff;border:1px solid #bae6fd;">
+            <div class="card-body">
+              <h3 id="phieuTitle" style="margin-bottom:12px;"></h3>
+              <div id="phieuInfo" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;"></div>
+              <div id="sachList" style="margin-bottom:16px;"></div>
+              <div id="giaHanInfo" style="background:#fef3c7;padding:12px;border-radius:8px;margin-bottom:16px;"></div>
+              <button class="btn btn-primary" id="btnGiaHan" onclick="doGiaHan()"><i class="fas fa-calendar-plus"></i> Xác nhận gia hạn</button>
+            </div>
+          </div>
+        </div>
+        <div id="multiResult" style="display:none;margin-top:20px;"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="../../assets/js/data.js"></script>
+<script src="../../assets/js/storage.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/user.js"></script>
+<script>
+checkAuth('user');
+document.getElementById('userName').textContent = getCurrentUser()?.name || '';
+document.getElementById('sidebarToggle').onclick = () => document.getElementById('sidebar').classList.toggle('open');
+document.getElementById('sidebarClose').onclick = () => document.getElementById('sidebar').classList.remove('open');
+
+let currentPhieu = null;
+const MAX_GIA_HAN = 2;
+const GIA_HAN_DAYS = 7;
+
+function searchPhieu() {
+  const q = document.getElementById('searchInput').value.trim().toUpperCase();
+  if (!q) { showAlert('Vui lòng nhập mã phiếu hoặc mã độc giả', 'warning'); return; }
+  Storage.init();
+  const phieuMuon = Storage.getAll('phieuMuon') || [];
+  const docGia = Storage.getAll('docGia') || [];
+  let results = phieuMuon.filter(p => p.trangThai === 'dangMuon' && (p.maPhieu === q || p.maDG === q));
+  if (!results.length) { showAlert('Không tìm thấy phiếu mượn đang hoạt động', 'error'); document.getElementById('resultArea').style.display='none'; document.getElementById('multiResult').style.display='none'; return; }
+  if (results.length === 1) { showPhieu(results[0], docGia); }
+  else { showMulti(results, docGia); }
+}
+
+function showMulti(results, docGia) {
+  document.getElementById('resultArea').style.display='none';
+  const html = results.map(p => {
+    const dg = docGia.find(d => d.maDG === p.maDG) || {};
+    const soGiaHan = p.soGiaHan || 0;
+    const canRenew = soGiaHan < MAX_GIA_HAN;
+    return `<div class="card" style="margin-bottom:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
+      <div><strong>${p.maPhieu}</strong> - ${dg.hoTen||p.maDG} | Hạn trả: ${formatDate(p.hanTra)} | Gia hạn: ${soGiaHan}/${MAX_GIA_HAN}</div>
+      <button class="btn btn-sm btn-primary" ${canRenew?'':'disabled'} onclick="showPhieuById('${p.maPhieu}')">Chọn</button>
+    </div>`;
+  }).join('');
+  document.getElementById('multiResult').innerHTML = html;
+  document.getElementById('multiResult').style.display='block';
+}
+
+function showPhieuById(maPhieu) {
+  Storage.init();
+  const phieuMuon = Storage.getAll('phieuMuon') || [];
+  const docGia = Storage.getAll('docGia') || [];
+  const p = phieuMuon.find(x => x.maPhieu === maPhieu);
+  if (p) showPhieu(p, docGia);
+}
+
+function showPhieu(phieu, docGia) {
+  currentPhieu = phieu;
+  document.getElementById('multiResult').style.display='none';
+  document.getElementById('resultArea').style.display='block';
+  const dg = docGia.find(d => d.maDG === phieu.maDG) || {};
+  document.getElementById('phieuTitle').innerHTML = `<i class="fas fa-file-alt"></i> Phiếu mượn: ${phieu.maPhieu}`;
+  const soGiaHan = phieu.soGiaHan || 0;
+  document.getElementById('phieuInfo').innerHTML = `
+    <div><strong>Độc giả:</strong> ${dg.hoTen||phieu.maDG}</div>
+    <div><strong>Mã DG:</strong> ${phieu.maDG}</div>
+    <div><strong>Ngày mượn:</strong> ${formatDate(phieu.ngayMuon)}</div>
+    <div><strong>Hạn trả hiện tại:</strong> ${formatDate(phieu.hanTra)}</div>`;
+  const sachHtml = (phieu.danhSachSach||[]).map(s => `<span class="badge badge-info" style="margin:2px;">${s.tenSach}</span>`).join('');
+  document.getElementById('sachList').innerHTML = `<strong>Sách đang mượn:</strong><br>${sachHtml}`;
+  const newDate = new Date(phieu.hanTra);
+  newDate.setDate(newDate.getDate() + GIA_HAN_DAYS);
+  const canRenew = soGiaHan < MAX_GIA_HAN;
+  document.getElementById('giaHanInfo').innerHTML = canRenew
+    ? `<i class="fas fa-info-circle" style="color:#d97706;"></i> Lần gia hạn ${soGiaHan+1}/${MAX_GIA_HAN} | Hạn trả mới: <strong>${formatDate(newDate.toISOString().split('T')[0])}</strong> (+${GIA_HAN_DAYS} ngày)`
+    : `<i class="fas fa-exclamation-circle" style="color:#dc2626;"></i> <strong>Đã đạt tối đa ${MAX_GIA_HAN} lần gia hạn</strong>`;
+  document.getElementById('btnGiaHan').disabled = !canRenew;
+}
+
+function doGiaHan() {
+  if (!currentPhieu) return;
+  const soGiaHan = (currentPhieu.soGiaHan || 0);
+  if (soGiaHan >= MAX_GIA_HAN) { showAlert('Đã đạt tối đa số lần gia hạn', 'error'); return; }
+  const newDate = new Date(currentPhieu.hanTra);
+  newDate.setDate(newDate.getDate() + GIA_HAN_DAYS);
+  Storage.updateItem('phieuMuon', currentPhieu.maPhieu, { hanTra: newDate.toISOString().split('T')[0], soGiaHan: soGiaHan + 1 });
+  showAlert(`Gia hạn thành công! Hạn trả mới: ${formatDate(newDate.toISOString().split('T')[0])}`, 'success');
+  document.getElementById('resultArea').style.display='none';
+  document.getElementById('searchInput').value='';
+  currentPhieu = null;
+}
+</script>
+</body>
+</html>
