@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trả Sách - Thư Viện</title>
+  <link rel="stylesheet" href="../../assets/css/user.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    .card{background:#fff;border-radius:10px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+    .search-row{display:flex;gap:8px;}
+    .search-row input{flex:1;}
+    .phieu-info{display:flex;flex-wrap:wrap;gap:12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:14px;margin-bottom:16px;}
+    .phieu-info-item{flex:1 1 140px;}<br>
+    .phieu-info-item label{font-size:.75rem;color:#64748b;display:block;}
+    .phieu-info-item span{font-weight:600;}
+    .badge{padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:600;}
+    .badge-dangMuon{background:#dbeafe;color:#1d4ed8;}
+    .badge-daTra{background:#dcfce7;color:#16a34a;}
+    .badge-quaHan{background:#fee2e2;color:#dc2626;}
+    table{width:100%;border-collapse:collapse;font-size:.9rem;}
+    th{background:#f1f5f9;padding:9px 12px;text-align:left;font-weight:600;color:#475569;}
+    td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle;}
+    tr:hover td{background:#f8fafc;}
+    .fine-box{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:16px;margin-top:16px;}
+    .fine-row{display:flex;justify-content:space-between;padding:4px 0;font-size:.9rem;}
+    .fine-total{font-weight:700;font-size:1rem;border-top:1px solid #fed7aa;margin-top:8px;padding-top:8px;}
+    select.tinhTrang{padding:5px 8px;border:1px solid #d1d5db;border-radius:5px;font-size:.85rem;}
+    .overdue-badge{background:#fee2e2;color:#dc2626;padding:2px 8px;border-radius:4px;font-size:.78rem;margin-left:6px;}
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo"><i class="fas fa-book-open"></i><span>Thư Viện</span></div>
+      <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">TỔNG QUAN</div>
+        <a href="../dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">QUẢN LÝ</div>
+        <a href="../doc-gia/danh-sach.html" class="nav-item"><i class="fas fa-users"></i><span>Độc giả</span></a>
+        <a href="../sach/danh-sach.html" class="nav-item"><i class="fas fa-book"></i><span>Sách</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">DỊCH VỤ</div>
+        <a href="../dich-vu/cho-muon.html" class="nav-item"><i class="fas fa-hand-holding-heart"></i><span>Cho mượn</span></a>
+        <a href="../dich-vu/tra-sach.html" class="nav-item active"><i class="fas fa-undo-alt"></i><span>Trả sách</span></a>
+        <a href="../dich-vu/gia-han.html" class="nav-item"><i class="fas fa-calendar-plus"></i><span>Gia hạn</span></a>
+        <a href="../dich-vu/xu-ly-phat.html" class="nav-item"><i class="fas fa-gavel"></i><span>Xử lý phạt</span></a>
+        <a href="../dich-vu/dat-cho.html" class="nav-item"><i class="fas fa-bookmark"></i><span>Đặt chỗ</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">BÁO CÁO</div>
+        <a href="../bao-cao/lich-su.html" class="nav-item"><i class="fas fa-history"></i><span>Lịch sử</span></a>
+        <a href="../bao-cao/thong-ke.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Thống kê</span></div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></button>
+    </div>
+  </aside>
+  <div class="main-content">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+      <div class="topbar-title"><i class="fas fa-undo-alt"></i> Trả Sách</div>
+      <div class="topbar-right" id="userInfo"></div>
+    </header>
+    <div class="content-area">
+
+      <div class="card">
+        <div style="font-size:1.1rem;font-weight:700;margin-bottom:16px;color:#2563eb;"><i class="fas fa-search"></i> Tìm Phiếu Mượn</div>
+        <div class="search-row">
+          <input type="text" id="searchInput" placeholder="Nhập mã phiếu mượn hoặc mã độc giả..." />
+          <button class="btn btn-primary" onclick="searchPhieu()"><i class="fas fa-search"></i> Tìm kiếm</button>
+        </div>
+        <div id="searchError" style="color:#dc2626;margin-top:8px;display:none;"></div>
+      </div>
+
+      <div id="resultArea" style="display:none;">
+        <div class="card">
+          <div style="font-size:1rem;font-weight:700;margin-bottom:14px;color:#374151;"><i class="fas fa-file-alt"></i> Thông Tin Phiếu Mượn</div>
+          <div class="phieu-info">
+            <div class="phieu-info-item"><label>Mã phiếu</label><span id="pi-maPhieu"></span></div>
+            <div class="phieu-info-item"><label>Mã độc giả</label><span id="pi-maDG"></span></div>
+            <div class="phieu-info-item"><label>Tên độc giả</label><span id="pi-tenDocGia"></span></div>
+            <div class="phieu-info-item"><label>Ngày mượn</label><span id="pi-ngayMuon"></span></div>
+            <div class="phieu-info-item"><label>Hạn trả</label><span id="pi-hanTra"></span></div>
+            <div class="phieu-info-item"><label>Trạng thái</label><span id="pi-trangThai"></span></div>
+          </div>
+
+          <div style="font-weight:600;margin-bottom:8px;color:#374151;"><i class="fas fa-books"></i> Sách trong phiếu</div>
+          <table>
+            <thead><tr><th>Mã sách</th><th>Tên sách</th><th>Tình trạng</th></tr></thead>
+            <tbody id="sachTableBody"></tbody>
+          </table>
+
+          <div class="fine-box" id="fineBox" style="display:none;">
+            <div style="font-weight:700;margin-bottom:10px;color:#c2410c;"><i class="fas fa-exclamation-triangle"></i> Tính Phạt</div>
+            <div id="fineDetails"></div>
+          </div>
+
+          <div style="margin-top:16px;">
+            <button class="btn btn-success" id="confirmBtn" onclick="xacNhanTra()"><i class="fas fa-check-circle"></i> Xác nhận trả sách</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/storage.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/user.js"></script>
+<script>
+checkAuth('user');
+
+let currentPhieu = null;
+const FINE_PER_DAY = 2000;
+const DAMAGE_LIGHT = 20000;
+const DAMAGE_HEAVY = 50000;
+const LOST_FINE = 150000;
+
+function searchPhieu() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const errEl = document.getElementById('searchError');
+  errEl.style.display = 'none';
+  if (!q) return;
+  const phieuMuons = storage.getAll('phieuMuon');
+  const found = phieuMuons.filter(p => p.trangThai === 'dangMuon' && (p.maPhieu.toLowerCase() === q || p.maDG.toLowerCase() === q));
+  if (!found.length) { errEl.textContent = 'Không tìm thấy phiếu mượn đang hoạt động.'; errEl.style.display = 'block'; document.getElementById('resultArea').style.display = 'none'; return; }
+  const phieu = found[0];
+  currentPhieu = phieu;
+  document.getElementById('pi-maPhieu').textContent = phieu.maPhieu;
+  document.getElementById('pi-maDG').textContent = phieu.maDG;
+  document.getElementById('pi-tenDocGia').textContent = phieu.tenDocGia;
+  document.getElementById('pi-ngayMuon').textContent = formatDate ? formatDate(phieu.ngayMuon) : phieu.ngayMuon;
+  document.getElementById('pi-hanTra').textContent = formatDate ? formatDate(phieu.hanTra) : phieu.hanTra;
+  const today = new Date(); const due = new Date(phieu.hanTra);
+  const isOverdue = today > due;
+  document.getElementById('pi-trangThai').innerHTML = isOverdue
+    ? '<span class="badge badge-quaHan">Quá hạn</span>'
+    : '<span class="badge badge-dangMuon">Đang mượn</span>';
+
+  const tbody = document.getElementById('sachTableBody');
+  tbody.innerHTML = (phieu.sachMuon || []).map((s, i) => `<tr>
+    <td>${s.maSach}</td><td>${s.tenSach}${isOverdue?'<span class="overdue-badge">Quá hạn</span>':''}</td>
+    <td><select class="tinhTrang" id="tinhTrang_${i}" onchange="calcFines()">
+      <option value="tot">Tốt</option>
+      <option value="nheHong">Nhẹ hỏng</option>
+      <option value="nangHong">Nặng hỏng</option>
+      <option value="matSach">Mất sách</option>
+    </select></td>
+  </tr>`).join('');
+
+  document.getElementById('resultArea').style.display = 'block';
+  calcFines();
+}
+
+function calcFines() {
+  if (!currentPhieu) return;
+  const today = new Date(); const due = new Date(currentPhieu.hanTra);
+  const daysLate = Math.max(0, Math.floor((today - due) / 86400000));
+  const sachs = currentPhieu.sachMuon || [];
+  let lateFine = daysLate > 0 ? calculateFine ? calculateFine(currentPhieu.hanTra, today.toISOString().split('T')[0], sachs.length) : daysLate * FINE_PER_DAY * sachs.length : 0;
+  let damageFine = 0;
+  sachs.forEach((s, i) => {
+    const tt = document.getElementById(`tinhTrang_${i}`)?.value || 'tot';
+    if (tt === 'nheHong') damageFine += DAMAGE_LIGHT;
+    else if (tt === 'nangHong') damageFine += DAMAGE_HEAVY;
+    else if (tt === 'matSach') damageFine += LOST_FINE;
+  });
+  const total = lateFine + damageFine;
+  const fineBox = document.getElementById('fineBox');
+  if (total === 0) { fineBox.style.display = 'none'; return; }
+  fineBox.style.display = 'block';
+  let html = '';
+  if (daysLate > 0) html += `<div class="fine-row"><span>Phạt trễ hạn (${daysLate} ngày)</span><span style="color:#dc2626;">${formatCurrency ? formatCurrency(lateFine) : lateFine.toLocaleString('vi-VN') + ' đ'}</span></div>`;
+  if (damageFine > 0) html += `<div class="fine-row"><span>Tiền bồi thường hư hỏng/mất</span><span style="color:#dc2626;">${formatCurrency ? formatCurrency(damageFine) : damageFine.toLocaleString('vi-VN') + ' đ'}</span></div>`;
+  html += `<div class="fine-row fine-total"><span>Tổng tiền phạt</span><span style="color:#dc2626;">${formatCurrency ? formatCurrency(total) : total.toLocaleString('vi-VN') + ' đ'}</span></div>`;
+  document.getElementById('fineDetails').innerHTML = html;
+}
+
+function xacNhanTra() {
+  if (!currentPhieu) return;
+  const today = new Date(); const due = new Date(currentPhieu.hanTra);
+  const daysLate = Math.max(0, Math.floor((today - due) / 86400000));
+  const sachs = currentPhieu.sachMuon || [];
+  let lateFine = daysLate > 0 ? calculateFine ? calculateFine(currentPhieu.hanTra, today.toISOString().split('T')[0], sachs.length) : daysLate * 2000 * sachs.length : 0;
+  let damageFine = 0;
+  const sachMuonUpdated = sachs.map((s, i) => {
+    const tt = document.getElementById(`tinhTrang_${i}`)?.value || 'tot';
+    if (tt === 'nheHong') damageFine += DAMAGE_LIGHT;
+    else if (tt === 'nangHong') damageFine += DAMAGE_HEAVY;
+    else if (tt === 'matSach') damageFine += LOST_FINE;
+    return { ...s, tinhTrang: tt };
+  });
+  const total = lateFine + damageFine;
+  const todayStr = today.toISOString().split('T')[0];
+
+  storage.updateItem('phieuMuon', currentPhieu.id, { trangThai: 'daTra', ngayTra: todayStr, sachMuon: sachMuonUpdated });
+
+  sachs.forEach(s => {
+    if (sachMuonUpdated.find(u => u.maSach === s.maSach)?.tinhTrang !== 'matSach') {
+      const sach = storage.getAll('sach').find(b => b.maSach === s.maSach);
+      if (sach) storage.updateItem('sach', sach.id, { soLuongCon: (sach.soLuongCon || 0) + 1 });
+    }
+  });
+
+  const docGia = storage.getAll('docGia').find(d => d.maDG === currentPhieu.maDG);
+  if (docGia) storage.updateItem('docGia', docGia.id, { soSachDangMuon: Math.max(0, (docGia.soSachDangMuon || 0) - sachs.length) });
+
+  if (total > 0) {
+    const phieuPhats = storage.getAll('phieuPhat');
+    const maPP = generateId('PP', phieuPhats, 'maPhieuPhat');
+    storage.addItem('phieuPhat', {
+      maPhieuPhat: maPP, maPhieu: currentPhieu.maPhieu, maDG: currentPhieu.maDG,
+      hoTen: currentPhieu.tenDocGia, soTien: total,
+      loaiViPham: daysLate > 0 && damageFine > 0 ? 'Trễ hạn & Hư hỏng' : daysLate > 0 ? 'Trễ hạn' : 'Hư hỏng/Mất sách',
+      trangThai: 'chuaThanhToan', ngayLap: todayStr
+    });
+  }
+
+  showAlert('Trả sách thành công!' + (total > 0 ? ` Tạo phiếu phạt ${formatCurrency ? formatCurrency(total) : total}.` : ''), 'success');
+  document.getElementById('resultArea').style.display = 'none';
+  document.getElementById('searchInput').value = '';
+  currentPhieu = null;
+}
+</script>
+</body>
+</html>

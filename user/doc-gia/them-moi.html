@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thêm / Sửa độc giả – Thư Viện</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <link rel="stylesheet" href="../../assets/css/user.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .85rem; color: #64748b; margin-bottom: 1.25rem;
+    }
+    .breadcrumb a { color: #6366f1; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb i { font-size: .7rem; }
+
+    /* ── Form card ── */
+    .form-card {
+      background: #fff; border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      overflow: hidden; max-width: 880px;
+    }
+    .form-card-header {
+      padding: 1.25rem 1.75rem; border-bottom: 1px solid #f1f5f9;
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .form-card-header-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: #ede9fe; color: #7c3aed;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .form-card-header h2 { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 0; }
+    .form-card-header p  { font-size: .82rem; color: #64748b; margin: 0; }
+
+    /* ── Form body ── */
+    .form-body { padding: 1.75rem; }
+    .form-section-title {
+      font-size: .75rem; font-weight: 700; letter-spacing: .08em;
+      color: #94a3b8; text-transform: uppercase;
+      margin: 1.5rem 0 .85rem; padding-bottom: .4rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .form-section-title:first-child { margin-top: 0; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem 1.5rem;
+    }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-grid .full { grid-column: 1 / -1; }
+
+    .form-group { display: flex; flex-direction: column; gap: .35rem; }
+    .form-label {
+      font-size: .85rem; font-weight: 600; color: #374151;
+      display: flex; align-items: center; gap: .3rem;
+    }
+    .required { color: #dc2626; }
+    .form-control {
+      border: 1.5px solid #e2e8f0; border-radius: 8px;
+      padding: .6rem .9rem; font-size: .9rem; color: #1e293b;
+      outline: none; transition: border-color .15s, box-shadow .15s;
+      background: #fff; width: 100%; box-sizing: border-box;
+    }
+    .form-control:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+    .form-control[readonly] { background: #f8fafc; color: #64748b; cursor: not-allowed; }
+    .form-control.error { border-color: #dc2626; }
+    .error-msg { font-size: .78rem; color: #dc2626; display: none; margin-top: 2px; }
+    .error-msg.show { display: block; }
+
+    /* Radio group */
+    .radio-group { display: flex; gap: 1.5rem; margin-top: .25rem; }
+    .radio-label {
+      display: flex; align-items: center; gap: .45rem;
+      cursor: pointer; font-size: .9rem; color: #334155;
+    }
+    .radio-label input[type="radio"] { accent-color: #6366f1; width: 16px; height: 16px; }
+
+    /* ── Footer ── */
+    .form-footer {
+      padding: 1.25rem 1.75rem; border-top: 1px solid #f1f5f9;
+      display: flex; align-items: center; gap: .75rem; justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .btn-cancel-link {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .6rem 1.2rem; border-radius: 8px;
+      border: 1.5px solid #e2e8f0; background: #fff;
+      color: #475569; font-weight: 600; font-size: .9rem;
+      text-decoration: none; cursor: pointer;
+      transition: background .15s;
+    }
+    .btn-cancel-link:hover { background: #f8fafc; }
+    .btn-submit {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .6rem 1.4rem; border-radius: 8px;
+      border: none; background: #6366f1;
+      color: #fff; font-weight: 600; font-size: .9rem;
+      cursor: pointer; transition: background .2s, transform .15s;
+    }
+    .btn-submit:hover { background: #4f46e5; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    /* ── Mã DG auto badge ── */
+    .id-hint {
+      font-size: .78rem; color: #6366f1; margin-top: 3px;
+      display: flex; align-items: center; gap: .3rem;
+    }
+  </style>
+</head>
+<body class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <i class="fas fa-book-open"></i>
+        <span>Thư Viện</span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">TỔNG QUAN</div>
+        <a href="../dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">QUẢN LÝ</div>
+        <a href="../doc-gia/danh-sach.html" class="nav-item active"><i class="fas fa-users"></i><span>Độc giả</span></a>
+        <a href="../sach/danh-sach.html" class="nav-item"><i class="fas fa-book"></i><span>Sách</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">DỊCH VỤ</div>
+        <a href="../dich-vu/cho-muon.html" class="nav-item"><i class="fas fa-hand-holding-heart"></i><span>Cho mượn</span></a>
+        <a href="../dich-vu/tra-sach.html" class="nav-item"><i class="fas fa-undo-alt"></i><span>Trả sách</span></a>
+        <a href="../dich-vu/gia-han.html" class="nav-item"><i class="fas fa-calendar-plus"></i><span>Gia hạn</span></a>
+        <a href="../dich-vu/xu-ly-phat.html" class="nav-item"><i class="fas fa-gavel"></i><span>Xử lý phạt</span></a>
+        <a href="../dich-vu/dat-cho.html" class="nav-item"><i class="fas fa-bookmark"></i><span>Đặt chỗ</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">BÁO CÁO</div>
+        <a href="../bao-cao/lich-su.html" class="nav-item"><i class="fas fa-history"></i><span>Lịch sử</span></a>
+        <a href="../bao-cao/thong-ke.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Thống kê</span></a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <header class="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <h1 class="page-title" id="pageTitle">Thêm độc giả mới</h1>
+      </div>
+      <div class="header-right">
+        <div class="user-menu">
+          <div class="user-avatar"><i class="fas fa-user"></i></div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Loading...</span>
+            <span class="user-role">Thủ Thư</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="../dashboard.html"><i class="fas fa-home"></i> Trang chủ</a>
+        <i class="fas fa-chevron-right"></i>
+        <a href="danh-sach.html">Độc giả</a>
+        <i class="fas fa-chevron-right"></i>
+        <span id="breadcrumbTitle">Thêm mới</span>
+      </div>
+
+      <!-- Form card -->
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="form-card-header-icon"><i class="fas fa-user-plus"></i></div>
+          <div>
+            <h2 id="formTitle">Thêm độc giả mới</h2>
+            <p id="formSubtitle">Điền đầy đủ thông tin để tạo thẻ độc giả</p>
+          </div>
+        </div>
+
+        <form id="readerForm" novalidate>
+          <div class="form-body">
+
+            <!-- Thông tin cơ bản -->
+            <div class="form-section-title"><i class="fas fa-id-card"></i> Thông tin cơ bản</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="maDG">Mã độc giả</label>
+                <input type="text" id="maDG" name="maDG" class="form-control" readonly placeholder="Tự động tạo" />
+                <div class="id-hint"><i class="fas fa-magic"></i> Mã được tạo tự động</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="hoTen">Họ và tên <span class="required">*</span></label>
+                <input type="text" id="hoTen" name="hoTen" class="form-control" placeholder="Nhập họ và tên" />
+                <div class="error-msg" id="err-hoTen">Vui lòng nhập họ và tên</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="ngaySinh">Ngày sinh <span class="required">*</span></label>
+                <input type="date" id="ngaySinh" name="ngaySinh" class="form-control" />
+                <div class="error-msg" id="err-ngaySinh">Vui lòng chọn ngày sinh</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Giới tính</label>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" name="gioiTinh" value="Nam" checked /> Nam
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="gioiTinh" value="Nữ" /> Nữ
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Học vụ -->
+            <div class="form-section-title"><i class="fas fa-graduation-cap"></i> Học vụ</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="lop">Lớp</label>
+                <input type="text" id="lop" name="lop" class="form-control" placeholder="Ví dụ: 12A1" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="khoa">Khoa / Bộ môn</label>
+                <input type="text" id="khoa" name="khoa" class="form-control" placeholder="Ví dụ: Công nghệ thông tin" />
+              </div>
+            </div>
+
+            <!-- Liên hệ -->
+            <div class="form-section-title"><i class="fas fa-address-book"></i> Thông tin liên hệ</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="email">Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="example@email.com" />
+                <div class="error-msg" id="err-email">Email không hợp lệ</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="sdt">Số điện thoại <span class="required">*</span></label>
+                <input type="tel" id="sdt" name="sdt" class="form-control" placeholder="0xxxxxxxxx" maxlength="11" />
+                <div class="error-msg" id="err-sdt">SĐT không hợp lệ (10–11 số)</div>
+              </div>
+              <div class="form-group full">
+                <label class="form-label" for="diaChi">Địa chỉ</label>
+                <input type="text" id="diaChi" name="diaChi" class="form-control" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố" />
+              </div>
+            </div>
+
+            <!-- Thẻ mượn -->
+            <div class="form-section-title"><i class="fas fa-id-badge"></i> Thẻ mượn sách</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="ngayCapThe">Ngày cấp thẻ</label>
+                <input type="date" id="ngayCapThe" name="ngayCapThe" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ngayHetHan">Ngày hết hạn</label>
+                <input type="date" id="ngayHetHan" name="ngayHetHan" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="trangThai">Trạng thái</label>
+                <select id="trangThai" name="trangThai" class="form-control">
+                  <option value="hoat_dong">Hoạt động</option>
+                  <option value="khong_hoat_dong">Không hoạt động</option>
+                  <option value="tam_khoa">Tạm khóa</option>
+                </select>
+              </div>
+            </div>
+
+          </div><!-- /form-body -->
+
+          <div class="form-footer">
+            <a href="danh-sach.html" class="btn-cancel-link">
+              <i class="fas fa-arrow-left"></i> Hủy bỏ
+            </a>
+            <button type="submit" class="btn-submit" id="submitBtn">
+              <i class="fas fa-save"></i> Lưu
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/user.js"></script>
+  <script>
+    checkAuth('user');
+
+    let isEditMode = false;
+    let editId = null;
+
+    // ── Init ─────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
+      if (user.name) document.getElementById('userName').textContent = user.name;
+
+      const params = new URLSearchParams(window.location.search);
+      editId = params.get('id');
+
+      if (editId) {
+        isEditMode = true;
+        setEditMode();
+        loadReaderData(editId);
+      } else {
+        setAddMode();
+        generateMaDG();
+      }
+
+      document.getElementById('readerForm').addEventListener('submit', handleSubmit);
+    });
+
+    // ── Mode setup ────────────────────────────────────────
+    function setAddMode() {
+      document.getElementById('pageTitle').textContent = 'Thêm độc giả mới';
+      document.getElementById('breadcrumbTitle').textContent = 'Thêm mới';
+      document.getElementById('formTitle').textContent = 'Thêm độc giả mới';
+      document.getElementById('formSubtitle').textContent = 'Điền đầy đủ thông tin để tạo thẻ độc giả';
+      document.querySelector('.form-card-header-icon').innerHTML = '<i class="fas fa-user-plus"></i>';
+
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('ngayCapThe').value = today;
+
+      const expire = new Date();
+      expire.setFullYear(expire.getFullYear() + 1);
+      document.getElementById('ngayHetHan').value = expire.toISOString().split('T')[0];
+    }
+
+    function setEditMode() {
+      document.getElementById('pageTitle').textContent = 'Sửa thông tin độc giả';
+      document.getElementById('breadcrumbTitle').textContent = 'Sửa thông tin';
+      document.getElementById('formTitle').textContent = 'Sửa thông tin độc giả';
+      document.getElementById('formSubtitle').textContent = 'Cập nhật thông tin độc giả';
+      document.querySelector('.form-card-header-icon').innerHTML = '<i class="fas fa-user-edit"></i>';
+      document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Cập nhật';
+    }
+
+    // ── Load data for edit ────────────────────────────────
+    function loadReaderData(id) {
+      const readers = Storage.getAll('docGia') || [];
+      const dg = readers.find(r => r.id === id);
+      if (!dg) {
+        if (typeof showAlert === 'function') showAlert('Không tìm thấy độc giả!', 'error');
+        window.location.href = 'danh-sach.html';
+        return;
+      }
+
+      document.getElementById('maDG').value = dg.maDG || dg.id || '';
+      document.getElementById('hoTen').value = dg.hoTen || '';
+      document.getElementById('ngaySinh').value = dg.ngaySinh || '';
+      document.getElementById('lop').value = dg.lop || '';
+      document.getElementById('khoa').value = dg.khoa || '';
+      document.getElementById('email').value = dg.email || '';
+      document.getElementById('sdt').value = dg.sdt || dg.dienThoai || '';
+      document.getElementById('diaChi').value = dg.diaChi || '';
+      document.getElementById('ngayCapThe').value = dg.ngayCapThe || '';
+      document.getElementById('ngayHetHan').value = dg.ngayHetHan || '';
+      document.getElementById('trangThai').value = dg.trangThai || 'hoat_dong';
+
+      const gender = dg.gioiTinh || 'Nam';
+      document.querySelectorAll('input[name="gioiTinh"]').forEach(r => {
+        r.checked = r.value === gender;
+      });
+    }
+
+    // ── Auto-generate ID ──────────────────────────────────
+    function generateMaDG() {
+      const readers = Storage.getAll('docGia') || [];
+      let id;
+      if (typeof generateId === 'function') {
+        id = generateId('DG', readers, 'maDG');
+      } else {
+        const max = readers.reduce((m, r) => {
+          const n = parseInt((r.maDG || '').replace(/\D/g, ''), 10) || 0;
+          return n > m ? n : m;
+        }, 0);
+        id = 'DG' + String(max + 1).padStart(4, '0');
+      }
+      document.getElementById('maDG').value = id;
+    }
+
+    // ── Validation ────────────────────────────────────────
+    function validate() {
+      let valid = true;
+
+      function check(id, errorId, condition) {
+        const el = document.getElementById(id);
+        const err = document.getElementById(errorId);
+        if (!condition(el.value)) {
+          el.classList.add('error');
+          err.classList.add('show');
+          valid = false;
+        } else {
+          el.classList.remove('error');
+          err.classList.remove('show');
+        }
+      }
+
+      check('hoTen', 'err-hoTen', v => v.trim().length >= 2);
+      check('ngaySinh', 'err-ngaySinh', v => v.trim() !== '');
+      check('email', 'err-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()));
+      check('sdt', 'err-sdt', v => /^[0-9]{10,11}$/.test(v.trim()));
+
+      return valid;
+    }
+
+    // Clear error on input
+    ['hoTen','ngaySinh','email','sdt'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        document.getElementById(id).classList.remove('error');
+        document.getElementById('err-' + id)?.classList.remove('show');
+      });
+    });
+
+    // ── Submit ────────────────────────────────────────────
+    function handleSubmit(e) {
+      e.preventDefault();
+      if (!validate()) return;
+
+      const gioiTinh = document.querySelector('input[name="gioiTinh"]:checked')?.value || 'Nam';
+      const data = {
+        maDG:       document.getElementById('maDG').value,
+        hoTen:      document.getElementById('hoTen').value.trim(),
+        ngaySinh:   document.getElementById('ngaySinh').value,
+        gioiTinh,
+        lop:        document.getElementById('lop').value.trim(),
+        khoa:       document.getElementById('khoa').value.trim(),
+        email:      document.getElementById('email').value.trim(),
+        sdt:        document.getElementById('sdt').value.trim(),
+        diaChi:     document.getElementById('diaChi').value.trim(),
+        ngayCapThe: document.getElementById('ngayCapThe').value,
+        ngayHetHan: document.getElementById('ngayHetHan').value,
+        trangThai:  document.getElementById('trangThai').value,
+      };
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...';
+
+      setTimeout(() => {
+        try {
+          if (isEditMode) {
+            Storage.updateItem('docGia', editId, data);
+            if (typeof showAlert === 'function') showAlert('Cập nhật độc giả thành công!', 'success');
+          } else {
+            data.id = data.maDG;
+            Storage.addItem('docGia', data);
+            if (typeof showAlert === 'function') showAlert('Thêm độc giả thành công!', 'success');
+          }
+          setTimeout(() => { window.location.href = 'danh-sach.html'; }, 600);
+        } catch (err) {
+          if (typeof showAlert === 'function') showAlert('Có lỗi xảy ra, vui lòng thử lại!', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-save"></i> Lưu';
+        }
+      }, 300);
+    }
+
+    // ── Sidebar toggle ────────────────────────────────────
+    document.getElementById('sidebarToggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+    document.getElementById('sidebarClose').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('open');
+    });
+  </script>
+</body>
+</html>

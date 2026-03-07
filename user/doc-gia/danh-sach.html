@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Danh sách độc giả – Thư Viện</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <link rel="stylesheet" href="../../assets/css/user.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: .75rem; margin-bottom: 1.25rem;
+    }
+    .search-box {
+      display: flex; align-items: center;
+      background: #fff; border: 1.5px solid #e2e8f0;
+      border-radius: 8px; padding: 0 .85rem;
+      gap: .5rem; flex: 1; min-width: 200px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .search-box i { color: #94a3b8; }
+    .search-box input {
+      border: none; outline: none; padding: .6rem 0;
+      font-size: .9rem; width: 100%; background: transparent;
+    }
+    .filter-select {
+      border: 1.5px solid #e2e8f0; border-radius: 8px;
+      padding: .6rem .95rem; font-size: .9rem;
+      background: #fff; color: #334155;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      cursor: pointer; outline: none;
+    }
+    .filter-select:focus { border-color: #6366f1; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: #6366f1; color: #fff;
+      border: none; border-radius: 8px;
+      padding: .6rem 1.1rem; font-size: .9rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: #4f46e5; transform: translateY(-1px); }
+
+    /* ── Card ── */
+    .card {
+      background: #fff; border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; border-bottom: 1px solid #f1f5f9;
+    }
+    .card-title {
+      font-size: 1rem; font-weight: 600; color: #1e293b;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .card-title i { color: #6366f1; }
+    .record-count { font-size: .82rem; color: #64748b; }
+
+    /* ── Table ── */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    thead th {
+      background: #f8fafc; color: #475569;
+      font-weight: 600; text-align: left;
+      padding: .7rem 1rem; white-space: nowrap;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    tbody tr { border-bottom: 1px solid #f1f5f9; transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: .7rem 1rem; color: #334155; vertical-align: middle; }
+    tbody tr:hover td { background: #f8fafc; }
+    .empty-row td { text-align: center; color: #94a3b8; padding: 2.5rem; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: .75rem; font-weight: 600;
+    }
+    .badge-success { background: #dcfce7; color: #16a34a; }
+    .badge-danger  { background: #fee2e2; color: #dc2626; }
+    .badge-warning { background: #fef3c7; color: #d97706; }
+    .badge-secondary { background: #f1f5f9; color: #64748b; }
+
+    /* ── Action buttons ── */
+    .action-btns { display: flex; gap: .35rem; }
+    .btn-icon {
+      width: 30px; height: 30px;
+      border-radius: 7px; border: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: .8rem;
+      text-decoration: none; transition: all .15s;
+    }
+    .btn-icon.view   { background: #dbeafe; color: #2563eb; }
+    .btn-icon.edit   { background: #dcfce7; color: #16a34a; }
+    .btn-icon.delete { background: #fee2e2; color: #dc2626; }
+    .btn-icon:hover  { filter: brightness(.9); transform: scale(1.1); }
+
+    /* ── Pagination ── */
+    .pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: .75rem;
+      padding: 1rem 1.5rem; border-top: 1px solid #f1f5f9;
+    }
+    .page-info { font-size: .82rem; color: #64748b; }
+    .page-btns { display: flex; gap: .35rem; }
+    .page-btn {
+      min-width: 34px; height: 34px; padding: 0 .5rem;
+      border-radius: 7px; border: 1.5px solid #e2e8f0;
+      background: #fff; color: #334155;
+      font-size: .85rem; font-weight: 500;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .page-btn:hover:not(:disabled) { border-color: #6366f1; color: #6366f1; }
+    .page-btn.active { background: #6366f1; border-color: #6366f1; color: #fff; }
+    .page-btn:disabled { opacity: .4; cursor: default; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.4); z-index: 9000;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff; border-radius: 16px;
+      padding: 2rem; max-width: 420px; width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+      text-align: center;
+    }
+    .modal-icon { font-size: 2.5rem; margin-bottom: .75rem; }
+    .modal h3 { font-size: 1.15rem; margin-bottom: .5rem; color: #1e293b; }
+    .modal p  { color: #64748b; font-size: .9rem; margin-bottom: 1.5rem; }
+    .modal-actions { display: flex; gap: .75rem; justify-content: center; }
+    .btn-cancel {
+      padding: .55rem 1.2rem; border-radius: 8px;
+      border: 1.5px solid #e2e8f0; background: #fff;
+      color: #475569; font-weight: 600; cursor: pointer;
+      transition: background .15s;
+    }
+    .btn-cancel:hover { background: #f8fafc; }
+    .btn-danger-solid {
+      padding: .55rem 1.2rem; border-radius: 8px;
+      border: none; background: #dc2626;
+      color: #fff; font-weight: 600; cursor: pointer;
+      transition: background .15s;
+    }
+    .btn-danger-solid:hover { background: #b91c1c; }
+  </style>
+</head>
+<body class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <i class="fas fa-book-open"></i>
+        <span>Thư Viện</span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">TỔNG QUAN</div>
+        <a href="../dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">QUẢN LÝ</div>
+        <a href="../doc-gia/danh-sach.html" class="nav-item active"><i class="fas fa-users"></i><span>Độc giả</span></a>
+        <a href="../sach/danh-sach.html" class="nav-item"><i class="fas fa-book"></i><span>Sách</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">DỊCH VỤ</div>
+        <a href="../dich-vu/cho-muon.html" class="nav-item"><i class="fas fa-hand-holding-heart"></i><span>Cho mượn</span></a>
+        <a href="../dich-vu/tra-sach.html" class="nav-item"><i class="fas fa-undo-alt"></i><span>Trả sách</span></a>
+        <a href="../dich-vu/gia-han.html" class="nav-item"><i class="fas fa-calendar-plus"></i><span>Gia hạn</span></a>
+        <a href="../dich-vu/xu-ly-phat.html" class="nav-item"><i class="fas fa-gavel"></i><span>Xử lý phạt</span></a>
+        <a href="../dich-vu/dat-cho.html" class="nav-item"><i class="fas fa-bookmark"></i><span>Đặt chỗ</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">BÁO CÁO</div>
+        <a href="../bao-cao/lich-su.html" class="nav-item"><i class="fas fa-history"></i><span>Lịch sử</span></a>
+        <a href="../bao-cao/thong-ke.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Thống kê</span></a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <header class="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <h1 class="page-title">Danh sách độc giả</h1>
+      </div>
+      <div class="header-right">
+        <div class="user-menu">
+          <div class="user-avatar"><i class="fas fa-user"></i></div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Loading...</span>
+            <span class="user-role">Thủ Thư</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Tìm theo tên, mã DG, email, SĐT..." />
+        </div>
+        <select class="filter-select" id="filterStatus">
+          <option value="">Tất cả trạng thái</option>
+          <option value="hoat_dong">Hoạt động</option>
+          <option value="khong_hoat_dong">Không hoạt động</option>
+          <option value="tam_khoa">Tạm khóa</option>
+        </select>
+        <a href="them-moi.html" class="btn-primary">
+          <i class="fas fa-user-plus"></i>Thêm độc giả
+        </a>
+      </div>
+
+      <!-- Table card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-users"></i> Danh sách độc giả</div>
+          <span class="record-count" id="recordCount">0 bản ghi</span>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Mã DG</th>
+                <th>Họ tên</th>
+                <th>Lớp/Khoa</th>
+                <th>SĐT</th>
+                <th>Email</th>
+                <th>Trạng thái</th>
+                <th style="text-align:center">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr class="empty-row">
+                <td colspan="8"><i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span class="page-info" id="pageInfo">Hiển thị 0–0 trong tổng số 0</span>
+          <div class="page-btns" id="pageBtns"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Delete confirm modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-icon">🗑️</div>
+      <h3>Xác nhận xóa</h3>
+      <p id="deleteModalMsg">Bạn có chắc chắn muốn xóa độc giả này?<br/>Thao tác này không thể hoàn tác.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeDeleteModal()">Hủy bỏ</button>
+        <button class="btn-danger-solid" onclick="confirmDelete()">Xóa</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/user.js"></script>
+  <script>
+    checkAuth('user');
+
+    // ── State ────────────────────────────────────────────
+    const PAGE_SIZE = 10;
+    let allReaders = [];
+    let filtered = [];
+    let currentPage = 1;
+    let pendingDeleteId = null;
+
+    // ── Init ─────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
+      if (user.name) document.getElementById('userName').textContent = user.name;
+
+      loadReaders();
+
+      document.getElementById('searchInput').addEventListener('input', applyFilters);
+      document.getElementById('filterStatus').addEventListener('change', applyFilters);
+    });
+
+    function loadReaders() {
+      allReaders = Storage.getAll('docGia') || [];
+      applyFilters();
+    }
+
+    // ── Filter & Search ───────────────────────────────────
+    function applyFilters() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const status = document.getElementById('filterStatus').value;
+
+      filtered = allReaders.filter(dg => {
+        const matchQuery = !query ||
+          (dg.hoTen || '').toLowerCase().includes(query) ||
+          (dg.maDG || dg.id || '').toLowerCase().includes(query) ||
+          (dg.email || '').toLowerCase().includes(query) ||
+          (dg.sdt || dg.dienThoai || '').includes(query);
+
+        const matchStatus = !status || (dg.trangThai || 'hoat_dong') === status;
+        return matchQuery && matchStatus;
+      });
+
+      currentPage = 1;
+      renderTable();
+    }
+
+    // ── Render ────────────────────────────────────────────
+    function renderTable() {
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, filtered.length);
+      const pageData = filtered.slice(start, end);
+
+      document.getElementById('recordCount').textContent = `${filtered.length} bản ghi`;
+      document.getElementById('pageInfo').textContent =
+        filtered.length === 0 ? 'Không có dữ liệu' :
+        `Hiển thị ${start + 1}–${end} trong tổng số ${filtered.length}`;
+
+      const tbody = document.getElementById('tableBody');
+      if (pageData.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="8"><i class="fas fa-user-slash"></i> Không tìm thấy độc giả nào</td></tr>';
+        renderPagination();
+        return;
+      }
+
+      tbody.innerHTML = pageData.map((dg, idx) => {
+        const maDG = dg.maDG || dg.id || '—';
+        const lopKhoa = [dg.lop, dg.khoa].filter(Boolean).join(' – ') || '—';
+        const sdt = dg.sdt || dg.dienThoai || '—';
+        const email = dg.email || '—';
+        const status = dg.trangThai || 'hoat_dong';
+        return `
+          <tr>
+            <td style="color:#94a3b8;font-weight:500">${start + idx + 1}</td>
+            <td><span style="font-weight:600;color:#6366f1">${maDG}</span></td>
+            <td>
+              <div style="font-weight:600;color:#1e293b">${dg.hoTen || '—'}</div>
+            </td>
+            <td>${lopKhoa}</td>
+            <td>${sdt}</td>
+            <td style="color:#64748b">${email}</td>
+            <td>${statusBadge(status)}</td>
+            <td>
+              <div class="action-btns" style="justify-content:center">
+                <a href="chi-tiet.html?id=${dg.id}" class="btn-icon view" title="Xem chi tiết"><i class="fas fa-eye"></i></a>
+                <a href="them-moi.html?id=${dg.id}" class="btn-icon edit" title="Sửa"><i class="fas fa-edit"></i></a>
+                <button class="btn-icon delete" title="Xóa" onclick="openDeleteModal('${dg.id}','${dg.hoTen || ''}')"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      renderPagination();
+    }
+
+    function statusBadge(status) {
+      const map = {
+        hoat_dong:       ['badge-success', 'Hoạt động'],
+        khong_hoat_dong: ['badge-secondary', 'Không HĐ'],
+        tam_khoa:        ['badge-warning', 'Tạm khóa'],
+      };
+      const [cls, label] = map[status] || ['badge-secondary', status];
+      return `<span class="badge ${cls}">${label}</span>`;
+    }
+
+    // ── Pagination ────────────────────────────────────────
+    function renderPagination() {
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      const container = document.getElementById('pageBtns');
+
+      let html = `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+
+      const range = getPageRange(currentPage, totalPages);
+      range.forEach(p => {
+        if (p === '…') {
+          html += `<button class="page-btn" disabled>…</button>`;
+        } else {
+          html += `<button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="goPage(${p})">${p}</button>`;
+        }
+      });
+
+      html += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+      container.innerHTML = html;
+    }
+
+    function getPageRange(current, total) {
+      if (total <= 7) return Array.from({length: total}, (_, i) => i + 1);
+      if (current <= 4) return [1,2,3,4,5,'…',total];
+      if (current >= total - 3) return [1,'…',total-4,total-3,total-2,total-1,total];
+      return [1,'…',current-1,current,current+1,'…',total];
+    }
+
+    function goPage(p) {
+      const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+      if (p < 1 || p > totalPages) return;
+      currentPage = p;
+      renderTable();
+    }
+
+    // ── Delete modal ──────────────────────────────────────
+    function openDeleteModal(id, name) {
+      pendingDeleteId = id;
+      document.getElementById('deleteModalMsg').innerHTML =
+        `Bạn có chắc chắn muốn xóa độc giả <strong>${name}</strong>?<br/>Thao tác này không thể hoàn tác.`;
+      document.getElementById('deleteModal').classList.add('open');
+    }
+
+    function closeDeleteModal() {
+      pendingDeleteId = null;
+      document.getElementById('deleteModal').classList.remove('open');
+    }
+
+    function confirmDelete() {
+      if (!pendingDeleteId) return;
+      Storage.removeItem('docGia', pendingDeleteId);
+      closeDeleteModal();
+      if (typeof showAlert === 'function') showAlert('Đã xóa độc giả thành công!', 'success');
+      loadReaders();
+    }
+
+    // Close modal on overlay click
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+      if (e.target === this) closeDeleteModal();
+    });
+
+    // ── Sidebar toggle ────────────────────────────────────
+    document.getElementById('sidebarToggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+    document.getElementById('sidebarClose').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('open');
+    });
+  </script>
+</body>
+</html>

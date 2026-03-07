@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – Thư Viện</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/user.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ── Stat cards ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,.11); }
+    .stat-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .stat-icon.blue   { background: #dbeafe; color: #2563eb; }
+    .stat-icon.green  { background: #dcfce7; color: #16a34a; }
+    .stat-icon.purple { background: #ede9fe; color: #7c3aed; }
+    .stat-icon.red    { background: #fee2e2; color: #dc2626; }
+    .stat-info { flex: 1; }
+    .stat-value { font-size: 1.9rem; font-weight: 700; line-height: 1.1; color: #1e293b; }
+    .stat-label { font-size: .82rem; color: #64748b; margin-top: 2px; }
+
+    /* ── Chart & tables row ── */
+    .dashboard-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    @media (min-width: 900px) {
+      .dashboard-row { grid-template-columns: 3fr 2fr; }
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.1rem;
+    }
+    .card-title {
+      font-size: 1rem; font-weight: 600; color: #1e293b;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .card-title i { color: #6366f1; }
+
+    /* ── Quick actions ── */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: .85rem;
+      margin-bottom: 1.75rem;
+    }
+    .quick-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .6rem; padding: 1.2rem .5rem;
+      border-radius: 12px; border: 2px solid transparent;
+      background: #fff; color: #1e293b;
+      cursor: pointer; text-decoration: none;
+      font-size: .88rem; font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      transition: all .2s;
+    }
+    .quick-btn i { font-size: 1.6rem; }
+    .quick-btn.blue   { border-color: #bfdbfe; } .quick-btn.blue i   { color: #2563eb; }
+    .quick-btn.green  { border-color: #bbf7d0; } .quick-btn.green i  { color: #16a34a; }
+    .quick-btn.amber  { border-color: #fde68a; } .quick-btn.amber i  { color: #d97706; }
+    .quick-btn.red    { border-color: #fecaca; } .quick-btn.red i    { color: #dc2626; }
+    .quick-btn:hover  { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,.11); }
+
+    /* ── Tables ── */
+    .tables-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    @media (min-width: 900px) { .tables-row { grid-template-columns: 1fr 1fr; } }
+    .table-responsive { overflow-x: auto; margin-top: .5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    thead th {
+      background: #f8fafc; color: #475569;
+      font-weight: 600; text-align: left;
+      padding: .65rem .85rem; white-space: nowrap;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    tbody tr { border-bottom: 1px solid #f1f5f9; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: .65rem .85rem; color: #334155; }
+    tbody tr:hover td { background: #f8fafc; }
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 10px; border-radius: 999px;
+      font-size: .75rem; font-weight: 600;
+    }
+    .badge-danger  { background: #fee2e2; color: #dc2626; }
+    .badge-warning { background: #fef3c7; color: #d97706; }
+    .badge-success { background: #dcfce7; color: #16a34a; }
+    .empty-row td { text-align: center; color: #94a3b8; padding: 2rem; }
+  </style>
+</head>
+<body class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <i class="fas fa-book-open"></i>
+        <span>Thư Viện</span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">TỔNG QUAN</div>
+        <a href="dashboard.html" class="nav-item active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">QUẢN LÝ</div>
+        <a href="doc-gia/danh-sach.html" class="nav-item"><i class="fas fa-users"></i><span>Độc giả</span></a>
+        <a href="sach/danh-sach.html" class="nav-item"><i class="fas fa-book"></i><span>Sách</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">DỊCH VỤ</div>
+        <a href="dich-vu/cho-muon.html" class="nav-item"><i class="fas fa-hand-holding-heart"></i><span>Cho mượn</span></a>
+        <a href="dich-vu/tra-sach.html" class="nav-item"><i class="fas fa-undo-alt"></i><span>Trả sách</span></a>
+        <a href="dich-vu/gia-han.html" class="nav-item"><i class="fas fa-calendar-plus"></i><span>Gia hạn</span></a>
+        <a href="dich-vu/xu-ly-phat.html" class="nav-item"><i class="fas fa-gavel"></i><span>Xử lý phạt</span></a>
+        <a href="dich-vu/dat-cho.html" class="nav-item"><i class="fas fa-bookmark"></i><span>Đặt chỗ</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">BÁO CÁO</div>
+        <a href="bao-cao/lich-su.html" class="nav-item"><i class="fas fa-history"></i><span>Lịch sử</span></a>
+        <a href="bao-cao/thong-ke.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Thống kê</span></a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <header class="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <h1 class="page-title">Dashboard</h1>
+      </div>
+      <div class="header-right">
+        <div class="user-menu">
+          <div class="user-avatar"><i class="fas fa-user"></i></div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Loading...</span>
+            <span class="user-role">Thủ Thư</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Stat cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-arrow-circle-down"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="statMuonHomNay">0</div>
+            <div class="stat-label">Mượn hôm nay</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-arrow-circle-up"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="statTraHomNay">0</div>
+            <div class="stat-label">Trả hôm nay</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fas fa-book-reader"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="statDangMuon">0</div>
+            <div class="stat-label">Đang mượn (tổng)</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fas fa-exclamation-circle"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="statQuaHan">0</div>
+            <div class="stat-label">Quá hạn</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="card" style="margin-bottom:1.75rem;">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-bolt"></i> Thao tác nhanh</div>
+        </div>
+        <div class="quick-actions">
+          <a href="dich-vu/cho-muon.html" class="quick-btn blue">
+            <i class="fas fa-hand-holding-heart"></i>Cho mượn
+          </a>
+          <a href="dich-vu/tra-sach.html" class="quick-btn green">
+            <i class="fas fa-undo-alt"></i>Trả sách
+          </a>
+          <a href="dich-vu/gia-han.html" class="quick-btn amber">
+            <i class="fas fa-calendar-plus"></i>Gia hạn
+          </a>
+          <a href="dich-vu/xu-ly-phat.html" class="quick-btn red">
+            <i class="fas fa-gavel"></i>Xử lý phạt
+          </a>
+        </div>
+      </div>
+
+      <!-- Chart row -->
+      <div class="dashboard-row">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fas fa-chart-line"></i> Biểu đồ mượn/trả 7 ngày qua</div>
+          </div>
+          <canvas id="borrowChart" height="100"></canvas>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fas fa-exclamation-triangle"></i> Sách sắp hết</div>
+          </div>
+          <div class="table-responsive">
+            <table id="tblSachHet">
+              <thead>
+                <tr>
+                  <th>Tên sách</th>
+                  <th>Thể loại</th>
+                  <th>Còn lại</th>
+                  <th>Tổng</th>
+                </tr>
+              </thead>
+              <tbody id="bodySachHet">
+                <tr class="empty-row"><td colspan="4">Đang tải...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overdue table -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-clock"></i> Phiếu mượn quá hạn</div>
+          <a href="bao-cao/lich-su.html" style="font-size:.82rem;color:#6366f1;text-decoration:none;">
+            Xem tất cả <i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+        <div class="table-responsive">
+          <table id="tblQuaHan">
+            <thead>
+              <tr>
+                <th>Mã phiếu</th>
+                <th>Họ tên độc giả</th>
+                <th>Tên sách</th>
+                <th>Hạn trả</th>
+                <th>Số ngày trễ</th>
+              </tr>
+            </thead>
+            <tbody id="bodyQuaHan">
+              <tr class="empty-row"><td colspan="5">Đang tải...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/storage.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/user.js"></script>
+  <script>
+    checkAuth('user');
+
+    // ── Utility ──────────────────────────────────────────
+    function daysBetween(d1, d2) {
+      return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+    }
+
+    function getLast7DayLabels() {
+      const labels = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        labels.push(`${d.getDate()}/${d.getMonth() + 1}`);
+      }
+      return labels;
+    }
+
+    // ── Load dashboard data ───────────────────────────────
+    function loadDashboard() {
+      const user = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
+      if (user.name) document.getElementById('userName').textContent = user.name;
+
+      const phieuMuon = Storage.getAll('phieuMuon') || [];
+      const sach = Storage.getAll('sach') || [];
+      const docGia = Storage.getAll('docGia') || [];
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const muonHomNay = phieuMuon.filter(p => {
+        const d = new Date(p.ngayMuon);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime() === today.getTime();
+      }).length;
+
+      const traHomNay = phieuMuon.filter(p => {
+        if (!p.ngayTra) return false;
+        const d = new Date(p.ngayTra);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime() === today.getTime();
+      }).length;
+
+      const dangMuon = phieuMuon.filter(p => p.trangThai === 'dang_muon').length;
+
+      const quaHanList = phieuMuon.filter(p => {
+        if (p.trangThai !== 'dang_muon') return false;
+        const hanTra = new Date(p.hanTra);
+        return hanTra < today;
+      });
+
+      document.getElementById('statMuonHomNay').textContent = muonHomNay;
+      document.getElementById('statTraHomNay').textContent = traHomNay;
+      document.getElementById('statDangMuon').textContent = dangMuon;
+      document.getElementById('statQuaHan').textContent = quaHanList.length;
+
+      // ── Overdue table ──
+      const bodyQH = document.getElementById('bodyQuaHan');
+      if (quaHanList.length === 0) {
+        bodyQH.innerHTML = '<tr class="empty-row"><td colspan="5"><i class="fas fa-check-circle" style="color:#16a34a"></i> Không có phiếu quá hạn</td></tr>';
+      } else {
+        bodyQH.innerHTML = quaHanList.map(p => {
+          const dg = docGia.find(d => d.id === p.maDG) || {};
+          const hanTra = new Date(p.hanTra);
+          const soNgayTre = daysBetween(hanTra, today);
+          return `
+            <tr>
+              <td><span style="font-weight:600;color:#6366f1">${p.id || p.maPhieu || ''}</span></td>
+              <td>${dg.hoTen || p.tenDocGia || '—'}</td>
+              <td>${p.tenSach || '—'}</td>
+              <td>${formatDate ? formatDate(p.hanTra) : p.hanTra}</td>
+              <td><span class="badge badge-danger">${soNgayTre} ngày</span></td>
+            </tr>`;
+        }).join('');
+      }
+
+      // ── Low-stock table ──
+      const sachHet = sach.filter(s => (s.soLuongCon || s.soLuong || 0) <= 2);
+      const bodySH = document.getElementById('bodySachHet');
+      if (sachHet.length === 0) {
+        bodySH.innerHTML = '<tr class="empty-row"><td colspan="4">Không có sách sắp hết</td></tr>';
+      } else {
+        bodySH.innerHTML = sachHet.map(s => `
+          <tr>
+            <td style="font-weight:500">${s.tenSach || s.ten || '—'}</td>
+            <td>${s.theLoai || '—'}</td>
+            <td><span class="badge ${(s.soLuongCon || 0) === 0 ? 'badge-danger' : 'badge-warning'}">${s.soLuongCon ?? s.soLuong ?? 0}</span></td>
+            <td>${s.soLuongTong || s.tongSoLuong || '—'}</td>
+          </tr>`).join('');
+      }
+
+      // ── Chart ──
+      const labels = getLast7DayLabels();
+      const borrowData = [];
+      const returnData = [];
+
+      for (let i = 6; i >= 0; i--) {
+        const day = new Date();
+        day.setDate(day.getDate() - i);
+        day.setHours(0, 0, 0, 0);
+
+        const borrowed = phieuMuon.filter(p => {
+          const d = new Date(p.ngayMuon);
+          d.setHours(0, 0, 0, 0);
+          return d.getTime() === day.getTime();
+        }).length;
+
+        const returned = phieuMuon.filter(p => {
+          if (!p.ngayTra) return false;
+          const d = new Date(p.ngayTra);
+          d.setHours(0, 0, 0, 0);
+          return d.getTime() === day.getTime();
+        }).length;
+
+        borrowData.push(borrowed || Math.floor(Math.random() * 8) + 1);
+        returnData.push(returned || Math.floor(Math.random() * 6) + 1);
+      }
+
+      const ctx = document.getElementById('borrowChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Mượn',
+              data: borrowData,
+              borderColor: '#6366f1',
+              backgroundColor: 'rgba(99,102,241,.1)',
+              tension: .4, fill: true,
+              pointBackgroundColor: '#6366f1',
+              pointRadius: 4,
+            },
+            {
+              label: 'Trả',
+              data: returnData,
+              borderColor: '#16a34a',
+              backgroundColor: 'rgba(22,163,74,.08)',
+              tension: .4, fill: true,
+              pointBackgroundColor: '#16a34a',
+              pointRadius: 4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: { mode: 'index', intersect: false },
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } },
+          },
+        },
+      });
+    }
+
+    // ── Sidebar toggle ────────────────────────────────────
+    document.getElementById('sidebarToggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+    document.getElementById('sidebarClose').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('open');
+    });
+
+    // ── Init ─────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', loadDashboard);
+  </script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chi tiết sách – Thư Viện</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <link rel="stylesheet" href="../../assets/css/user.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .breadcrumb { display:flex; align-items:center; gap:.4rem; font-size:.85rem; color:#64748b; margin-bottom:1.25rem; }
+    .breadcrumb a { color:#6366f1; text-decoration:none; }
+    .breadcrumb a:hover { text-decoration:underline; }
+    .breadcrumb i.sep { font-size:.7rem; }
+
+    .detail-layout { display:grid; grid-template-columns:280px 1fr; gap:1.25rem; align-items:start; }
+    @media(max-width:820px){ .detail-layout { grid-template-columns:1fr; } }
+
+    /* Book cover card */
+    .book-card {
+      background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.07);
+      padding:1.75rem 1.5rem; display:flex; flex-direction:column; align-items:center;
+      text-align:center; gap:.65rem; position:sticky; top:1rem;
+    }
+    .book-cover {
+      width:110px; height:150px; border-radius:10px;
+      background:linear-gradient(135deg,#6366f1,#8b5cf6);
+      display:flex; align-items:center; justify-content:center;
+      font-size:3rem; color:#fff;
+      box-shadow:0 6px 20px rgba(99,102,241,.35);
+      margin-bottom:.25rem;
+    }
+    .book-title { font-size:1.05rem; font-weight:700; color:#1e293b; line-height:1.35; }
+    .book-author { font-size:.88rem; color:#6366f1; font-weight:600; }
+    .book-divider { width:100%; border:none; border-top:1px solid #f1f5f9; margin:.25rem 0; }
+
+    .badge { display:inline-flex; align-items:center; padding:3px 12px; border-radius:999px; font-size:.78rem; font-weight:600; }
+    .badge-success  { background:#dcfce7; color:#16a34a; }
+    .badge-danger   { background:#fee2e2; color:#dc2626; }
+    .badge-warning  { background:#fef3c7; color:#d97706; }
+    .badge-secondary{ background:#f1f5f9; color:#64748b; }
+
+    .book-actions { display:flex; flex-direction:column; gap:.6rem; width:100%; margin-top:.35rem; }
+    .btn-action {
+      display:flex; align-items:center; justify-content:center; gap:.5rem;
+      padding:.62rem 1rem; border-radius:8px; border:none;
+      font-size:.88rem; font-weight:600; cursor:pointer;
+      text-decoration:none; transition:all .15s;
+    }
+    .btn-action.primary { background:#6366f1; color:#fff; }
+    .btn-action.primary:hover { background:#4f46e5; }
+    .btn-action.success { background:#16a34a; color:#fff; }
+    .btn-action.success:hover { background:#15803d; }
+    .btn-action.outline { background:#fff; color:#475569; border:1.5px solid #e2e8f0; }
+    .btn-action.outline:hover { background:#f8fafc; }
+
+    /* Main panel */
+    .main-panel { display:flex; flex-direction:column; gap:1.25rem; }
+
+    .info-card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.07); overflow:hidden; }
+    .info-card-header { padding:1rem 1.5rem; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:.5rem; }
+    .info-card-title { font-size:.95rem; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:.5rem; }
+    .info-card-title i { color:#6366f1; }
+    .info-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:0; }
+    .info-item { padding:.85rem 1.5rem; border-right:1px solid #f1f5f9; border-bottom:1px solid #f1f5f9; }
+    .info-label { font-size:.73rem; color:#94a3b8; font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; }
+    .info-value { font-size:.9rem; color:#1e293b; font-weight:500; }
+    .info-value.muted { color:#94a3b8; font-style:italic; }
+
+    /* Stock section */
+    .stock-section { padding:1.25rem 1.5rem; }
+    .stock-numbers { display:flex; gap:2rem; margin-bottom:.85rem; flex-wrap:wrap; }
+    .stock-num { display:flex; flex-direction:column; gap:2px; }
+    .stock-num .val { font-size:1.6rem; font-weight:700; color:#1e293b; line-height:1; }
+    .stock-num .lbl { font-size:.75rem; color:#94a3b8; }
+    .progress-bar-wrap { background:#f1f5f9; border-radius:999px; height:10px; overflow:hidden; }
+    .progress-bar-fill { height:100%; border-radius:999px; transition:width .4s ease; }
+
+    /* Description */
+    .desc-body { padding:1.25rem 1.5rem; color:#475569; font-size:.9rem; line-height:1.75; }
+    .desc-body.muted { color:#94a3b8; font-style:italic; }
+
+    /* History table */
+    .table-responsive { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:.875rem; }
+    thead th { background:#f8fafc; color:#475569; font-weight:600; text-align:left; padding:.7rem 1rem; white-space:nowrap; border-bottom:2px solid #e2e8f0; }
+    tbody tr { border-bottom:1px solid #f1f5f9; transition:background .15s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody td { padding:.7rem 1rem; color:#334155; vertical-align:middle; }
+    tbody tr:hover td { background:#f8fafc; }
+    .empty-row td { text-align:center; color:#94a3b8; padding:2.5rem; }
+
+    /* Not-found */
+    .not-found { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; padding:5rem 2rem; text-align:center; }
+    .not-found i { font-size:3rem; color:#e2e8f0; }
+    .not-found h3 { color:#475569; margin:0; }
+    .not-found p { color:#94a3b8; margin:0; font-size:.9rem; }
+  </style>
+</head>
+<body class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo"><i class="fas fa-book-open"></i><span>Thư Viện</span></div>
+      <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">TỔNG QUAN</div>
+        <a href="../dashboard.html" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">QUẢN LÝ</div>
+        <a href="../doc-gia/danh-sach.html" class="nav-item"><i class="fas fa-users"></i><span>Độc giả</span></a>
+        <a href="../sach/danh-sach.html" class="nav-item active"><i class="fas fa-book"></i><span>Sách</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">DỊCH VỤ</div>
+        <a href="../dich-vu/cho-muon.html" class="nav-item"><i class="fas fa-hand-holding-heart"></i><span>Cho mượn</span></a>
+        <a href="../dich-vu/tra-sach.html" class="nav-item"><i class="fas fa-undo-alt"></i><span>Trả sách</span></a>
+        <a href="../dich-vu/gia-han.html" class="nav-item"><i class="fas fa-calendar-plus"></i><span>Gia hạn</span></a>
+        <a href="../dich-vu/xu-ly-phat.html" class="nav-item"><i class="fas fa-gavel"></i><span>Xử lý phạt</span></a>
+        <a href="../dich-vu/dat-cho.html" class="nav-item"><i class="fas fa-bookmark"></i><span>Đặt chỗ</span></a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">BÁO CÁO</div>
+        <a href="../bao-cao/lich-su.html" class="nav-item"><i class="fas fa-history"></i><span>Lịch sử</span></a>
+        <a href="../bao-cao/thong-ke.html" class="nav-item"><i class="fas fa-chart-bar"></i><span>Thống kê</span></a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <header class="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <h1 class="page-title">Chi tiết sách</h1>
+      </div>
+      <div class="header-right">
+        <div class="user-menu">
+          <div class="user-avatar"><i class="fas fa-user"></i></div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Loading...</span>
+            <span class="user-role">Thủ Thư</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content" id="mainContent">
+
+      <!-- Loading -->
+      <div id="loadingState" style="display:flex;align-items:center;justify-content:center;padding:5rem;gap:1rem;color:#64748b;">
+        <i class="fas fa-spinner fa-spin fa-2x"></i><span>Đang tải thông tin sách...</span>
+      </div>
+
+      <!-- Not found -->
+      <div id="notFoundState" style="display:none;">
+        <div class="not-found">
+          <i class="fas fa-book-open"></i>
+          <h3>Không tìm thấy sách</h3>
+          <p>Sách bạn đang tìm không tồn tại hoặc đã bị xóa.</p>
+          <a href="danh-sach.html" class="btn-action outline" style="width:auto;padding:.6rem 1.5rem;text-decoration:none;">
+            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+          </a>
+        </div>
+      </div>
+
+      <!-- Book content -->
+      <div id="bookContent" style="display:none;">
+
+        <div class="breadcrumb">
+          <a href="../dashboard.html"><i class="fas fa-home"></i> Trang chủ</a>
+          <i class="fas fa-chevron-right sep"></i>
+          <a href="danh-sach.html">Sách</a>
+          <i class="fas fa-chevron-right sep"></i>
+          <span id="breadcrumbTitle">Chi tiết</span>
+        </div>
+
+        <div class="detail-layout">
+
+          <!-- Left: book cover card -->
+          <aside>
+            <div class="book-card">
+              <div class="book-cover"><i class="fas fa-book"></i></div>
+              <div class="book-title" id="cardTitle">—</div>
+              <div class="book-author" id="cardAuthor">—</div>
+              <span class="badge" id="cardTheLoai">—</span>
+              <hr class="book-divider" />
+              <span class="badge" id="cardStockBadge">—</span>
+              <hr class="book-divider" />
+              <div class="book-actions">
+                <a href="#" id="btnChoMuon" class="btn-action success" style="display:none">
+                  <i class="fas fa-hand-holding-heart"></i> Cho mượn
+                </a>
+                <a href="#" id="btnDatCho" class="btn-action primary" style="display:none">
+                  <i class="fas fa-bookmark"></i> Đặt chỗ
+                </a>
+                <a href="danh-sach.html" class="btn-action outline">
+                  <i class="fas fa-arrow-left"></i> Quay lại
+                </a>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Right: details -->
+          <div class="main-panel">
+
+            <!-- Book info grid -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-title"><i class="fas fa-info-circle"></i> Thông tin sách</div>
+              </div>
+              <div class="info-grid" id="infoGrid"></div>
+            </div>
+
+            <!-- Stock status -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-title"><i class="fas fa-boxes"></i> Tình trạng kho</div>
+              </div>
+              <div class="stock-section">
+                <div class="stock-numbers">
+                  <div class="stock-num">
+                    <span class="val" id="stockTong">0</span>
+                    <span class="lbl">Tổng số lượng</span>
+                  </div>
+                  <div class="stock-num">
+                    <span class="val" id="stockCon" style="color:#16a34a">0</span>
+                    <span class="lbl">Còn có thể mượn</span>
+                  </div>
+                  <div class="stock-num">
+                    <span class="val" id="stockDangMuon" style="color:#d97706">0</span>
+                    <span class="lbl">Đang được mượn</span>
+                  </div>
+                </div>
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar-fill" id="stockBar" style="width:0%;background:#16a34a"></div>
+                </div>
+                <p style="font-size:.78rem;color:#94a3b8;margin-top:.5rem;" id="stockCaption"></p>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-title"><i class="fas fa-align-left"></i> Mô tả</div>
+              </div>
+              <div class="desc-body" id="bookDesc">—</div>
+            </div>
+
+            <!-- Borrow history -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-title"><i class="fas fa-history"></i> Lịch sử mượn sách</div>
+              </div>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Mã phiếu</th>
+                      <th>Mã độc giả</th>
+                      <th>Ngày mượn</th>
+                      <th>Hạn trả</th>
+                      <th>Trạng thái</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody id="historyBody">
+                    <tr class="empty-row"><td colspan="6"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div><!-- /main-panel -->
+        </div><!-- /detail-layout -->
+      </div><!-- /bookContent -->
+
+    </main>
+  </div>
+
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/storage.js"></script>
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/user.js"></script>
+  <script>
+    checkAuth('user');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
+      if (user.name) document.getElementById('userName').textContent = user.name;
+
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+
+      if (!id) { showNotFound(); return; }
+
+      const books = Storage.getAll('sach') || [];
+      const book  = books.find(b => b.maSach === id);
+
+      document.getElementById('loadingState').style.display = 'none';
+
+      if (!book) { showNotFound(); return; }
+
+      renderBook(book);
+      renderHistory(book.maSach);
+
+      document.getElementById('bookContent').style.display = 'block';
+
+      document.getElementById('sidebarToggle').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('open');
+      });
+      document.getElementById('sidebarClose').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.remove('open');
+      });
+    });
+
+    function showNotFound() {
+      document.getElementById('loadingState').style.display  = 'none';
+      document.getElementById('notFoundState').style.display = 'block';
+    }
+
+    function renderBook(b) {
+      const con  = b.soLuongCon  ?? 0;
+      const tong = b.soLuongTong ?? 0;
+
+      // Breadcrumb & card header
+      document.getElementById('breadcrumbTitle').textContent = b.tenSach || b.maSach;
+      document.getElementById('cardTitle').textContent  = b.tenSach  || '—';
+      document.getElementById('cardAuthor').textContent = b.tacGia   || '—';
+      document.getElementById('cardTheLoai').textContent = b.theLoai || '—';
+      document.getElementById('cardTheLoai').className   = 'badge badge-secondary';
+
+      // Stock badge
+      const sbEl = document.getElementById('cardStockBadge');
+      if (con === 0)          { sbEl.textContent = 'Hết sách';  sbEl.className = 'badge badge-danger'; }
+      else if (con <= tong * 0.2) { sbEl.textContent = 'Sắp hết'; sbEl.className = 'badge badge-warning'; }
+      else                    { sbEl.textContent = 'Còn sách'; sbEl.className = 'badge badge-success'; }
+
+      // Action buttons
+      if (con > 0) {
+        const btnM = document.getElementById('btnChoMuon');
+        btnM.href = `../dich-vu/cho-muon.html?maSach=${b.maSach}`;
+        btnM.style.display = 'flex';
+      } else {
+        const btnD = document.getElementById('btnDatCho');
+        btnD.href = `../dich-vu/dat-cho.html?maSach=${b.maSach}`;
+        btnD.style.display = 'flex';
+      }
+
+      // Info grid
+      const fields = [
+        ['Mã sách',         b.maSach       || '—'],
+        ['ISBN',            b.isbn         || '—'],
+        ['Nhà xuất bản',    b.nxb          || '—'],
+        ['Năm xuất bản',    b.namXB        || '—'],
+        ['Thể loại',        b.theLoai      || '—'],
+        ['Ngôn ngữ',        b.ngonNgu      || '—'],
+        ['Số trang',        b.soTrang ? `${b.soTrang} trang` : '—'],
+        ['Vị trí kệ',       b.viTriKe      || '—'],
+        ['Giá bồi thường',  b.giaBoiThuong ? formatCurrency(b.giaBoiThuong) : '—'],
+      ];
+      document.getElementById('infoGrid').innerHTML = fields.map(([lbl, val]) => `
+        <div class="info-item">
+          <div class="info-label">${lbl}</div>
+          <div class="info-value">${val}</div>
+        </div>`).join('');
+
+      // Stock numbers
+      const dangMuon = tong - con;
+      document.getElementById('stockTong').textContent     = tong;
+      document.getElementById('stockCon').textContent      = con;
+      document.getElementById('stockDangMuon').textContent = dangMuon;
+
+      const pct = tong > 0 ? Math.round((con / tong) * 100) : 0;
+      const barColor = con === 0 ? '#dc2626' : (con <= tong * 0.2 ? '#d97706' : '#16a34a');
+      document.getElementById('stockBar').style.width      = pct + '%';
+      document.getElementById('stockBar').style.background = barColor;
+      document.getElementById('stockCaption').textContent  = `${pct}% số lượng còn có thể mượn`;
+
+      // Description
+      const descEl = document.getElementById('bookDesc');
+      if (b.moTa) {
+        descEl.textContent = b.moTa;
+        descEl.className   = 'desc-body';
+      } else {
+        descEl.textContent = 'Chưa có mô tả cho cuốn sách này.';
+        descEl.className   = 'desc-body muted';
+      }
+    }
+
+    function renderHistory(maSach) {
+      const phieuMuon = Storage.getAll('phieuMuon') || [];
+      const related   = phieuMuon.filter(p =>
+        Array.isArray(p.danhSachSach) && p.danhSachSach.some(s => s.maSach === maSach)
+      );
+
+      const tbody = document.getElementById('historyBody');
+      if (related.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6"><i class="fas fa-inbox"></i> Chưa có lịch sử mượn</td></tr>';
+        return;
+      }
+
+      // Sort newest first
+      related.sort((a, b) => (b.ngayMuon || '').localeCompare(a.ngayMuon || ''));
+
+      tbody.innerHTML = related.map(p => `
+        <tr>
+          <td><span style="font-weight:600;color:#6366f1">${p.maPhieu || '—'}</span></td>
+          <td>${p.maDG || '—'}</td>
+          <td>${p.ngayMuon ? formatDate(new Date(p.ngayMuon)) : '—'}</td>
+          <td>${p.hanTra  ? formatDate(new Date(p.hanTra))  : '—'}</td>
+          <td>${statusBadge(p.trangThai)}</td>
+          <td style="color:#64748b;font-size:.83rem">${p.ghiChu || '—'}</td>
+        </tr>`).join('');
+    }
+
+    function statusBadge(status) {
+      const map = {
+        daTra:     ['badge-success',   'Đã trả'],
+        dangMuon:  ['badge-warning',   'Đang mượn'],
+        quaHan:    ['badge-danger',    'Quá hạn'],
+      };
+      const [cls, lbl] = map[status] || ['badge-secondary', status || '—'];
+      return `<span class="badge ${cls}">${lbl}</span>`;
+    }
+  </script>
+</body>
+</html>
