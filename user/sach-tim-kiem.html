@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tìm Kiếm Sách - Thư Viện</title>
+<style>
+/* === RESET VÀ CƠ BẢN === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; background: #f0f2f5; font-size: 14px; color: #333; }
+
+/* === THANH TIÊU ĐỀ === */
+#header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: #2196F3; color: white; height: 50px;
+    padding: 0 20px; overflow: hidden;
+}
+#header h1 { float: left; font-size: 18px; line-height: 50px; font-weight: bold; }
+#header .user-area { float: right; line-height: 50px; }
+#header .user-area span { margin-right: 10px; font-size: 13px; }
+#header .btn-logout {
+    color: white; text-decoration: none;
+    background: rgba(0,0,0,0.18); padding: 5px 12px;
+    border-radius: 3px; font-size: 13px;
+}
+#header .btn-logout:hover { background: rgba(0,0,0,0.28); }
+
+/* === THANH BÊN === */
+#sidebar {
+    position: fixed; top: 50px; left: 0; bottom: 0;
+    width: 200px; background: #1565C0;
+    overflow-y: auto; z-index: 900;
+}
+#sidebar a {
+    display: block; color: #cce4ff; text-decoration: none;
+    padding: 10px 15px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 13px;
+}
+#sidebar a:hover { background: #1976D2; color: white; }
+#sidebar a.active {
+    background: #0D47A1; color: white;
+    font-weight: bold; border-left: 3px solid #64B5F6;
+    padding-left: 12px;
+}
+
+/* === KHU VỰC NỘI DUNG === */
+#content {
+    margin-left: 200px;
+    padding: 70px 20px 20px 20px;
+    min-height: 100vh;
+}
+
+/* === TIÊU ĐỀ TRANG === */
+.page-title {
+    font-size: 22px; font-weight: bold; color: #1565C0;
+    margin-bottom: 15px; padding-bottom: 10px;
+    border-bottom: 2px solid #2196F3;
+}
+
+/* === THẺ NỘI DUNG === */
+.card {
+    background: white; border-radius: 5px; padding: 20px;
+    margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* === NHÃN PHẦN === */
+.section-label {
+    font-size: 15px; font-weight: bold; color: #1565C0;
+    margin-bottom: 15px; padding-bottom: 6px;
+    border-bottom: 1px solid #BBDEFB;
+}
+
+/* === FORM TÌM KIẾM NÂNG CAO === */
+/* Bố cục 2 cột bằng float */
+.form-row { overflow: hidden; margin-bottom: 14px; }
+.form-col { float: left; width: 50%; padding-right: 15px; }
+.form-col:last-child { padding-right: 0; }
+.form-col label {
+    display: block; margin-bottom: 5px;
+    font-weight: bold; color: #555; font-size: 13px;
+}
+.form-col input[type="text"],
+.form-col input[type="number"],
+.form-col select {
+    width: 100%; padding: 8px 12px;
+    border: 1px solid #ccc; border-radius: 3px;
+    font-size: 14px; outline: none; background: white;
+}
+.form-col input:focus,
+.form-col select:focus {
+    border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3);
+}
+/* Nhóm năm xuất bản */
+.year-group { overflow: hidden; }
+.year-group input { float: left; width: 45%; }
+.year-group span {
+    float: left; padding: 8px 5px;
+    font-size: 13px; color: #666;
+}
+
+/* === NÚT BẤM === */
+.btn-row { margin-top: 10px; overflow: hidden; }
+.btn {
+    padding: 9px 22px; border: none; border-radius: 3px;
+    cursor: pointer; font-size: 14px; text-decoration: none;
+    display: inline-block; line-height: normal;
+}
+.btn-blue { background: #2196F3; color: white; margin-right: 10px; }
+.btn-blue:hover { background: #1976D2; }
+.btn-grey { background: #9E9E9E; color: white; }
+.btn-grey:hover { background: #757575; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-teal { background: #009688; color: white; }
+.btn-teal:hover { background: #00796B; }
+
+/* === BẢNG KẾT QUẢ === */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 650px; }
+table thead tr { background: #2196F3; color: white; }
+table th { padding: 10px 8px; text-align: left; font-size: 13px; white-space: nowrap; }
+table td {
+    padding: 8px; border-bottom: 1px solid #eee;
+    font-size: 13px; vertical-align: middle;
+}
+table tbody tr:hover { background: #e3f2fd; }
+table tbody tr:nth-child(even) { background: #fafafa; }
+table tbody tr:nth-child(even):hover { background: #e3f2fd; }
+
+/* === MÀU SỐ LƯỢNG CÒN LẠI === */
+.so-luong-do { color: #D32F2F; font-weight: bold; }
+.so-luong-cam { color: #E65100; font-weight: bold; }
+.so-luong-xanh { color: #2E7D32; font-weight: bold; }
+
+/* === NHÃN TRẠNG THÁI === */
+.badge {
+    padding: 3px 10px; border-radius: 12px; font-size: 12px;
+    font-weight: bold; display: inline-block;
+}
+.badge-co-sach { background: #E8F5E9; color: #2E7D32; border: 1px solid #81C784; }
+.badge-het-sach { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+
+/* === THÔNG BÁO === */
+.no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
+.count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
+.hint-msg {
+    text-align: center; color: #1565C0;
+    padding: 25px; font-size: 14px;
+    background: #E3F2FD; border-radius: 5px;
+}
+
+/* === CLEARFIX === */
+.cf::after { content: ""; display: table; clear: both; }
+</style>
+</head>
+<body>
+
+<!-- Thanh tiêu đề trên cùng -->
+<div id="header">
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-area">
+        <span id="lblNguoiDung">👤 Khách</span>
+        <a href="../index.html" class="btn-logout" onclick="return dangXuat()">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<!-- Thanh điều hướng bên trái -->
+<div id="sidebar">
+    <a href="dashboard.html">🏠 Trang chủ</a>
+    <a href="doc-gia-danh-sach.html">👥 DS Độc giả</a>
+    <a href="doc-gia-them.html">➕ Thêm độc giả</a>
+    <a href="sach-danh-sach.html">📖 DS Sách</a>
+    <a href="sach-tim-kiem.html" class="active">🔍 Tìm sách</a>
+    <a href="cho-muon.html">🤝 Cho mượn</a>
+    <a href="tra-sach.html">↩️ Trả sách</a>
+    <a href="gia-han.html">⏰ Gia hạn</a>
+    <a href="xu-ly-phat.html">💰 Xử lý phạt</a>
+    <a href="dat-cho.html">📌 Đặt chỗ</a>
+    <a href="lich-su.html">📋 Lịch sử</a>
+    <a href="thong-ke.html">📊 Thống kê</a>
+</div>
+
+<!-- Khu vực nội dung chính -->
+<div id="content">
+    <div class="page-title">🔍 Tìm Kiếm Sách Nâng Cao</div>
+
+    <!-- Thẻ form tìm kiếm -->
+    <div class="card">
+        <div class="section-label">🔎 Điều kiện tìm kiếm</div>
+
+        <!-- Hàng 1: Tên sách và Tác giả -->
+        <div class="form-row cf">
+            <div class="form-col">
+                <label>Tên sách</label>
+                <input type="text" id="timTenSach" placeholder="Nhập tên sách..." />
+            </div>
+            <div class="form-col">
+                <label>Tác giả</label>
+                <input type="text" id="timTacGia" placeholder="Nhập tên tác giả..." />
+            </div>
+        </div>
+
+        <!-- Hàng 2: Nhà xuất bản và Thể loại -->
+        <div class="form-row cf">
+            <div class="form-col">
+                <label>Nhà xuất bản</label>
+                <input type="text" id="timNXB" placeholder="Nhập nhà xuất bản..." />
+            </div>
+            <div class="form-col">
+                <label>Thể loại</label>
+                <select id="timTheLoai">
+                    <option value="">-- Tất cả thể loại --</option>
+                    <!-- Điền bởi JS -->
+                </select>
+            </div>
+        </div>
+
+        <!-- Hàng 3: Năm xuất bản từ - đến -->
+        <div class="form-row cf">
+            <div class="form-col">
+                <label>Năm xuất bản</label>
+                <div class="year-group">
+                    <input type="number" id="timNamTu" placeholder="Từ năm" min="1900" max="2099" />
+                    <span>—</span>
+                    <input type="number" id="timNamDen" placeholder="Đến năm" min="1900" max="2099" style="float:right; width:45%;" />
+                </div>
+            </div>
+            <div class="form-col">
+                <!-- Cột trống để căn layout -->
+            </div>
+        </div>
+
+        <!-- Nút Tìm kiếm và Đặt lại -->
+        <div class="btn-row">
+            <button class="btn btn-blue" onclick="timKiemSach()">🔍 Tìm kiếm</button>
+            <button class="btn btn-grey" onclick="datLai()">🔄 Đặt lại</button>
+        </div>
+    </div>
+
+    <!-- Thẻ kết quả tìm kiếm -->
+    <div class="card" id="cardKetQua">
+        <div class="section-label">📋 Kết quả tìm kiếm</div>
+
+        <!-- Thông tin số lượng -->
+        <div class="count-info" id="lblSoLuong" style="display:none"></div>
+
+        <!-- Vùng gợi ý khi chưa tìm -->
+        <div id="goiY" class="hint-msg">
+            💡 Nhập điều kiện tìm kiếm ở trên và nhấn <strong>Tìm kiếm</strong>
+        </div>
+
+        <!-- Bảng kết quả -->
+        <div class="table-wrap" id="bangKetQuaWrap" style="display:none">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px">STT</th>
+                        <th style="width:80px">Mã sách</th>
+                        <th>Tên sách</th>
+                        <th style="width:120px">Tác giả</th>
+                        <th style="width:100px">Thể loại</th>
+                        <th style="width:90px">Còn/Tổng</th>
+                        <th style="width:85px">Trạng thái</th>
+                        <th style="width:110px">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="bangSach">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+/* === BIẾN ĐÁNH DẤU ĐÃ THỰC HIỆN TÌM KIẾM CHƯA === */
+var daTimKiem = false;
+
+/* === KIỂM TRA ĐĂNG NHẬP === */
+function kiemTraDangNhap() {
+    var nguoiDung = localStorage.getItem('currentUser');
+    if (!nguoiDung) {
+        alert('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!');
+        window.location.href = '../index.html';
+        return false;
+    }
+    document.getElementById('lblNguoiDung').innerHTML = '👤 ' + nguoiDung;
+    return true;
+}
+
+/* === LẤY DANH SÁCH SÁCH TỪ LOCALSTORAGE === */
+function layDanhSachSach() {
+    var data = localStorage.getItem('danhSachSach');
+    if (!data) return [];
+    try { return JSON.parse(data); }
+    catch (e) { return []; }
+}
+
+/* === TẢI DANH SÁCH THỂ LOẠI VÀO DROPDOWN === */
+function taiTheLoai() {
+    var danhSach = layDanhSachSach();
+    var dsTheLoai = {};
+    for (var i = 0; i < danhSach.length; i++) {
+        var tl = danhSach[i].theLoai;
+        if (tl) dsTheLoai[tl] = true;
+    }
+    var sel = document.getElementById('timTheLoai');
+    var html = '<option value="">-- Tất cả thể loại --</option>';
+    for (var ten in dsTheLoai) {
+        html += '<option value="' + ten + '">' + ten + '</option>';
+    }
+    sel.innerHTML = html;
+}
+
+/* === XÁC ĐỊNH MÀU SỐ LƯỢNG CÒN LẠI === */
+function mauSoLuong(soLuongCon) {
+    if (soLuongCon === 0) return 'so-luong-do';
+    if (soLuongCon <= 2) return 'so-luong-cam';
+    return 'so-luong-xanh';
+}
+
+/* === TÌM KIẾM SÁCH VỚI LOGIC AND (TẤT CẢ ĐIỀU KIỆN PHẢI KHỚP) === */
+function timKiemSach() {
+    daTimKiem = true;
+
+    /* Lấy giá trị các điều kiện tìm kiếm */
+    var timTenSach = document.getElementById('timTenSach').value.trim().toLowerCase();
+    var timTacGia = document.getElementById('timTacGia').value.trim().toLowerCase();
+    var timNXB = document.getElementById('timNXB').value.trim().toLowerCase();
+    var timTheLoai = document.getElementById('timTheLoai').value;
+    var timNamTu = document.getElementById('timNamTu').value.trim();
+    var timNamDen = document.getElementById('timNamDen').value.trim();
+
+    var namTu = timNamTu ? parseInt(timNamTu, 10) : 0;
+    var namDen = timNamDen ? parseInt(timNamDen, 10) : 9999;
+
+    /* Kiểm tra năm hợp lệ */
+    if (timNamTu && timNamDen && namTu > namDen) {
+        alert('⚠ Năm bắt đầu không được lớn hơn năm kết thúc!');
+        return;
+    }
+
+    var danhSach = layDanhSachSach();
+    var ketQua = [];
+
+    /* Áp dụng tất cả điều kiện theo logic AND */
+    for (var i = 0; i < danhSach.length; i++) {
+        var s = danhSach[i];
+
+        /* Điều kiện 1: Tên sách */
+        if (timTenSach && !(s.tenSach && s.tenSach.toLowerCase().indexOf(timTenSach) !== -1)) continue;
+
+        /* Điều kiện 2: Tác giả */
+        if (timTacGia && !(s.tacGia && s.tacGia.toLowerCase().indexOf(timTacGia) !== -1)) continue;
+
+        /* Điều kiện 3: Nhà xuất bản */
+        if (timNXB && !(s.nxb && s.nxb.toLowerCase().indexOf(timNXB) !== -1)) continue;
+
+        /* Điều kiện 4: Thể loại */
+        if (timTheLoai && s.theLoai !== timTheLoai) continue;
+
+        /* Điều kiện 5: Năm xuất bản */
+        if (timNamTu || timNamDen) {
+            var namXB = parseInt(s.namXB, 10) || 0;
+            if (namXB < namTu || namXB > namDen) continue;
+        }
+
+        ketQua.push(s);
+    }
+
+    /* Hiển thị kết quả */
+    var lblSoLuong = document.getElementById('lblSoLuong');
+    var goiY = document.getElementById('goiY');
+    var bangWrap = document.getElementById('bangKetQuaWrap');
+    var bangSach = document.getElementById('bangSach');
+
+    goiY.style.display = 'none';
+    lblSoLuong.style.display = 'block';
+    lblSoLuong.innerHTML = 'Tìm thấy <strong>' + ketQua.length + '</strong> kết quả';
+
+    if (ketQua.length === 0) {
+        bangWrap.style.display = 'none';
+        bangSach.innerHTML = '';
+        lblSoLuong.innerHTML += ' &nbsp;⚠ Không có sách phù hợp với điều kiện tìm kiếm';
+        return;
+    }
+
+    bangWrap.style.display = 'block';
+
+    var html = '';
+    for (var j = 0; j < ketQua.length; j++) {
+        var sach = ketQua[j];
+        var soLuongCon = parseInt(sach.soLuongCon, 10) || 0;
+        var soLuongTong = parseInt(sach.soLuongTong, 10) || 0;
+        var classColor = mauSoLuong(soLuongCon);
+        var trangThai = soLuongCon > 0 ? 'Còn sách' : 'Hết sách';
+        var badgeClass = soLuongCon > 0 ? 'badge-co-sach' : 'badge-het-sach';
+
+        html += '<tr>';
+        html += '<td>' + (j + 1) + '</td>';
+        html += '<td><strong>' + (sach.maSach || '') + '</strong></td>';
+        html += '<td>' + (sach.tenSach || '') + '</td>';
+        html += '<td>' + (sach.tacGia || '') + '</td>';
+        html += '<td>' + (sach.theLoai || '') + '</td>';
+        html += '<td><span class="' + classColor + '">' + soLuongCon + '</span> / ' + soLuongTong + '</td>';
+        html += '<td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td>';
+        html += '<td>';
+        html += '<a href="sach-chi-tiet.html?ma=' + encodeURIComponent(sach.maSach) + '" class="btn btn-sm btn-teal">🔍 Chi tiết</a>';
+        html += '</td>';
+        html += '</tr>';
+    }
+    bangSach.innerHTML = html;
+}
+
+/* === ĐẶT LẠI TẤT CẢ ĐIỀU KIỆN === */
+function datLai() {
+    document.getElementById('timTenSach').value = '';
+    document.getElementById('timTacGia').value = '';
+    document.getElementById('timNXB').value = '';
+    document.getElementById('timTheLoai').value = '';
+    document.getElementById('timNamTu').value = '';
+    document.getElementById('timNamDen').value = '';
+
+    /* Ẩn kết quả, hiện lại gợi ý */
+    document.getElementById('lblSoLuong').style.display = 'none';
+    document.getElementById('bangKetQuaWrap').style.display = 'none';
+    document.getElementById('goiY').style.display = 'block';
+    document.getElementById('bangSach').innerHTML = '';
+    daTimKiem = false;
+}
+
+/* === HÀM ĐĂNG XUẤT === */
+function dangXuat() {
+    if (confirm('Bạn có muốn đăng xuất không?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = '../index.html';
+    }
+    return false;
+}
+
+/* === KHỞI TẠO TRANG === */
+if (kiemTraDangNhap()) {
+    taiTheLoai();
+}
+</script>
+</body>
+</html>
