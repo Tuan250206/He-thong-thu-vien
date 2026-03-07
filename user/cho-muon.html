@@ -4,253 +4,119 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cho mượn sách - Thư viện</title>
+<link rel="stylesheet" href="common.css">
 <style>
-/* ========== RESET CƠ BẢN ========== */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; background: #f0f2f5; color: #333; font-size: 14px; }
-
-/* ========== HEADER ========== */
-.header {
-    background: #2196F3;
-    color: white;
-    padding: 0 20px;
-    height: 55px;
-    line-height: 55px;
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    overflow: hidden;
-}
-.header h1 { float: left; font-size: 20px; }
-.header .user-info { float: right; font-size: 13px; }
-.header .user-info a { color: #fff; text-decoration: none; }
-.header .user-info a:hover { text-decoration: underline; }
-
-/* ========== SIDEBAR ========== */
-.sidebar {
-    float: left;
-    width: 200px;
-    background: #1565C0;
-    min-height: 100vh;
-    padding-top: 55px;
-    position: fixed;
-    top: 0; left: 0;
-}
-.sidebar a {
-    display: block;
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 15px;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.sidebar a:hover { background: #1976D2; }
-.sidebar a.active { background: #2196F3; font-weight: bold; }
-
-/* ========== NỘI DUNG CHÍNH ========== */
-.content {
-    margin-left: 220px;
-    padding: 70px 20px 30px 20px;
-}
-
-/* Tiêu đề trang */
-.page-title {
-    background: white;
-    padding: 14px 20px;
-    margin-bottom: 18px;
-    border-radius: 4px;
-    border-left: 4px solid #2196F3;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
+.page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 .page-title h2 { font-size: 17px; color: #333; }
-
-/* Thẻ card */
-.card {
-    background: white;
-    padding: 20px;
-    margin-bottom: 18px;
-    border-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-.card h3 {
-    font-size: 15px;
-    color: #2196F3;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #E3F2FD;
-}
-.card-step-num {
-    display: inline-block;
-    background: #2196F3;
-    color: white;
-    border-radius: 50%;
-    width: 22px; height: 22px;
-    line-height: 22px;
-    text-align: center;
-    font-size: 12px;
-    margin-right: 6px;
-}
-
-/* Form */
+.card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.card h3 { font-size: 15px; color: #2196F3; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #E3F2FD; }
+.card-step-num { display: inline-block; background: #2196F3; color: white; border-radius: 50%; width: 22px; height: 22px; line-height: 22px; text-align: center; font-size: 12px; margin-right: 6px; }
 .form-group { margin-bottom: 14px; overflow: hidden; }
-.form-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: bold;
-    color: #555;
-    margin-bottom: 5px;
-}
-.form-group input, .form-group select {
-    padding: 8px 11px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    width: 280px;
-}
+.form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
+.form-group input, .form-group select { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 280px; }
 .form-group input:focus { outline: none; border-color: #2196F3; }
-
-/* Nút bấm */
-.btn {
-    padding: 8px 18px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    display: inline-block;
-}
+.btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; display: inline-block; }
 .btn-primary { background: #2196F3; color: white; }
 .btn-primary:hover { background: #1976D2; }
 .btn-success { background: #4CAF50; color: white; }
 .btn-success:hover { background: #388E3C; }
-.btn-danger {
-    background: #f44336; color: white;
-    font-size: 12px; padding: 4px 10px;
-}
+.btn-danger { background: #f44336; color: white; font-size: 12px; padding: 4px 10px; }
 .btn-danger:hover { background: #D32F2F; }
-
-/* Hộp thông tin vàng */
-.info-box {
-    background: #FFFDE7;
-    border: 1px solid #F9A825;
-    border-radius: 4px;
-    padding: 12px 15px;
-    margin-top: 10px;
-    font-size: 13px;
-}
+.info-box { background: #FFFDE7; border: 1px solid #F9A825; border-radius: 4px; padding: 12px 15px; margin-top: 10px; font-size: 13px; }
 .info-box p { margin-bottom: 4px; }
 .info-box p:last-child { margin-bottom: 0; }
-
-/* Hộp lỗi */
-.error-box {
-    background: #FFEBEE;
-    border: 1px solid #FFCDD2;
-    color: #C62828;
-    padding: 10px 14px;
-    border-radius: 4px;
-    margin-top: 10px;
-    font-size: 13px;
-}
-
-/* Hộp ngày */
-.date-box {
-    background: #E3F2FD;
-    border: 1px solid #90CAF9;
-    border-radius: 4px;
-    padding: 12px 15px;
-    margin-bottom: 15px;
-    font-size: 13px;
-}
+.error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
+.date-box { background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 4px; padding: 12px 15px; margin-bottom: 15px; font-size: 13px; }
 .date-box p { margin-bottom: 4px; }
-
-/* Bảng */
 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th {
-    background: #2196F3;
-    color: white;
-    padding: 10px 12px;
-    text-align: left;
-    font-size: 13px;
-    white-space: nowrap;
-}
-td {
-    padding: 9px 12px;
-    border-bottom: 1px solid #eee;
-    font-size: 13px;
-    vertical-align: middle;
-}
+th { background: #2196F3; color: white; padding: 10px 12px; text-align: left; font-size: 13px; white-space: nowrap; }
+td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
 tr:hover td { background: #F5F5F5; }
-
-/* Ghi chú nhỏ */
 .note { font-size: 12px; color: #888; margin-top: 6px; }
-
-/* Ẩn phần tử */
 .hidden { display: none; }
 </style>
 </head>
 <body>
 
-<!-- ========== HEADER ========== -->
 <div class="header">
     <h1>📚 Hệ Thống Thư Viện</h1>
     <div class="user-info">
-        Xin chào, <strong id="tenNguoiDung">Nhân viên</strong>
-        &nbsp;|&nbsp;
-        <a href="../index.html">Đăng xuất</a>
+        Xin chào! <strong id="tenNguoiDung">Nhân viên</strong>
+        &nbsp;|&nbsp;<a href="../index.html">Đăng xuất</a>
     </div>
 </div>
 
-<!-- ========== SIDEBAR ========== -->
 <div class="sidebar">
-    <a href="dashboard.html">🏠 Trang chủ</a>
-    <a href="doc-gia-danh-sach.html">👥 DS Độc giả</a>
-    <a href="doc-gia-them.html">➕ Thêm độc giả</a>
-    <a href="sach-danh-sach.html">📖 DS Sách</a>
-    <a href="sach-tim-kiem.html">🔍 Tìm sách</a>
-    <a href="cho-muon.html" class="active">🤝 Cho mượn</a>
-    <a href="tra-sach.html">↩️ Trả sách</a>
-    <a href="gia-han.html">⏰ Gia hạn</a>
-    <a href="xu-ly-phat.html">💰 Xử lý phạt</a>
-    <a href="dat-cho.html">📌 Đặt chỗ</a>
-    <a href="lich-su.html">📋 Lịch sử</a>
-    <a href="thong-ke.html">📊 Thống kê</a>
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item active">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="dat-cho.html" class="menu-item">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="doc-gia-them.html" class="menu-item">
+        <span class="menu-icon">➕</span>Thêm ĐG
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <a href="sach-tim-kiem.html" class="menu-item">
+        <span class="menu-icon">🔍</span>Tìm sách
+    </a>
+
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
 </div>
 
-<!-- ========== NỘI DUNG CHÍNH ========== -->
 <div class="content">
+    <div class="page-title"><h2>🤝 Cho mượn sách</h2></div>
 
-    <div class="page-title">
-        <h2>🤝 Cho mượn sách</h2>
-    </div>
-
-    <!-- ===== BƯỚC 1: TÌM ĐỘC GIẢ ===== -->
     <div class="card" id="buoc1">
         <h3><span class="card-step-num">1</span>Tìm độc giả</h3>
         <div class="form-group">
             <label for="maDGInput">Mã độc giả:</label>
-            <input type="text" id="maDGInput" placeholder="Nhập mã độc giả..."
-                   onkeydown="if(event.keyCode===13) timDocGia()">
+            <input type="text" id="maDGInput" placeholder="Nhập mã độc giả..." onkeydown="if(event.keyCode===13) timDocGia()">
             <button class="btn btn-primary" onclick="timDocGia()" style="margin-left:8px;">🔍 Tìm</button>
         </div>
-        <!-- Khu vực hiển thị kết quả tìm độc giả -->
         <div id="ketQuaDocGia"></div>
     </div>
 
-    <!-- ===== BƯỚC 2: THÊM SÁCH (ẩn ban đầu) ===== -->
     <div class="card hidden" id="buoc2">
         <h3><span class="card-step-num">2</span>Thêm sách cần mượn</h3>
         <div class="form-group">
             <label for="maSachInput">Mã sách:</label>
-            <input type="text" id="maSachInput" placeholder="Nhập mã sách..."
-                   onkeydown="if(event.keyCode===13) themSach()">
+            <input type="text" id="maSachInput" placeholder="Nhập mã sách..." onkeydown="if(event.keyCode===13) themSach()">
             <button class="btn btn-primary" onclick="themSach()" style="margin-left:8px;">➕ Thêm sách</button>
         </div>
-        <!-- Thông báo lỗi khi thêm sách -->
         <div id="loiSach"></div>
-        <!-- Bảng danh sách sách đã chọn -->
         <div id="bangSachChon"></div>
     </div>
 
-    <!-- ===== BƯỚC 3: XÁC NHẬN (ẩn ban đầu) ===== -->
     <div class="card hidden" id="buoc3">
         <h3><span class="card-step-num">3</span>Xác nhận cho mượn</h3>
         <div class="date-box">
@@ -262,39 +128,26 @@ tr:hover td { background: #F5F5F5; }
             <input type="date" id="hanTraInput">
         </div>
         <button class="btn btn-success" onclick="xacNhanChoMuon()">✅ Xác nhận cho mượn</button>
-        <button class="btn btn-primary" onclick="resetTrang()"
-                style="margin-left:10px;background:#757575;">🔄 Nhập mới</button>
+        <button class="btn btn-primary" onclick="resetTrang()" style="margin-left:10px;background:#757575;">🔄 Nhập mới</button>
     </div>
-
-</div><!-- end content -->
+</div>
 
 <script>
-// =====================================================
-// BIẾN TOÀN CỤC
-// =====================================================
-var docGiaHienTai = null;   // Lưu thông tin độc giả đang thao tác
-var sachDaChon = [];         // Danh sách sách đã chọn để mượn
+var docGiaHienTai = null;
+var sachDaChon = [];
 
-// =====================================================
-// KHỞI TẠO KHI TẢI TRANG
-// =====================================================
 window.onload = function() {
-    // Hiển thị tên người dùng đăng nhập từ localStorage
     var user = localStorage.getItem('currentUser') || 'Nhân viên';
-    document.getElementById('tenNguoiDung').textContent = user;
-
-    // Hiển thị ngày mượn là hôm nay
+    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+    var tenHienThi = userInfo.hoTen || user;
+    document.getElementById('tenNguoiDung').textContent = tenHienThi;
+    
     var homNay = layNgayHomNay();
     document.getElementById('hienThiNgayMuon').textContent = homNay;
-
-    // Hạn trả mặc định = hôm nay + 14 ngày
     document.getElementById('hanTraInput').value = tinhNgaySau(new Date(), 14);
     document.getElementById('hanTraInput').min = homNay;
 };
 
-// =====================================================
-// HÀM TIỆN ÍCH: LẤY NGÀY HÔM NAY (YYYY-MM-DD)
-// =====================================================
 function layNgayHomNay() {
     var d = new Date();
     var thang = String(d.getMonth() + 1).padStart(2, '0');
@@ -302,7 +155,6 @@ function layNgayHomNay() {
     return d.getFullYear() + '-' + thang + '-' + ngay;
 }
 
-// HÀM TIỆN ÍCH: TÍNH NGÀY SAU N NGÀY, TRẢ VỀ YYYY-MM-DD
 function tinhNgaySau(ngayGoc, soNgay) {
     var d = new Date(ngayGoc);
     d.setDate(d.getDate() + soNgay);
@@ -311,7 +163,6 @@ function tinhNgaySau(ngayGoc, soNgay) {
     return d.getFullYear() + '-' + thang + '-' + ngay;
 }
 
-// HÀM TIỆN ÍCH: ĐỊNH DẠNG NGÀY DD/MM/YYYY
 function dinhDangNgay(str) {
     if (!str) return '---';
     var p = str.split('-');
@@ -319,33 +170,22 @@ function dinhDangNgay(str) {
     return p[2] + '/' + p[1] + '/' + p[0];
 }
 
-// HÀM TIỆN ÍCH: HIỂN THỊ HỘP LỖI
 function hienThiLoi(idEl, msg) {
-    document.getElementById(idEl).innerHTML =
-        '<div class="error-box">⚠️ ' + msg + '</div>';
+    document.getElementById(idEl).innerHTML = '<div class="error-box">⚠️ ' + msg + '</div>';
 }
 
-// =====================================================
-// BƯỚC 1: TÌM ĐỘC GIẢ THEO MÃ
-// =====================================================
 function timDocGia() {
     var maDG = document.getElementById('maDGInput').value.trim();
     var elKetQua = document.getElementById('ketQuaDocGia');
-
-    // Xóa kết quả cũ và ẩn các bước tiếp theo
     elKetQua.innerHTML = '';
     anCacBuocTiep();
 
-    // Kiểm tra đầu vào bắt buộc
     if (!maDG) {
         hienThiLoi('ketQuaDocGia', 'Vui lòng nhập mã độc giả!');
         return;
     }
 
-    // Đọc danh sách độc giả từ localStorage
     var dsDocGia = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
-
-    // Tìm kiếm độc giả khớp mã
     var docGia = null;
     for (var i = 0; i < dsDocGia.length; i++) {
         if (dsDocGia[i].maDG === maDG) {
@@ -354,21 +194,16 @@ function timDocGia() {
         }
     }
 
-    // Trường hợp không tìm thấy độc giả
     if (!docGia) {
-        hienThiLoi('ketQuaDocGia',
-            'Không tìm thấy độc giả với mã: <strong>' + maDG + '</strong>');
+        hienThiLoi('ketQuaDocGia', 'Không tìm thấy độc giả với mã: <strong>' + maDG + '</strong>');
         return;
     }
 
-    // Kiểm tra tài khoản bị khóa
     if (docGia.trangThai === 'Khóa') {
-        hienThiLoi('ketQuaDocGia',
-            'Tài khoản độc giả <strong>' + docGia.hoTen + '</strong> đã bị khóa, không thể cho mượn!');
+        hienThiLoi('ketQuaDocGia', 'Tài khoản độc giả <strong>' + docGia.hoTen + '</strong> đã bị khóa, không thể cho mượn!');
         return;
     }
 
-    // Đếm tổng số sách đang mượn (tất cả phiếu đang mượn của độc giả này)
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
     var soSachDangMuon = 0;
     for (var j = 0; j < dsPhieuMuon.length; j++) {
@@ -378,40 +213,29 @@ function timDocGia() {
         }
     }
 
-    // Kiểm tra giới hạn tối đa 5 sách
     if (soSachDangMuon >= 5) {
-        hienThiLoi('ketQuaDocGia',
-            'Độc giả <strong>' + docGia.hoTen + '</strong> đang mượn ' + soSachDangMuon +
-            '/5 sách — đã đạt giới hạn tối đa, không thể mượn thêm!');
+        hienThiLoi('ketQuaDocGia', 'Độc giả <strong>' + docGia.hoTen + '</strong> đang mượn ' + soSachDangMuon + '/5 sách — đã đạt giới hạn tối đa, không thể mượn thêm!');
         return;
     }
 
-    // Lưu độc giả đang thao tác và reset danh sách sách
     docGiaHienTai = docGia;
     sachDaChon = [];
 
-    // Hiển thị thông tin độc giả trong hộp vàng
     elKetQua.innerHTML = '<div class="info-box">'
         + '<p>✅ <strong>Đã tìm thấy độc giả!</strong></p>'
         + '<p><strong>Mã DG:</strong> ' + docGia.maDG + '</p>'
         + '<p><strong>Họ tên:</strong> ' + docGia.hoTen + '</p>'
-        + '<p><strong>Lớp:</strong> ' + (docGia.lop || '---')
-        + ' &nbsp;|&nbsp; <strong>Khoa:</strong> ' + (docGia.khoa || '---') + '</p>'
+        + '<p><strong>Lớp:</strong> ' + (docGia.lop || '---') + ' &nbsp;|&nbsp; <strong>Khoa:</strong> ' + (docGia.khoa || '---') + '</p>'
         + '<p><strong>Đang mượn:</strong> ' + soSachDangMuon + '/5 sách</p>'
-        + '<p><strong>Trạng thái:</strong> ' + docGia.trangThai + '</p>'
-        + '</div>';
+        + '<p><strong>Trạng thái:</strong> ' + docGia.trangThai + '</p></div>';
 
-    // Mở bước 2, đóng bước 3
     document.getElementById('buoc2').className = 'card';
     document.getElementById('buoc3').className = 'card hidden';
     document.getElementById('bangSachChon').innerHTML = '';
     document.getElementById('loiSach').innerHTML = '';
-
-    // Focus vào ô mã sách để nhập nhanh
     document.getElementById('maSachInput').focus();
 }
 
-// Ẩn bước 2 và 3, xóa dữ liệu tạm
 function anCacBuocTiep() {
     docGiaHienTai = null;
     sachDaChon = [];
@@ -419,29 +243,21 @@ function anCacBuocTiep() {
     document.getElementById('buoc3').className = 'card hidden';
 }
 
-// =====================================================
-// BƯỚC 2: THÊM SÁCH VÀO DANH SÁCH MƯỢN
-// =====================================================
 function themSach() {
     var maSach = document.getElementById('maSachInput').value.trim();
     document.getElementById('loiSach').innerHTML = '';
 
-    // Phải tìm độc giả trước
     if (!docGiaHienTai) {
         hienThiLoi('loiSach', 'Vui lòng tìm độc giả trước!');
         return;
     }
 
-    // Kiểm tra đầu vào
     if (!maSach) {
         hienThiLoi('loiSach', 'Vui lòng nhập mã sách!');
         return;
     }
 
-    // Đọc danh sách sách từ localStorage
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-
-    // Tìm sách theo mã
     var sach = null;
     for (var i = 0; i < dsSach.length; i++) {
         if (dsSach[i].maSach === maSach) {
@@ -450,29 +266,23 @@ function themSach() {
         }
     }
 
-    // Không tìm thấy sách
     if (!sach) {
         hienThiLoi('loiSach', 'Không tìm thấy sách với mã: <strong>' + maSach + '</strong>');
         return;
     }
 
-    // Kiểm tra sách còn trong kho
     if (parseInt(sach.soLuongCon) <= 0) {
-        hienThiLoi('loiSach',
-            'Sách <strong>' + sach.tenSach + '</strong> hiện đã hết (số lượng còn = 0)!');
+        hienThiLoi('loiSach', 'Sách <strong>' + sach.tenSach + '</strong> hiện đã hết (số lượng còn = 0)!');
         return;
     }
 
-    // Kiểm tra sách đã có trong danh sách chọn chưa
     for (var j = 0; j < sachDaChon.length; j++) {
         if (sachDaChon[j].maSach === maSach) {
-            hienThiLoi('loiSach',
-                'Sách <strong>' + sach.tenSach + '</strong> đã có trong danh sách mượn!');
+            hienThiLoi('loiSach', 'Sách <strong>' + sach.tenSach + '</strong> đã có trong danh sách mượn!');
             return;
         }
     }
 
-    // Kiểm tra tổng giới hạn: sách đang mượn + sách chuẩn bị mượn <= 5
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
     var soSachDangMuon = 0;
     for (var k = 0; k < dsPhieuMuon.length; k++) {
@@ -482,83 +292,44 @@ function themSach() {
         }
     }
     if (soSachDangMuon + sachDaChon.length >= 5) {
-        hienThiLoi('loiSach',
-            'Vượt quá giới hạn mượn sách! Độc giả chỉ được mượn tối đa 5 cuốn.');
+        hienThiLoi('loiSach', 'Vượt quá giới hạn mượn sách! Độc giả chỉ được mượn tối đa 5 cuốn.');
         return;
     }
 
-    // Thêm sách vào danh sách tạm
-    sachDaChon.push({
-        maSach: sach.maSach,
-        tenSach: sach.tenSach,
-        tacGia: sach.tacGia || '---',
-        soLuong: 1,
-        tinhTrang: 'Tốt'
-    });
-
-    // Xóa ô nhập mã sách, cập nhật bảng
+    sachDaChon.push({ maSach: sach.maSach, tenSach: sach.tenSach, tacGia: sach.tacGia || '---', soLuong: 1, tinhTrang: 'Tốt' });
     document.getElementById('maSachInput').value = '';
     capNhatBangSachChon();
-
-    // Hiện bước 3 sau khi có ít nhất 1 sách
     document.getElementById('buoc3').className = 'card';
     document.getElementById('maSachInput').focus();
 }
 
-// Vẽ lại bảng danh sách sách đã chọn
 function capNhatBangSachChon() {
     var container = document.getElementById('bangSachChon');
-
     if (sachDaChon.length === 0) {
         container.innerHTML = '<p class="note">Chưa có sách nào được chọn.</p>';
         document.getElementById('buoc3').className = 'card hidden';
         return;
     }
 
-    var html = '<table>'
-        + '<tr>'
-        + '<th>STT</th>'
-        + '<th>Mã sách</th>'
-        + '<th>Tên sách</th>'
-        + '<th>Tác giả</th>'
-        + '<th style="text-align:center;">Xóa</th>'
-        + '</tr>';
-
+    var html = '<table><tr><th>STT</th><th>Mã sách</th><th>Tên sách</th><th>Tác giả</th><th style="text-align:center;">Xóa</th></tr>';
     for (var i = 0; i < sachDaChon.length; i++) {
         var s = sachDaChon[i];
-        // Dùng closure qua thuộc tính data để truyền index vào onclick
-        html += '<tr>'
-            + '<td>' + (i + 1) + '</td>'
-            + '<td>' + s.maSach + '</td>'
-            + '<td>' + s.tenSach + '</td>'
-            + '<td>' + s.tacGia + '</td>'
-            + '<td style="text-align:center;">'
-            + '<button class="btn btn-danger" onclick="xoaSach(' + i + ')">✕ Xóa</button>'
-            + '</td>'
-            + '</tr>';
+        html += '<tr><td>' + (i + 1) + '</td><td>' + s.maSach + '</td><td>' + s.tenSach + '</td><td>' + s.tacGia + '</td>';
+        html += '<td style="text-align:center;"><button class="btn btn-danger" onclick="xoaSach(' + i + ')">✕ Xóa</button></td></tr>';
     }
-
-    html += '</table>'
-        + '<p class="note">Tổng: <strong>' + sachDaChon.length + '</strong> cuốn</p>';
-
+    html += '</table><p class="note">Tổng: <strong>' + sachDaChon.length + '</strong> cuốn</p>';
     container.innerHTML = html;
 }
 
-// Xóa sách khỏi danh sách theo vị trí index
 function xoaSach(viTri) {
     sachDaChon.splice(viTri, 1);
     capNhatBangSachChon();
-    // Nếu không còn sách nào thì ẩn bước 3
     if (sachDaChon.length === 0) {
         document.getElementById('buoc3').className = 'card hidden';
     }
 }
 
-// =====================================================
-// BƯỚC 3: XÁC NHẬN TẠO PHIẾU MƯỢN
-// =====================================================
 function xacNhanChoMuon() {
-    // Kiểm tra điều kiện cần thiết
     if (!docGiaHienTai) {
         alert('Lỗi: Chưa chọn độc giả!');
         return;
@@ -571,7 +342,6 @@ function xacNhanChoMuon() {
     var ngayMuon = layNgayHomNay();
     var hanTra = document.getElementById('hanTraInput').value;
 
-    // Kiểm tra hạn trả
     if (!hanTra) {
         alert('Vui lòng nhập hạn trả!');
         return;
@@ -581,25 +351,16 @@ function xacNhanChoMuon() {
         return;
     }
 
-    // Xây dựng thông tin xác nhận
     var tenSachList = '';
     for (var t = 0; t < sachDaChon.length; t++) {
         tenSachList += '\n  - ' + sachDaChon[t].tenSach;
     }
 
-    var xacNhan = confirm(
-        'XÁC NHẬN CHO MƯỢN\n\n'
-        + 'Độc giả: ' + docGiaHienTai.hoTen + ' (' + docGiaHienTai.maDG + ')\n'
-        + 'Số sách: ' + sachDaChon.length + ' cuốn' + tenSachList + '\n\n'
-        + 'Ngày mượn: ' + dinhDangNgay(ngayMuon) + '\n'
-        + 'Hạn trả: ' + dinhDangNgay(hanTra)
-    );
+    var xacNhan = confirm('XÁC NHẬN CHO MƯỢN\n\nĐộc giả: ' + docGiaHienTai.hoTen + ' (' + docGiaHienTai.maDG + ')\nSố sách: ' + sachDaChon.length + ' cuốn' + tenSachList + '\n\nNgày mượn: ' + dinhDangNgay(ngayMuon) + '\nHạn trả: ' + dinhDangNgay(hanTra));
     if (!xacNhan) return;
 
-    // Tạo mã phiếu duy nhất bằng timestamp
     var maPhieu = 'PM' + Date.now();
 
-    // Giảm soLuongCon của từng sách trong kho
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
     for (var i = 0; i < sachDaChon.length; i++) {
         for (var j = 0; j < dsSach.length; j++) {
@@ -611,54 +372,36 @@ function xacNhanChoMuon() {
     }
     localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
 
-    // Tạo phiếu mượn mới
     var phieuMuon = {
         maPhieu: maPhieu,
         maDG: docGiaHienTai.maDG,
         tenDG: docGiaHienTai.hoTen,
         ngayMuon: ngayMuon,
         hanTra: hanTra,
-        danhSachSach: JSON.parse(JSON.stringify(sachDaChon)), // Sao chép sâu
+        danhSachSach: JSON.parse(JSON.stringify(sachDaChon)),
         trangThai: 'Đang mượn',
         soLanGiaHan: 0
     };
 
-    // Lưu phiếu mượn vào localStorage
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
     dsPhieuMuon.push(phieuMuon);
     localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
 
-    // Thông báo thành công
-    alert('✅ TẠO PHIẾU MƯỢN THÀNH CÔNG!\n\n'
-        + 'Mã phiếu: ' + maPhieu + '\n'
-        + 'Độc giả: ' + docGiaHienTai.hoTen + '\n'
-        + 'Số sách: ' + sachDaChon.length + ' cuốn\n'
-        + 'Hạn trả: ' + dinhDangNgay(hanTra));
-
-    // Reset form về trạng thái ban đầu
+    alert('✅ TẠO PHIẾU MƯỢN THÀNH CÔNG!\n\nMã phiếu: ' + maPhieu + '\nĐộc giả: ' + docGiaHienTai.hoTen + '\nSố sách: ' + sachDaChon.length + ' cuốn\nHạn trả: ' + dinhDangNgay(hanTra));
     resetTrang();
 }
 
-// =====================================================
-// RESET FORM VỀ TRẠNG THÁI BAN ĐẦU
-// =====================================================
 function resetTrang() {
     docGiaHienTai = null;
     sachDaChon = [];
-
     document.getElementById('maDGInput').value = '';
     document.getElementById('maSachInput').value = '';
     document.getElementById('ketQuaDocGia').innerHTML = '';
     document.getElementById('bangSachChon').innerHTML = '';
     document.getElementById('loiSach').innerHTML = '';
-
     document.getElementById('buoc2').className = 'card hidden';
     document.getElementById('buoc3').className = 'card hidden';
-
-    // Đặt lại hạn trả về mặc định
     document.getElementById('hanTraInput').value = tinhNgaySau(new Date(), 14);
-
-    // Focus lại ô mã độc giả
     document.getElementById('maDGInput').focus();
 }
 </script>

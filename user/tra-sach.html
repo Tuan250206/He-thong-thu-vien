@@ -4,229 +4,135 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trả sách - Thư viện</title>
+<link rel="stylesheet" href="common.css">
 <style>
-/* ========== RESET ========== */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; background: #f0f2f5; color: #333; font-size: 14px; }
-
-/* ========== HEADER ========== */
-.header {
-    background: #2196F3; color: white;
-    padding: 0 20px; height: 55px; line-height: 55px;
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100; overflow: hidden;
-}
-.header h1 { float: left; font-size: 20px; }
-.header .user-info { float: right; font-size: 13px; }
-.header .user-info a { color: #fff; text-decoration: none; }
-
-/* ========== SIDEBAR ========== */
-.sidebar {
-    float: left; width: 200px; background: #1565C0;
-    min-height: 100vh; padding-top: 55px;
-    position: fixed; top: 0; left: 0;
-}
-.sidebar a {
-    display: block; color: #fff; text-decoration: none;
-    padding: 10px 15px; font-size: 13px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.sidebar a:hover { background: #1976D2; }
-.sidebar a.active { background: #2196F3; font-weight: bold; }
-
-/* ========== NỘI DUNG ========== */
-.content { margin-left: 220px; padding: 70px 20px 30px 20px; }
-
-.page-title {
-    background: white; padding: 14px 20px; margin-bottom: 18px;
-    border-radius: 4px; border-left: 4px solid #2196F3;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
+.page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 .page-title h2 { font-size: 17px; color: #333; }
-
-.card {
-    background: white; padding: 20px; margin-bottom: 18px;
-    border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-.card h3 {
-    font-size: 15px; color: #2196F3; margin-bottom: 15px;
-    padding-bottom: 8px; border-bottom: 2px solid #E3F2FD;
-}
-
-/* Form */
+.card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.card h3 { font-size: 15px; color: #2196F3; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #E3F2FD; }
 .form-group { margin-bottom: 14px; }
-.form-group label {
-    display: block; font-size: 13px;
-    font-weight: bold; color: #555; margin-bottom: 5px;
-}
-.form-group input, .form-group select {
-    padding: 8px 11px; border: 1px solid #ccc;
-    border-radius: 4px; font-size: 14px; width: 320px;
-}
+.form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
+.form-group input, .form-group select { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 320px; }
 .form-group input:focus { outline: none; border-color: #2196F3; }
-
-/* Nút bấm */
 .btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
 .btn-primary { background: #2196F3; color: white; }
 .btn-primary:hover { background: #1976D2; }
 .btn-success { background: #4CAF50; color: white; }
 .btn-success:hover { background: #388E3C; }
-
-/* Hộp thông tin vàng */
-.info-box {
-    background: #FFFDE7; border: 1px solid #F9A825;
-    border-radius: 4px; padding: 12px 15px;
-    margin-top: 10px; font-size: 13px;
-}
+.info-box { background: #FFFDE7; border: 1px solid #F9A825; border-radius: 4px; padding: 12px 15px; margin-top: 10px; font-size: 13px; }
 .info-box p { margin-bottom: 4px; }
-
-/* Hộp lỗi */
-.error-box {
-    background: #FFEBEE; border: 1px solid #FFCDD2;
-    color: #C62828; padding: 10px 14px;
-    border-radius: 4px; margin-top: 10px; font-size: 13px;
-}
-
-/* Hộp cảnh báo */
-.warn-box {
-    background: #FFF3E0; border: 1px solid #FFCC80;
-    color: #E65100; padding: 10px 14px;
-    border-radius: 4px; margin-bottom: 12px; font-size: 13px;
-}
-
-/* Bảng */
+.error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
+.warn-box { background: #FFF3E0; border: 1px solid #FFCC80; color: #E65100; padding: 10px 14px; border-radius: 4px; margin-bottom: 12px; font-size: 13px; }
 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th {
-    background: #2196F3; color: white;
-    padding: 10px 12px; text-align: left; font-size: 13px;
-}
-td {
-    padding: 9px 12px; border-bottom: 1px solid #eee;
-    font-size: 13px; vertical-align: middle;
-}
+th { background: #2196F3; color: white; padding: 10px 12px; text-align: left; font-size: 13px; }
+td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
 tr:hover td { background: #F5F5F5; }
-
-/* Select tình trạng trong bảng */
-td select {
-    padding: 5px 8px; border: 1px solid #ccc;
-    border-radius: 4px; font-size: 13px; width: 120px;
-}
-
-/* Tổng tiền phạt */
-.tong-tien {
-    background: #FFEBEE; border: 2px solid #EF9A9A;
-    border-radius: 4px; padding: 12px 20px;
-    margin-top: 15px; font-size: 15px;
-    font-weight: bold; color: #C62828;
-    text-align: right;
-}
-.tong-tien.no-fine {
-    background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32;
-}
-
-/* Nhãn quá hạn */
+td select { padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; width: 120px; }
+.tong-tien { background: #FFEBEE; border: 2px solid #EF9A9A; border-radius: 4px; padding: 12px 20px; margin-top: 15px; font-size: 15px; font-weight: bold; color: #C62828; text-align: right; }
+.tong-tien.no-fine { background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32; }
 .qua-han { color: #D32F2F; font-weight: bold; }
 .con-han { color: #388E3C; }
-
-/* Ghi chú */
-.note { font-size: 12px; color: #888; margin-top: 6px; }
-
-/* Ẩn */
 .hidden { display: none; }
 </style>
 </head>
 <body>
 
-<!-- ========== HEADER ========== -->
 <div class="header">
     <h1>📚 Hệ Thống Thư Viện</h1>
     <div class="user-info">
-        Xin chào, <strong id="tenNguoiDung">Nhân viên</strong>
+        Xin chào! <strong id="tenNguoiDung">Nhân viên</strong>
         &nbsp;|&nbsp;<a href="../index.html">Đăng xuất</a>
     </div>
 </div>
 
-<!-- ========== SIDEBAR ========== -->
 <div class="sidebar">
-    <a href="dashboard.html">🏠 Trang chủ</a>
-    <a href="doc-gia-danh-sach.html">👥 DS Độc giả</a>
-    <a href="doc-gia-them.html">➕ Thêm độc giả</a>
-    <a href="sach-danh-sach.html">📖 DS Sách</a>
-    <a href="sach-tim-kiem.html">🔍 Tìm sách</a>
-    <a href="cho-muon.html">🤝 Cho mượn</a>
-    <a href="tra-sach.html" class="active">↩️ Trả sách</a>
-    <a href="gia-han.html">⏰ Gia hạn</a>
-    <a href="xu-ly-phat.html">💰 Xử lý phạt</a>
-    <a href="dat-cho.html">📌 Đặt chỗ</a>
-    <a href="lich-su.html">📋 Lịch sử</a>
-    <a href="thong-ke.html">📊 Thống kê</a>
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item active">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="dat-cho.html" class="menu-item">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="doc-gia-them.html" class="menu-item">
+        <span class="menu-icon">➕</span>Thêm ĐG
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <a href="sach-tim-kiem.html" class="menu-item">
+        <span class="menu-icon">🔍</span>Tìm sách
+    </a>
+
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
 </div>
 
-<!-- ========== NỘI DUNG CHÍNH ========== -->
 <div class="content">
+    <div class="page-title"><h2>↩️ Trả sách</h2></div>
 
-    <div class="page-title">
-        <h2>↩️ Trả sách</h2>
-    </div>
-
-    <!-- ===== TÌM PHIẾU MƯỢN ===== -->
     <div class="card">
         <h3>🔍 Tìm phiếu mượn</h3>
         <div class="form-group">
             <label>Mã phiếu hoặc Mã độc giả:</label>
-            <input type="text" id="maTimInput" placeholder="Nhập mã phiếu (PM...) hoặc mã độc giả..."
-                   onkeydown="if(event.keyCode===13) timPhieu()">
+            <input type="text" id="maTimInput" placeholder="Nhập mã phiếu (PM...) hoặc mã độc giả..." onkeydown="if(event.keyCode===13) timPhieu()">
             <button class="btn btn-primary" onclick="timPhieu()" style="margin-left:8px;">🔍 Tìm</button>
         </div>
-        <!-- Khu vực hiển thị kết quả tìm: thông báo lỗi hoặc dropdown phiếu -->
         <div id="ketQuaTim"></div>
     </div>
 
-    <!-- ===== THÔNG TIN PHIẾU MƯỢN (ẩn ban đầu) ===== -->
     <div class="card hidden" id="cardThongTinPhieu">
         <h3>📋 Thông tin phiếu mượn</h3>
         <div id="chiTietPhieu"></div>
     </div>
 
-    <!-- ===== BẢNG TRẢ SÁCH (ẩn ban đầu) ===== -->
     <div class="card hidden" id="cardTraSach">
         <h3>📚 Chọn sách cần trả</h3>
-        <p class="note" style="margin-bottom:10px;">
-            Tích chọn sách cần trả và chọn tình trạng sách khi trả.
-        </p>
-        <!-- Bảng sách sẽ được tạo động ở đây -->
+        <p style="margin-bottom:10px;font-size:12px;color:#888;">Tích chọn sách cần trả và chọn tình trạng sách khi trả.</p>
         <div id="bangSachTra"></div>
-        <!-- Tổng tiền phạt -->
         <div id="khuTongPhat"></div>
-        <!-- Nút xác nhận -->
         <div style="margin-top:20px;">
             <button class="btn btn-success" onclick="xacNhanTra()">✅ Xác nhận trả sách</button>
-            <button class="btn btn-primary" onclick="resetTrang()"
-                    style="margin-left:10px; background:#757575;">🔄 Tìm phiếu khác</button>
+            <button class="btn btn-primary" onclick="resetTrang()" style="margin-left:10px;background:#757575;">🔄 Tìm phiếu khác</button>
         </div>
     </div>
-
-</div><!-- end content -->
+</div>
 
 <script>
-// =====================================================
-// BIẾN TOÀN CỤC
-// =====================================================
-var phieuHienTai = null;            // Phiếu mượn đang thao tác
-var dsDuLieuDropdown = [];          // Lưu danh sách phiếu khi tìm bằng maDG
+var phieuHienTai = null;
+var dsDuLieuDropdown = [];
 
-// =====================================================
-// KHỞI TẠO TRANG
-// =====================================================
 window.onload = function() {
     var user = localStorage.getItem('currentUser') || 'Nhân viên';
-    document.getElementById('tenNguoiDung').textContent = user;
+    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+    var tenHienThi = userInfo.hoTen || user;
+    document.getElementById('tenNguoiDung').textContent = tenHienThi;
 };
 
-// =====================================================
-// HÀM TIỆN ÍCH
-// =====================================================
-
-// Lấy ngày hôm nay định dạng YYYY-MM-DD
 function layNgayHomNay() {
     var d = new Date();
     var thang = String(d.getMonth() + 1).padStart(2, '0');
@@ -234,7 +140,6 @@ function layNgayHomNay() {
     return d.getFullYear() + '-' + thang + '-' + ngay;
 }
 
-// Định dạng hiển thị DD/MM/YYYY
 function dinhDangNgay(str) {
     if (!str) return '---';
     var p = str.split('-');
@@ -242,7 +147,6 @@ function dinhDangNgay(str) {
     return p[2] + '/' + p[1] + '/' + p[0];
 }
 
-// Định dạng tiền tệ Việt Nam
 function dinhDangTien(so) {
     so = Math.round(so);
     if (so === 0) return '0 đ';
@@ -255,28 +159,20 @@ function dinhDangTien(so) {
     return result + ' đ';
 }
 
-// Tính số ngày chênh lệch giữa 2 ngày (YYYY-MM-DD)
 function tinhSoNgay(ngay1Str, ngay2Str) {
     var d1 = new Date(ngay1Str);
     var d2 = new Date(ngay2Str);
     return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
 }
 
-// Hiển thị hộp lỗi
 function hienThiLoi(idEl, msg) {
-    document.getElementById(idEl).innerHTML =
-        '<div class="error-box">⚠️ ' + msg + '</div>';
+    document.getElementById(idEl).innerHTML = '<div class="error-box">⚠️ ' + msg + '</div>';
 }
 
-// =====================================================
-// TÌM PHIẾU MƯỢN (theo mã phiếu hoặc mã độc giả)
-// =====================================================
 function timPhieu() {
     var maTim = document.getElementById('maTimInput').value.trim();
     var elKetQua = document.getElementById('ketQuaTim');
     elKetQua.innerHTML = '';
-
-    // Ẩn các card kết quả
     document.getElementById('cardThongTinPhieu').className = 'card hidden';
     document.getElementById('cardTraSach').className = 'card hidden';
     phieuHienTai = null;
@@ -286,71 +182,51 @@ function timPhieu() {
         return;
     }
 
-    // Lấy toàn bộ danh sách phiếu mượn
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-
-    // --- Thử tìm theo mã phiếu trực tiếp ---
     var phieuTimThay = null;
     for (var i = 0; i < dsPhieuMuon.length; i++) {
-        if (dsPhieuMuon[i].maPhieu === maTim
-            && dsPhieuMuon[i].trangThai === 'Đang mượn') {
+        if (dsPhieuMuon[i].maPhieu === maTim && dsPhieuMuon[i].trangThai === 'Đang mượn') {
             phieuTimThay = dsPhieuMuon[i];
             break;
         }
     }
 
     if (phieuTimThay) {
-        // Tìm thấy theo mã phiếu → hiển thị trực tiếp
         hienThiChiTietPhieu(phieuTimThay);
         return;
     }
 
-    // --- Thử tìm theo mã độc giả ---
     var phieuCuaDG = [];
     for (var j = 0; j < dsPhieuMuon.length; j++) {
-        if (dsPhieuMuon[j].maDG === maTim
-            && dsPhieuMuon[j].trangThai === 'Đang mượn') {
+        if (dsPhieuMuon[j].maDG === maTim && dsPhieuMuon[j].trangThai === 'Đang mượn') {
             phieuCuaDG.push(dsPhieuMuon[j]);
         }
     }
 
     if (phieuCuaDG.length === 0) {
-        // Không tìm thấy gì cả
-        hienThiLoi('ketQuaTim',
-            'Không tìm thấy phiếu mượn đang hoạt động với: <strong>' + maTim + '</strong>');
+        hienThiLoi('ketQuaTim', 'Không tìm thấy phiếu mượn đang hoạt động với: <strong>' + maTim + '</strong>');
         return;
     }
 
     if (phieuCuaDG.length === 1) {
-        // Chỉ có 1 phiếu → hiển thị luôn
         hienThiChiTietPhieu(phieuCuaDG[0]);
         return;
     }
 
-    // Nhiều phiếu → hiển thị dropdown để chọn
     dsDuLieuDropdown = phieuCuaDG;
-    var html = '<div class="info-box">'
-        + '<p><strong>Tìm thấy ' + phieuCuaDG.length + ' phiếu mượn</strong> đang hoạt động của độc giả.</p>'
-        + '<p style="margin-top:8px;">Vui lòng chọn phiếu cần trả:</p>'
-        + '<select id="chonPhieuDropdown" style="width:400px;padding:7px;margin-top:8px;border:1px solid #ccc;border-radius:4px;"'
-        + ' onchange="chonPhieuTuDropdown()">'
-        + '<option value="">-- Chọn phiếu mượn --</option>';
+    var html = '<div class="info-box"><p><strong>Tìm thấy ' + phieuCuaDG.length + ' phiếu mượn</strong> đang hoạt động của độc giả.</p>';
+    html += '<p style="margin-top:8px;">Vui lòng chọn phiếu cần trả:</p>';
+    html += '<select id="chonPhieuDropdown" style="width:400px;padding:7px;margin-top:8px;border:1px solid #ccc;border-radius:4px;" onchange="chonPhieuTuDropdown()">';
+    html += '<option value="">-- Chọn phiếu mượn --</option>';
 
     for (var k = 0; k < phieuCuaDG.length; k++) {
         var p = phieuCuaDG[k];
-        html += '<option value="' + p.maPhieu + '">'
-            + p.maPhieu
-            + ' | Ngày mượn: ' + dinhDangNgay(p.ngayMuon)
-            + ' | Hạn trả: ' + dinhDangNgay(p.hanTra)
-            + ' | ' + p.danhSachSach.length + ' cuốn'
-            + '</option>';
+        html += '<option value="' + p.maPhieu + '">' + p.maPhieu + ' | Ngày mượn: ' + dinhDangNgay(p.ngayMuon) + ' | Hạn trả: ' + dinhDangNgay(p.hanTra) + ' | ' + p.danhSachSach.length + ' cuốn</option>';
     }
-
     html += '</select></div>';
     elKetQua.innerHTML = html;
 }
 
-// Xử lý khi người dùng chọn phiếu từ dropdown
 function chonPhieuTuDropdown() {
     var maPhieu = document.getElementById('chonPhieuDropdown').value;
     if (!maPhieu) {
@@ -358,7 +234,6 @@ function chonPhieuTuDropdown() {
         document.getElementById('cardTraSach').className = 'card hidden';
         return;
     }
-    // Tìm phiếu trong dữ liệu đã lưu
     for (var i = 0; i < dsDuLieuDropdown.length; i++) {
         if (dsDuLieuDropdown[i].maPhieu === maPhieu) {
             hienThiChiTietPhieu(dsDuLieuDropdown[i]);
@@ -367,100 +242,51 @@ function chonPhieuTuDropdown() {
     }
 }
 
-// =====================================================
-// HIỂN THỊ THÔNG TIN CHI TIẾT PHIẾU MƯỢN
-// =====================================================
 function hienThiChiTietPhieu(phieu) {
     phieuHienTai = phieu;
-
     var homNay = layNgayHomNay();
     var soNgayQuaHan = tinhSoNgay(phieu.hanTra, homNay);
     var quaHan = soNgayQuaHan > 0;
 
-    // Xây dựng HTML thông tin phiếu
-    var trangThaiHtml = quaHan
-        ? '<span class="qua-han">⚠️ Quá hạn ' + soNgayQuaHan + ' ngày!</span>'
-        : '<span class="con-han">✅ ' + phieu.trangThai + '</span>';
+    var trangThaiHtml = quaHan ? '<span class="qua-han">⚠️ Quá hạn ' + soNgayQuaHan + ' ngày!</span>' : '<span class="con-han">✅ ' + phieu.trangThai + '</span>';
 
     document.getElementById('cardThongTinPhieu').className = 'card';
     document.getElementById('chiTietPhieu').innerHTML = '<div class="info-box">'
         + '<p><strong>Mã phiếu:</strong> ' + phieu.maPhieu + '</p>'
-        + '<p><strong>Mã DG:</strong> ' + phieu.maDG
-        + ' &nbsp;|&nbsp; <strong>Tên:</strong> ' + phieu.tenDG + '</p>'
-        + '<p><strong>Ngày mượn:</strong> ' + dinhDangNgay(phieu.ngayMuon)
-        + ' &nbsp;|&nbsp; <strong>Hạn trả:</strong> ' + dinhDangNgay(phieu.hanTra) + '</p>'
+        + '<p><strong>Mã DG:</strong> ' + phieu.maDG + ' &nbsp;|&nbsp; <strong>Tên:</strong> ' + phieu.tenDG + '</p>'
+        + '<p><strong>Ngày mượn:</strong> ' + dinhDangNgay(phieu.ngayMuon) + ' &nbsp;|&nbsp; <strong>Hạn trả:</strong> ' + dinhDangNgay(phieu.hanTra) + '</p>'
         + '<p><strong>Trạng thái:</strong> ' + trangThaiHtml + '</p>'
-        + '<p><strong>Số sách:</strong> ' + phieu.danhSachSach.length + ' cuốn</p>'
-        + '</div>';
+        + '<p><strong>Số sách:</strong> ' + phieu.danhSachSach.length + ' cuốn</p></div>';
 
-    // Xây dựng bảng sách cần trả
     hienThiBangSachTra(phieu, soNgayQuaHan);
     document.getElementById('cardTraSach').className = 'card';
 }
 
-// =====================================================
-// HIỂN THỊ BẢNG SÁCH VÀ TÌNH TRẠNG KHI TRẢ
-// =====================================================
 function hienThiBangSachTra(phieu, soNgayQuaHan) {
     var html = '';
-
-    // Cảnh báo nếu quá hạn
     if (soNgayQuaHan > 0) {
-        html += '<div class="warn-box">⏰ Phiếu mượn quá hạn <strong>'
-            + soNgayQuaHan + ' ngày</strong>. Tiền phạt quá hạn: '
-            + dinhDangTien(soNgayQuaHan * 2000) + ' / cuốn (không mất/hư hỏng).</div>';
+        html += '<div class="warn-box">⏰ Phiếu mượn quá hạn <strong>' + soNgayQuaHan + ' ngày</strong>. Tiền phạt quá hạn: ' + dinhDangTien(soNgayQuaHan * 2000) + ' / cuốn (không mất/hư hỏng).</div>';
     }
 
-    html += '<table>'
-        + '<tr>'
-        + '<th style="width:50px;">Chọn</th>'
-        + '<th>Mã sách</th>'
-        + '<th>Tên sách</th>'
-        + '<th>Tình trạng</th>'
-        + '<th style="text-align:right;padding-right:15px;">Tiền phạt</th>'
-        + '</tr>';
+    html += '<table><tr><th style="width:50px;">Chọn</th><th>Mã sách</th><th>Tên sách</th><th>Tình trạng</th><th style="text-align:right;padding-right:15px;">Tiền phạt</th></tr>';
 
-    // Tạo dòng cho từng cuốn sách
     for (var i = 0; i < phieu.danhSachSach.length; i++) {
         var s = phieu.danhSachSach[i];
-        html += '<tr>'
-            + '<td style="text-align:center;">'
-            + '<input type="checkbox" id="cb_' + i + '" checked '
-            + 'onchange="capNhatTienPhat()">'
-            + '</td>'
-            + '<td>' + s.maSach + '</td>'
-            + '<td>' + s.tenSach + '</td>'
-            + '<td>'
-            + '<select id="tt_' + i + '" onchange="capNhatTienPhat()">'
-            + '<option value="Tốt">Tốt</option>'
-            + '<option value="Rách">Rách</option>'
-            + '<option value="Hư hỏng">Hư hỏng</option>'
-            + '<option value="Mất">Mất</option>'
-            + '</select>'
-            + '</td>'
-            + '<td style="text-align:right;padding-right:15px;" id="phat_' + i + '">0 đ</td>'
-            + '</tr>';
+        html += '<tr><td style="text-align:center;"><input type="checkbox" id="cb_' + i + '" checked onchange="capNhatTienPhat()"></td>';
+        html += '<td>' + s.maSach + '</td><td>' + s.tenSach + '</td>';
+        html += '<td><select id="tt_' + i + '" onchange="capNhatTienPhat()"><option value="Tốt">Tốt</option><option value="Rách">Rách</option><option value="Hư hỏng">Hư hỏng</option><option value="Mất">Mất</option></select></td>';
+        html += '<td style="text-align:right;padding-right:15px;" id="phat_' + i + '">0 đ</td></tr>';
     }
-
     html += '</table>';
     document.getElementById('bangSachTra').innerHTML = html;
-
-    // Tính tiền phạt ban đầu
     capNhatTienPhat();
 }
 
-// =====================================================
-// TÍNH VÀ HIỂN THỊ TIỀN PHẠT THEO LỰA CHỌN
-// =====================================================
 function capNhatTienPhat() {
     if (!phieuHienTai) return;
-
     var homNay = layNgayHomNay();
     var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuHienTai.hanTra, homNay));
-
-    // Lấy danh sách sách để tra giá bồi thường
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-
     var tongPhat = 0;
     var coChonSach = false;
 
@@ -468,11 +294,9 @@ function capNhatTienPhat() {
         var cbEl = document.getElementById('cb_' + i);
         var ttEl = document.getElementById('tt_' + i);
         var phatEl = document.getElementById('phat_' + i);
-
         if (!cbEl || !ttEl || !phatEl) continue;
 
         if (!cbEl.checked) {
-            // Sách không được chọn trả → không tính phạt
             phatEl.textContent = '---';
             phatEl.style.color = '#aaa';
             continue;
@@ -480,8 +304,6 @@ function capNhatTienPhat() {
 
         coChonSach = true;
         var maSach = phieuHienTai.danhSachSach[i].maSach;
-
-        // Tìm giá bồi thường của sách trong kho
         var giaBT = 0;
         for (var j = 0; j < dsSach.length; j++) {
             if (dsSach[j].maSach === maSach) {
@@ -494,12 +316,9 @@ function capNhatTienPhat() {
         var phatCuonNay = 0;
 
         if (tinhTrang === 'Mất') {
-            // Mất sách: phạt bằng toàn bộ giá bồi thường
             phatCuonNay = giaBT;
         } else {
-            // Tính phạt quá hạn (2.000đ/ngày/cuốn)
             phatCuonNay = soNgayQuaHan * 2000;
-            // Tính thêm phạt hư hỏng/rách
             if (tinhTrang === 'Rách' || tinhTrang === 'Hư hỏng') {
                 phatCuonNay += giaBT * 0.5;
             }
@@ -510,59 +329,42 @@ function capNhatTienPhat() {
         phatEl.style.color = phatCuonNay > 0 ? '#C62828' : '#388E3C';
     }
 
-    // Hiển thị tổng tiền phạt
     var khuTongPhat = document.getElementById('khuTongPhat');
     if (tongPhat > 0) {
-        khuTongPhat.innerHTML = '<div class="tong-tien">'
-            + '💰 Tổng tiền phạt: <span id="tongTienPhat">'
-            + dinhDangTien(tongPhat) + '</span>'
-            + '</div>';
+        khuTongPhat.innerHTML = '<div class="tong-tien">💰 Tổng tiền phạt: <span id="tongTienPhat">' + dinhDangTien(tongPhat) + '</span></div>';
     } else if (coChonSach) {
-        khuTongPhat.innerHTML = '<div class="tong-tien no-fine">'
-            + '✅ Không có tiền phạt'
-            + '</div>';
+        khuTongPhat.innerHTML = '<div class="tong-tien no-fine">✅ Không có tiền phạt</div>';
     } else {
         khuTongPhat.innerHTML = '<div class="warn-box">⚠️ Vui lòng chọn ít nhất một cuốn sách để trả.</div>';
     }
 }
 
-// =====================================================
-// XÁC NHẬN TRẢ SÁCH
-// =====================================================
 function xacNhanTra() {
     if (!phieuHienTai) {
         alert('Lỗi: Chưa chọn phiếu mượn!');
         return;
     }
 
-    // Xác định sách được chọn trả và tình trạng
     var sachTraList = [];
     for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
         var cb = document.getElementById('cb_' + i);
         var tt = document.getElementById('tt_' + i);
         if (cb && cb.checked) {
-            sachTraList.push({
-                index: i,
-                maSach: phieuHienTai.danhSachSach[i].maSach,
-                tenSach: phieuHienTai.danhSachSach[i].tenSach,
-                tinhTrang: tt ? tt.value : 'Tốt'
-            });
+            sachTraList.push({ index: i, maSach: phieuHienTai.danhSachSach[i].maSach, tenSach: phieuHienTai.danhSachSach[i].tenSach, tinhTrang: tt ? tt.value : 'Tốt' });
         }
     }
 
-    // Bắt buộc chọn ít nhất 1 sách
     if (sachTraList.length === 0) {
         alert('Vui lòng chọn ít nhất một cuốn sách để trả!');
         return;
     }
 
-    // Tính lại tổng tiền phạt để lưu vào hệ thống
     var homNay = layNgayHomNay();
     var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuHienTai.hanTra, homNay));
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
 
     var tongPhat = 0;
-    var loaiVPCuoiCung = '';    // Loại vi phạm để lưu vào phiếu phạt
+    var loaiVPCuoiCung = '';
     var coMat = false;
     var coHuHong = false;
     var coQuaHan = soNgayQuaHan > 0;
@@ -589,30 +391,17 @@ function xacNhanTra() {
         }
     }
 
-    // Xác định loại vi phạm nghiêm trọng nhất
     if (coMat) loaiVPCuoiCung = 'Mất sách';
     else if (coHuHong) loaiVPCuoiCung = 'Hư hỏng';
     else if (coQuaHan) loaiVPCuoiCung = 'Quá hạn';
 
-    // Xác nhận với nhân viên
     var tenSachTra = '';
     for (var t = 0; t < sachTraList.length; t++) {
         tenSachTra += '\n  - ' + sachTraList[t].tenSach + ' [' + sachTraList[t].tinhTrang + ']';
     }
-    var xacNhan = confirm(
-        'XÁC NHẬN TRẢ SÁCH\n\n'
-        + 'Độc giả: ' + phieuHienTai.tenDG + '\n'
-        + 'Phiếu: ' + phieuHienTai.maPhieu + '\n'
-        + 'Sách trả:' + tenSachTra + '\n\n'
-        + (tongPhat > 0
-            ? '💰 Tiền phạt: ' + dinhDangTien(tongPhat)
-            : '✅ Không có tiền phạt')
-    );
+    var xacNhan = confirm('XÁC NHẬN TRẢ SÁCH\n\nĐộc giả: ' + phieuHienTai.tenDG + '\nPhiếu: ' + phieuHienTai.maPhieu + '\nSách trả:' + tenSachTra + '\n\n' + (tongPhat > 0 ? '💰 Tiền phạt: ' + dinhDangTien(tongPhat) : '✅ Không có tiền phạt'));
     if (!xacNhan) return;
 
-    // ---- CẬP NHẬT DỮ LIỆU ----
-
-    // 1. Tăng soLuongCon cho sách "không mất"
     for (var si = 0; si < sachTraList.length; si++) {
         if (sachTraList[si].tinhTrang !== 'Mất') {
             for (var di = 0; di < dsSach.length; di++) {
@@ -625,7 +414,6 @@ function xacNhanTra() {
     }
     localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
 
-    // 2. Cập nhật phiếu mượn trong localStorage
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
     var idSachTra = {};
     for (var si2 = 0; si2 < sachTraList.length; si2++) {
@@ -634,17 +422,11 @@ function xacNhanTra() {
 
     for (var pi = 0; pi < dsPhieuMuon.length; pi++) {
         if (dsPhieuMuon[pi].maPhieu === phieuHienTai.maPhieu) {
-            // Cập nhật tình trạng sách đã trả trong phiếu
             for (var bi = 0; bi < dsPhieuMuon[pi].danhSachSach.length; bi++) {
                 if (idSachTra[dsPhieuMuon[pi].danhSachSach[bi].maSach]) {
-                    dsPhieuMuon[pi].danhSachSach[bi].tinhTrang =
-                        sachTraList.filter(function(x) {
-                            return x.maSach === dsPhieuMuon[pi].danhSachSach[bi].maSach;
-                        })[0].tinhTrang;
+                    dsPhieuMuon[pi].danhSachSach[bi].tinhTrang = sachTraList.filter(function(x) { return x.maSach === dsPhieuMuon[pi].danhSachSach[bi].maSach; })[0].tinhTrang;
                 }
             }
-
-            // Kiểm tra toàn bộ sách đã trả chưa để cập nhật trangThai phiếu
             var tatCaTra = (sachTraList.length === phieuHienTai.danhSachSach.length);
             if (tatCaTra) {
                 dsPhieuMuon[pi].trangThai = 'Đã trả';
@@ -655,45 +437,25 @@ function xacNhanTra() {
     }
     localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
 
-    // 3. Tạo phiếu phạt nếu có tiền phạt
     var maPhatMoi = '';
     if (tongPhat > 0) {
         maPhatMoi = 'MPH' + Date.now();
-        var phieuPhat = {
-            maPhat: maPhatMoi,
-            maPhieu: phieuHienTai.maPhieu,
-            maDG: phieuHienTai.maDG,
-            tenDG: phieuHienTai.tenDG,
-            loaiVP: loaiVPCuoiCung,
-            soTien: tongPhat,
-            ngayPhat: homNay,
-            trangThai: 'Chưa thanh toán'
-        };
+        var phieuPhat = { maPhat: maPhatMoi, maPhieu: phieuHienTai.maPhieu, maDG: phieuHienTai.maDG, tenDG: phieuHienTai.tenDG, loaiVP: loaiVPCuoiCung, soTien: tongPhat, ngayPhat: homNay, trangThai: 'Chưa thanh toán' };
         var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
         dsPhat.push(phieuPhat);
         localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
     }
 
-    // Thông báo kết quả
-    var thongBao = '✅ TRẢ SÁCH THÀNH CÔNG!\n\n'
-        + 'Phiếu: ' + phieuHienTai.maPhieu + '\n'
-        + 'Độc giả: ' + phieuHienTai.tenDG + '\n'
-        + 'Số sách đã trả: ' + sachTraList.length + ' cuốn\n';
-
+    var thongBao = '✅ TRẢ SÁCH THÀNH CÔNG!\n\nPhiếu: ' + phieuHienTai.maPhieu + '\nĐộc giả: ' + phieuHienTai.tenDG + '\nSố sách đã trả: ' + sachTraList.length + ' cuốn\n';
     if (tongPhat > 0) {
-        thongBao += '💰 Tiền phạt: ' + dinhDangTien(tongPhat) + '\n';
-        thongBao += '📋 Mã phiếu phạt: ' + maPhatMoi + ' (xem tại trang Xử lý phạt)';
+        thongBao += '💰 Tiền phạt: ' + dinhDangTien(tongPhat) + '\n📋 Mã phiếu phạt: ' + maPhatMoi + ' (xem tại trang Xử lý phạt)';
     } else {
         thongBao += '✅ Không có tiền phạt.';
     }
-
     alert(thongBao);
     resetTrang();
 }
 
-// =====================================================
-// RESET VỀ TRẠNG THÁI BAN ĐẦU
-// =====================================================
 function resetTrang() {
     phieuHienTai = null;
     dsDuLieuDropdown = [];

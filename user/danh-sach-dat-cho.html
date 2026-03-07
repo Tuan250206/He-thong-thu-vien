@@ -4,66 +4,91 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Danh sách đặt chỗ - Hệ thống thư viện</title>
+<link rel="stylesheet" href="common.css">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: Arial, sans-serif; font-size: 14px; background: #f0f2f5; color: #333; }
-  #header { background: #2196F3; color: #fff; padding: 12px 20px; position: fixed; top: 0; left: 0; right: 0; height: 50px; z-index: 100; overflow: hidden; }
-  #header h1 { font-size: 20px; display: inline-block; }
-  #header .user-info { float: right; font-size: 13px; margin-top: 2px; }
-  #header .user-info a { color: #fff; text-decoration: underline; cursor: pointer; margin-left: 10px; }
-  #sidebar { position: fixed; top: 50px; left: 0; bottom: 0; width: 200px; background: #1565C0; overflow-y: auto; z-index: 99; }
-  #sidebar a { display: block; padding: 10px 15px; color: #cce5ff; text-decoration: none; border-bottom: 1px solid #1976D2; font-size: 13px; }
-  #sidebar a:hover { background: #1976D2; color: #fff; }
-  #sidebar a.active { background: #2196F3; color: #fff; font-weight: bold; }
-  #content { margin-top: 50px; margin-left: 200px; padding: 20px; min-height: calc(100vh - 50px); }
-  .page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
-  .filter-box { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 15px 20px; margin-bottom: 20px; overflow: hidden; }
-  .filter-box label { float: left; padding-top: 7px; margin-right: 8px; font-weight: bold; color: #555; }
-  .filter-box select { float: left; padding: 7px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 180px; }
-  .btn-loc { float: left; margin-left: 10px; padding: 7px 18px; background: #2196F3; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
-  .btn-loc:hover { background: #1976D2; }
-  .btn-them { float: right; padding: 7px 16px; background: #4CAF50; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
-  .btn-them:hover { background: #388E3C; }
-  .table-wrap { background: #fff; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { background: #2196F3; color: #fff; }
-  thead th { padding: 10px 12px; text-align: left; font-size: 13px; white-space: nowrap; }
-  tbody tr:nth-child(even) { background: #f5f5f5; }
-  tbody tr:hover { background: #e3f2fd; }
-  tbody td { padding: 9px 12px; font-size: 13px; border-bottom: 1px solid #eee; vertical-align: middle; }
-  .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
-  .tag-cho { background: #fff3e0; color: #e65100; }
-  .tag-lay { background: #e8f5e9; color: #2e7d32; }
-  .tag-huy { background: #ffebee; color: #c62828; }
-  .btn-xn { padding: 5px 10px; background: #4CAF50; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; margin-right: 4px; }
-  .btn-xn:hover { background: #388E3C; }
-  .btn-huy { padding: 5px 10px; background: #f44336; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; }
-  .btn-huy:hover { background: #c62828; }
-  .empty-row td { text-align: center; padding: 30px; color: #999; font-style: italic; }
-  .so-luong { background: #e3f2fd; border-radius: 4px; padding: 5px 12px; margin-bottom: 12px; font-size: 13px; color: #1565C0; }
-  .clearfix::after { content: ""; display: table; clear: both; }
+.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
+.filter-box { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 15px 20px; margin-bottom: 20px; overflow: hidden; }
+.filter-box label { float: left; padding-top: 7px; margin-right: 8px; font-weight: bold; color: #555; }
+.filter-box select { float: left; padding: 7px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 180px; }
+.btn-loc { float: left; margin-left: 10px; padding: 7px 18px; background: #2196F3; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+.btn-loc:hover { background: #1976D2; }
+.btn-them { float: right; padding: 7px 16px; background: #4CAF50; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
+.btn-them:hover { background: #388E3C; }
+.table-wrap { background: #fff; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: #2196F3; color: #fff; }
+thead th { padding: 10px 12px; text-align: left; font-size: 13px; white-space: nowrap; }
+tbody tr:nth-child(even) { background: #f5f5f5; }
+tbody tr:hover { background: #e3f2fd; }
+tbody td { padding: 9px 12px; font-size: 13px; border-bottom: 1px solid #eee; vertical-align: middle; }
+.tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+.tag-cho { background: #fff3e0; color: #e65100; }
+.tag-lay { background: #e8f5e9; color: #2e7d32; }
+.tag-huy { background: #ffebee; color: #c62828; }
+.btn-xn { padding: 5px 10px; background: #4CAF50; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; margin-right: 4px; }
+.btn-xn:hover { background: #388E3C; }
+.btn-huy { padding: 5px 10px; background: #f44336; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; }
+.btn-huy:hover { background: #c62828; }
+.empty-row td { text-align: center; padding: 30px; color: #999; font-style: italic; }
+.so-luong { background: #e3f2fd; border-radius: 4px; padding: 5px 12px; margin-bottom: 12px; font-size: 13px; color: #1565C0; }
+.clearfix::after { content: ""; display: table; clear: both; }
 </style>
 </head>
 <body>
-<div id="header">
+
+<div class="header">
   <h1>📚 Hệ thống Thư viện</h1>
-  <div class="user-info">Xin chào: <strong id="tenNguoiDung">--</strong><a onclick="dangXuat()">Đăng xuất</a></div>
+  <div class="user-info">Xin chào! <strong id="tenNguoiDung">--</strong><a onclick="dangXuat()">Đăng xuất</a></div>
 </div>
-<div id="sidebar">
-  <a href="dashboard.html">🏠 Trang chủ</a>
-  <a href="doc-gia-danh-sach.html">👥 DS Độc giả</a>
-  <a href="doc-gia-them.html">➕ Thêm độc giả</a>
-  <a href="sach-danh-sach.html">📖 DS Sách</a>
-  <a href="sach-tim-kiem.html">🔍 Tìm sách</a>
-  <a href="cho-muon.html">🤝 Cho mượn</a>
-  <a href="tra-sach.html">↩️ Trả sách</a>
-  <a href="gia-han.html">⏰ Gia hạn</a>
-  <a href="xu-ly-phat.html">💰 Xử lý phạt</a>
-  <a href="dat-cho.html" class="active">📌 Đặt chỗ</a>
-  <a href="lich-su.html">📋 Lịch sử</a>
-  <a href="thong-ke.html">📊 Thống kê</a>
+
+<div class="sidebar">
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="dat-cho.html" class="menu-item">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item active">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="doc-gia-them.html" class="menu-item">
+        <span class="menu-icon">➕</span>Thêm ĐG
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <a href="sach-tim-kiem.html" class="menu-item">
+        <span class="menu-icon">🔍</span>Tìm sách
+    </a>
+
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
 </div>
-<div id="content">
+
+<div class="content">
   <div class="page-title">📋 Danh sách đặt chỗ</div>
   <div class="filter-box clearfix">
     <label>Trạng thái:</label>
@@ -97,23 +122,22 @@
     </table>
   </div>
 </div>
+
 <script>
-// Biến lưu danh sách đã lọc
 var danhSachHienThi = [];
 
-// Khởi tạo trang
 window.onload = function() {
   var user = localStorage.getItem('currentUser') || 'Admin';
-  document.getElementById('tenNguoiDung').innerText = user;
+  var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+  var tenHienThi = userInfo.hoTen || user;
+  document.getElementById('tenNguoiDung').textContent = tenHienThi;
   locDanhSach();
 };
 
-// Lọc danh sách đặt chỗ theo trạng thái
 function locDanhSach() {
   var filter = document.getElementById('filterTrangThai').value;
   var danhSach = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
 
-  // Lọc theo trạng thái nếu có chọn
   if (filter) {
     danhSachHienThi = [];
     for (var i = 0; i < danhSach.length; i++) {
@@ -125,7 +149,6 @@ function locDanhSach() {
     danhSachHienThi = danhSach;
   }
 
-  // Sắp xếp mới nhất lên đầu
   danhSachHienThi.sort(function(a, b) {
     return (b.ngayDat || '').localeCompare(a.ngayDat || '');
   });
@@ -133,7 +156,6 @@ function locDanhSach() {
   hienThiBang();
 }
 
-// Hiển thị bảng danh sách
 function hienThiBang() {
   var tbody = document.getElementById('tableDatCho');
   var soLuongEl = document.getElementById('soLuongHienThi');
@@ -151,7 +173,6 @@ function hienThiBang() {
     if (dc.trangThai === 'Đã lấy') tagClass = 'tag-lay';
     if (dc.trangThai === 'Đã hủy') tagClass = 'tag-huy';
 
-    // Xây dựng nút hành động
     var hanhDong = '';
     if (dc.trangThai === 'Chờ lấy') {
       hanhDong += '<button class="btn-xn" onclick="xacNhanLaySach(\'' + dc.maDatCho + '\')">✅ Xác nhận lấy</button>';
@@ -172,7 +193,6 @@ function hienThiBang() {
   tbody.innerHTML = html;
 }
 
-// Xác nhận độc giả đã lấy sách
 function xacNhanLaySach(maDatCho) {
   var danhSach = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
   var found = false;
@@ -190,7 +210,6 @@ function xacNhanLaySach(maDatCho) {
   }
 }
 
-// Hủy đặt chỗ (có xác nhận)
 function huyDatCho(maDatCho) {
   if (!confirm('Bạn có chắc muốn hủy đặt chỗ ' + maDatCho + ' không?')) return;
   var danhSach = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
@@ -209,7 +228,6 @@ function huyDatCho(maDatCho) {
   }
 }
 
-// Định dạng ngày YYYY-MM-DD -> DD/MM/YYYY
 function formatNgay(str) {
   if (!str) return '--';
   var parts = str.split('-');
@@ -217,7 +235,6 @@ function formatNgay(str) {
   return str;
 }
 
-// Đăng xuất
 function dangXuat() {
   if (confirm('Bạn có muốn đăng xuất không?')) {
     localStorage.removeItem('currentUser');

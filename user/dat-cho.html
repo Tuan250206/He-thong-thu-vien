@@ -4,219 +4,90 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Đặt chỗ sách - Hệ thống thư viện</title>
+<link rel="stylesheet" href="common.css">
 <style>
-  /* Reset cơ bản */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: Arial, sans-serif; font-size: 14px; background: #f0f2f5; color: #333; }
-
-  /* Header */
-  #header {
-    background: #2196F3;
-    color: #fff;
-    padding: 12px 20px;
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 50px;
-    z-index: 100;
-    overflow: hidden;
-  }
-  #header h1 { font-size: 20px; display: inline-block; }
-  #header .user-info { float: right; font-size: 13px; margin-top: 2px; }
-  #header .user-info a { color: #fff; text-decoration: underline; cursor: pointer; margin-left: 10px; }
-
-  /* Sidebar */
-  #sidebar {
-    position: fixed;
-    top: 50px; left: 0; bottom: 0;
-    width: 200px;
-    background: #1565C0;
-    overflow-y: auto;
-    z-index: 99;
-  }
-  #sidebar a {
-    display: block;
-    padding: 10px 15px;
-    color: #cce5ff;
-    text-decoration: none;
-    border-bottom: 1px solid #1976D2;
-    font-size: 13px;
-  }
-  #sidebar a:hover { background: #1976D2; color: #fff; }
-  #sidebar a.active { background: #2196F3; color: #fff; font-weight: bold; }
-
-  /* Nội dung chính */
-  #content {
-    margin-top: 50px;
-    margin-left: 200px;
-    padding: 20px;
-    min-height: calc(100vh - 50px);
-  }
-
-  /* Tiêu đề trang */
-  .page-title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #1565C0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #2196F3;
-  }
-
-  /* Hộp bước */
-  .step-box {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-  .step-box h3 {
-    font-size: 16px;
-    color: #1565C0;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #e3f2fd;
-  }
-
-  /* Dòng nhập liệu */
-  .input-row { margin-bottom: 12px; overflow: hidden; }
-  .input-row label {
-    display: block;
-    float: left;
-    width: 130px;
-    padding-top: 7px;
-    font-weight: bold;
-    color: #555;
-  }
-  .input-row input, .input-row select {
-    float: left;
-    width: 220px;
-    padding: 7px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  .input-row .btn-tim {
-    float: left;
-    margin-left: 8px;
-    padding: 7px 16px;
-    background: #2196F3;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  .input-row .btn-tim:hover { background: #1976D2; }
-
-  /* Thông tin hiển thị */
-  .info-box {
-    background: #e3f2fd;
-    border: 1px solid #90caf9;
-    border-radius: 4px;
-    padding: 12px 15px;
-    margin-top: 10px;
-    display: none;
-  }
-  .info-box table { width: 100%; border-collapse: collapse; }
-  .info-box td { padding: 4px 8px; font-size: 13px; }
-  .info-box td:first-child { font-weight: bold; color: #555; width: 140px; }
-
-  /* Cảnh báo */
-  .warning-box {
-    background: #fff3e0;
-    border: 1px solid #ffcc02;
-    border-radius: 4px;
-    padding: 10px 14px;
-    margin-top: 8px;
-    color: #e65100;
-    font-size: 13px;
-    display: none;
-  }
-  .warning-box::before { content: "⚠️ "; }
-
-  /* Hàng xác nhận */
-  .confirm-row {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 20px;
-    margin-bottom: 20px;
-    display: none;
-  }
-  .confirm-row h3 {
-    font-size: 16px;
-    color: #1565C0;
-    margin-bottom: 15px;
-  }
-
-  /* Nút xác nhận */
-  .btn-xacnhan {
-    padding: 10px 28px;
-    background: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: bold;
-    margin-top: 10px;
-  }
-  .btn-xacnhan:hover { background: #388E3C; }
-
-  .btn-reset {
-    padding: 10px 20px;
-    background: #9E9E9E;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-left: 10px;
-    margin-top: 10px;
-  }
-  .btn-reset:hover { background: #757575; }
-
-  /* Tag trạng thái */
-  .tag-available { color: #388E3C; font-weight: bold; }
-  .tag-unavailable { color: #d32f2f; font-weight: bold; }
-
-  /* Xóa float */
-  .clearfix::after { content: ""; display: table; clear: both; }
+.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
+.step-box { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 20px; margin-bottom: 20px; }
+.step-box h3 { font-size: 16px; color: #1565C0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #e3f2fd; }
+.input-row { margin-bottom: 12px; overflow: hidden; }
+.input-row label { display: block; float: left; width: 130px; padding-top: 7px; font-weight: bold; color: #555; }
+.input-row input, .input-row select { float: left; width: 220px; padding: 7px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+.input-row .btn-tim { float: left; margin-left: 8px; padding: 7px 16px; background: #2196F3; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+.input-row .btn-tim:hover { background: #1976D2; }
+.info-box { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 4px; padding: 12px 15px; margin-top: 10px; display: none; }
+.info-box table { width: 100%; border-collapse: collapse; }
+.info-box td { padding: 4px 8px; font-size: 13px; }
+.info-box td:first-child { font-weight: bold; color: #555; width: 140px; }
+.warning-box { background: #fff3e0; border: 1px solid #ffcc02; border-radius: 4px; padding: 10px 14px; margin-top: 8px; color: #e65100; font-size: 13px; display: none; }
+.warning-box::before { content: "⚠️ "; }
+.confirm-row { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 20px; margin-bottom: 20px; display: none; }
+.confirm-row h3 { font-size: 16px; color: #1565C0; margin-bottom: 15px; }
+.btn-xacnhan { padding: 10px 28px; background: #4CAF50; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 10px; }
+.btn-xacnhan:hover { background: #388E3C; }
+.btn-reset { padding: 10px 20px; background: #9E9E9E; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-left: 10px; margin-top: 10px; }
+.btn-reset:hover { background: #757575; }
+.tag-available { color: #388E3C; font-weight: bold; }
+.tag-unavailable { color: #d32f2f; font-weight: bold; }
+.clearfix::after { content: ""; display: table; clear: both; }
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<div id="header">
+<div class="header">
   <h1>📚 Hệ thống Thư viện</h1>
-  <div class="user-info">
-    Xin chào: <strong id="tenNguoiDung">--</strong>
-    <a onclick="dangXuat()">Đăng xuất</a>
-  </div>
+  <div class="user-info">Xin chào! <strong id="tenNguoiDung">--</strong><a onclick="dangXuat()">Đăng xuất</a></div>
 </div>
 
-<!-- Sidebar -->
-<div id="sidebar">
-  <a href="dashboard.html">🏠 Trang chủ</a>
-  <a href="doc-gia-danh-sach.html">👥 DS Độc giả</a>
-  <a href="doc-gia-them.html">➕ Thêm độc giả</a>
-  <a href="sach-danh-sach.html">📖 DS Sách</a>
-  <a href="sach-tim-kiem.html">🔍 Tìm sách</a>
-  <a href="cho-muon.html">🤝 Cho mượn</a>
-  <a href="tra-sach.html">↩️ Trả sách</a>
-  <a href="gia-han.html">⏰ Gia hạn</a>
-  <a href="xu-ly-phat.html">💰 Xử lý phạt</a>
-  <a href="dat-cho.html" class="active">📌 Đặt chỗ</a>
-  <a href="lich-su.html">📋 Lịch sử</a>
-  <a href="thong-ke.html">📊 Thống kê</a>
+<div class="sidebar">
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="dat-cho.html" class="menu-item active">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="doc-gia-them.html" class="menu-item">
+        <span class="menu-icon">➕</span>Thêm ĐG
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <a href="sach-tim-kiem.html" class="menu-item">
+        <span class="menu-icon">🔍</span>Tìm sách
+    </a>
+
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
 </div>
 
-<!-- Nội dung chính -->
-<div id="content">
+<div class="content">
   <div class="page-title">📌 Đặt chỗ sách</div>
 
-  <!-- Bước 1: Tìm độc giả -->
   <div class="step-box">
     <h3>Bước 1: Tìm độc giả</h3>
     <div class="input-row clearfix">
@@ -224,7 +95,6 @@
       <input type="text" id="inputMaDG" placeholder="Nhập mã độc giả..." onkeypress="enterDocGia(event)" />
       <button class="btn-tim" onclick="timDocGia()">🔍 Tìm</button>
     </div>
-    <!-- Hiển thị thông tin độc giả -->
     <div class="info-box" id="infoDG">
       <table>
         <tr><td>Mã độc giả:</td><td id="dg-ma">--</td></tr>
@@ -237,7 +107,6 @@
     </div>
   </div>
 
-  <!-- Bước 2: Tìm sách -->
   <div class="step-box">
     <h3>Bước 2: Tìm sách cần đặt</h3>
     <div class="input-row clearfix">
@@ -245,7 +114,6 @@
       <input type="text" id="inputMaSach" placeholder="Nhập mã sách..." onkeypress="enterSach(event)" />
       <button class="btn-tim" onclick="timSach()">🔍 Tìm</button>
     </div>
-    <!-- Hiển thị thông tin sách -->
     <div class="info-box" id="infoSach">
       <table>
         <tr><td>Mã sách:</td><td id="sach-ma">--</td></tr>
@@ -257,13 +125,9 @@
         <tr><td>SL còn:</td><td id="sach-slCon">--</td></tr>
       </table>
     </div>
-    <!-- Cảnh báo sách còn hàng -->
-    <div class="warning-box" id="warnSach">
-      Sách này hiện còn sẵn trên kệ. Bạn có thể mượn trực tiếp thay vì đặt chỗ.
-    </div>
+    <div class="warning-box" id="warnSach">Sách này hiện còn sẵn trên kệ. Bạn có thể mượn trực tiếp thay vì đặt chỗ.</div>
   </div>
 
-  <!-- Bước 3: Xác nhận đặt chỗ -->
   <div class="confirm-row" id="confirmBox">
     <h3>Bước 3: Xác nhận thông tin đặt chỗ</h3>
     <div class="input-row clearfix">
@@ -283,60 +147,37 @@
       <button class="btn-reset" onclick="datLai()">🔄 Làm lại</button>
     </div>
   </div>
-
-</div><!-- /content -->
+</div>
 
 <script>
-// =============================================
-// Biến toàn cục lưu thông tin tìm được
-// =============================================
-var docGiaDaChon = null;  // Độc giả đang chọn
-var sachDaChon = null;    // Sách đang chọn
+var docGiaDaChon = null;
+var sachDaChon = null;
 
-// =============================================
-// Khởi tạo trang
-// =============================================
 window.onload = function() {
-  // Hiển thị tên người dùng đang đăng nhập
   var user = localStorage.getItem('currentUser') || 'Admin';
-  document.getElementById('tenNguoiDung').innerText = user;
-
-  // Đặt hạn lấy sách mặc định = hôm nay + 7 ngày
+  var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+  var tenHienThi = userInfo.hoTen || user;
+  document.getElementById('tenNguoiDung').textContent = tenHienThi;
   var ngayMacDinh = layNgayMacDinh(7);
   document.getElementById('inputHanLay').value = ngayMacDinh;
 };
 
-// =============================================
-// Tính ngày mặc định (hôm nay + soNgay)
-// =============================================
 function layNgayMacDinh(soNgay) {
   var d = new Date();
   d.setDate(d.getDate() + soNgay);
   var thang = d.getMonth() + 1;
   var ngay = d.getDate();
-  // Định dạng YYYY-MM-DD
-  return d.getFullYear() + '-' +
-    (thang < 10 ? '0' + thang : thang) + '-' +
-    (ngay < 10 ? '0' + ngay : ngay);
+  return d.getFullYear() + '-' + (thang < 10 ? '0' + thang : thang) + '-' + (ngay < 10 ? '0' + ngay : ngay);
 }
 
-// =============================================
-// Xử lý Enter trong ô mã độc giả
-// =============================================
 function enterDocGia(e) {
   if (e.keyCode === 13) timDocGia();
 }
 
-// =============================================
-// Xử lý Enter trong ô mã sách
-// =============================================
 function enterSach(e) {
   if (e.keyCode === 13) timSach();
 }
 
-// =============================================
-// Tìm độc giả theo mã
-// =============================================
 function timDocGia() {
   var maDG = document.getElementById('inputMaDG').value.trim();
   if (!maDG) {
@@ -344,7 +185,6 @@ function timDocGia() {
     return;
   }
 
-  // Lấy danh sách độc giả từ localStorage
   var danhSach = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
   var docGia = null;
   for (var i = 0; i < danhSach.length; i++) {
@@ -362,7 +202,6 @@ function timDocGia() {
     return;
   }
 
-  // Kiểm tra trạng thái độc giả
   if (docGia.trangThai === 'Khóa' || docGia.trangThai === 'Ngừng hoạt động') {
     alert('Độc giả này đang bị khóa, không thể đặt chỗ!');
     document.getElementById('infoDG').style.display = 'none';
@@ -371,7 +210,6 @@ function timDocGia() {
     return;
   }
 
-  // Hiển thị thông tin độc giả
   document.getElementById('dg-ma').innerText = docGia.maDG;
   document.getElementById('dg-ten').innerText = docGia.hoTen;
   document.getElementById('dg-lop').innerText = docGia.lop || '--';
@@ -384,9 +222,6 @@ function timDocGia() {
   capNhatConfirmBox();
 }
 
-// =============================================
-// Tìm sách theo mã
-// =============================================
 function timSach() {
   var maSach = document.getElementById('inputMaSach').value.trim();
   if (!maSach) {
@@ -394,7 +229,6 @@ function timSach() {
     return;
   }
 
-  // Lấy danh sách sách từ localStorage
   var danhSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
   var sach = null;
   for (var i = 0; i < danhSach.length; i++) {
@@ -413,7 +247,6 @@ function timSach() {
     return;
   }
 
-  // Hiển thị thông tin sách
   var slCon = sach.soLuongCon !== undefined ? sach.soLuongCon : 0;
   document.getElementById('sach-ma').innerText = sach.maSach;
   document.getElementById('sach-ten').innerText = sach.tenSach;
@@ -422,7 +255,6 @@ function timSach() {
   document.getElementById('sach-nxb').innerText = sach.nxb || '--';
   document.getElementById('sach-slTong').innerText = sach.soLuongTong || 0;
 
-  // Hiển thị số lượng còn với màu sắc
   var slConEl = document.getElementById('sach-slCon');
   if (slCon > 0) {
     slConEl.innerHTML = '<span class="tag-available">' + slCon + ' (còn sẵn)</span>';
@@ -432,7 +264,6 @@ function timSach() {
 
   document.getElementById('infoSach').style.display = 'block';
 
-  // Hiển thị cảnh báo nếu sách còn hàng
   if (slCon > 0) {
     document.getElementById('warnSach').style.display = 'block';
   } else {
@@ -443,26 +274,17 @@ function timSach() {
   capNhatConfirmBox();
 }
 
-// =============================================
-// Cập nhật hiển thị hộp xác nhận
-// =============================================
 function capNhatConfirmBox() {
   var confirmBox = document.getElementById('confirmBox');
   if (docGiaDaChon && sachDaChon) {
-    // Cập nhật thông tin xác nhận
-    document.getElementById('confirm-docGia').innerText =
-      docGiaDaChon.maDG + ' - ' + docGiaDaChon.hoTen;
-    document.getElementById('confirm-sach').innerText =
-      sachDaChon.maSach + ' - ' + sachDaChon.tenSach;
+    document.getElementById('confirm-docGia').innerText = docGiaDaChon.maDG + ' - ' + docGiaDaChon.hoTen;
+    document.getElementById('confirm-sach').innerText = sachDaChon.maSach + ' - ' + sachDaChon.tenSach;
     confirmBox.style.display = 'block';
   } else {
     confirmBox.style.display = 'none';
   }
 }
 
-// =============================================
-// Hàm đặt chỗ sách chính
-// =============================================
 function datChoSach() {
   if (!docGiaDaChon) {
     alert('Vui lòng tìm độc giả trước!');
@@ -479,7 +301,6 @@ function datChoSach() {
     return;
   }
 
-  // Kiểm tra hạn lấy không được là quá khứ
   var hom_nay = new Date();
   hom_nay.setHours(0, 0, 0, 0);
   var ngayHanLay = new Date(hanLay);
@@ -488,10 +309,8 @@ function datChoSach() {
     return;
   }
 
-  // Tạo mã đặt chỗ theo timestamp
   var maDatCho = 'DC' + Date.now();
 
-  // Tạo bản ghi đặt chỗ mới
   var banGhiMoi = {
     maDatCho: maDatCho,
     maDG: docGiaDaChon.maDG,
@@ -503,36 +322,21 @@ function datChoSach() {
     trangThai: 'Chờ lấy'
   };
 
-  // Lưu vào localStorage
   var danhSachDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
   danhSachDatCho.push(banGhiMoi);
   localStorage.setItem('danhSachDatCho', JSON.stringify(danhSachDatCho));
 
-  // Thông báo thành công
-  alert('✅ Đặt chỗ thành công!\n\nMã đặt chỗ: ' + maDatCho +
-    '\nĐộc giả: ' + docGiaDaChon.hoTen +
-    '\nSách: ' + sachDaChon.tenSach +
-    '\nHạn lấy: ' + hanLay);
-
-  // Làm mới trang
+  alert('✅ Đặt chỗ thành công!\n\nMã đặt chỗ: ' + maDatCho + '\nĐộc giả: ' + docGiaDaChon.hoTen + '\nSách: ' + sachDaChon.tenSach + '\nHạn lấy: ' + hanLay);
   datLai();
 }
 
-// =============================================
-// Lấy ngày hiện tại dạng YYYY-MM-DD
-// =============================================
 function layNgayHienTai() {
   var d = new Date();
   var thang = d.getMonth() + 1;
   var ngay = d.getDate();
-  return d.getFullYear() + '-' +
-    (thang < 10 ? '0' + thang : thang) + '-' +
-    (ngay < 10 ? '0' + ngay : ngay);
+  return d.getFullYear() + '-' + (thang < 10 ? '0' + thang : thang) + '-' + (ngay < 10 ? '0' + ngay : ngay);
 }
 
-// =============================================
-// Đặt lại form về ban đầu
-// =============================================
 function datLai() {
   docGiaDaChon = null;
   sachDaChon = null;
@@ -545,9 +349,6 @@ function datLai() {
   document.getElementById('inputHanLay').value = layNgayMacDinh(7);
 }
 
-// =============================================
-// Đăng xuất
-// =============================================
 function dangXuat() {
   if (confirm('Bạn có muốn đăng xuất không?')) {
     localStorage.removeItem('currentUser');

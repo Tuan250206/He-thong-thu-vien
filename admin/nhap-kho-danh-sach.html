@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách phiếu nhập - Quản lý kho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            float: left;
+            min-height: 500px;
+            border-right: 1px solid #ddd;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sidebar a:hover {
+            background-color: #e8f5e9;
+        }
+        
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+            background-color: white;
+            min-height: 500px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-primary {
+            background-color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
+        <span>Xin chào: <strong id="username">Admin</strong> | <a href="login.html" style="color: white;">Đăng xuất</a></span>
+    </div>
+    
+    <div class="sidebar">
+        <a href="dashboard.html">🏠 Trang chủ</a>
+        <a href="sach-them.html">➕ Thêm sách</a>
+        <a href="sach-sua.html">✏️ Sửa sách</a>
+        <a href="bien-muc.html">📋 Biên mục</a>
+        <a href="in-barcode.html">🏷️ In tem sách</a>
+        <a href="kiem-ke.html">📊 Kiểm kê</a>
+        <a href="nhap-kho-danh-sach.html" style="background-color: #e8f5e9;">📥 Phiếu nhập</a>
+        <a href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
+        <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
+        <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
+        <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
+    </div>
+    
+    <div class="content">
+        <h2>📥 Danh sách phiếu nhập kho</h2>
+        
+        <button onclick="window.location.href='nhap-kho-tao.html'">➕ Tạo phiếu nhập mới</button>
+        
+        <table style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Mã phiếu</th>
+                    <th>Ngày nhập</th>
+                    <th>Nhà cung cấp</th>
+                    <th>SL sách</th>
+                    <th>Tổng tiền</th>
+                    <th>Người nhập</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="danhSachPhieuNhap">
+                <tr>
+                    <td colspan="7" style="text-align: center;">Đang tải...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        function kiemTraDangNhap() {
+            var admin = localStorage.getItem('currentAdmin');
+            if (!admin) {
+                alert('Bạn chưa đăng nhập!');
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('username').innerText = admin;
+            }
+        }
+        
+        function loadDanhSach() {
+            var phieuNhap = JSON.parse(localStorage.getItem('phieuNhapKho') || '[]');
+            var html = '';
+            
+            if (phieuNhap.length === 0) {
+                html = '<tr><td colspan="7" style="text-align: center;">Chưa có phiếu nhập nào</td></tr>';
+            } else {
+                for (var i = 0; i < phieuNhap.length; i++) {
+                    var p = phieuNhap[i];
+                    html += '<tr>';
+                    html += '<td>' + p.maPhieu + '</td>';
+                    html += '<td>' + p.ngayNhap + '</td>';
+                    html += '<td>' + p.tenNCC + '</td>';
+                    html += '<td>' + p.danhSachSach.length + '</td>';
+                    html += '<td>' + formatTien(p.tongTien) + '</td>';
+                    html += '<td>' + p.nguoiNhap + '</td>';
+                    html += '<td>';
+                    html += '<button onclick="xemChiTiet(' + i + ')" class="btn-primary">👁️ Xem</button> ';
+                    html += '<button onclick="inPhieu(' + i + ')">🖨️ In</button>';
+                    html += '</td>';
+                    html += '</tr>';
+                }
+            }
+            
+            document.getElementById('danhSachPhieuNhap').innerHTML = html;
+        }
+        
+        function formatTien(tien) {
+            return tien.toLocaleString('vi-VN') + 'đ';
+        }
+        
+        function xemChiTiet(index) {
+            var phieuNhap = JSON.parse(localStorage.getItem('phieuNhapKho') || '[]');
+            var p = phieuNhap[index];
+            
+            var thongTin = 'CHI TIẾT PHIẾU NHẬP\n\n';
+            thongTin += 'Mã phiếu: ' + p.maPhieu + '\n';
+            thongTin += 'Ngày: ' + p.ngayNhap + '\n';
+            thongTin += 'NCC: ' + p.tenNCC + '\n';
+            thongTin += 'Người nhập: ' + p.nguoiNhap + '\n\n';
+            thongTin += 'DANH SÁCH SÁCH:\n';
+            
+            for (var i = 0; i < p.danhSachSach.length; i++) {
+                var s = p.danhSachSach[i];
+                thongTin += (i + 1) + '. ' + s.tenSach + ' - SL: ' + s.soLuong + ' - Giá: ' + s.giaNhap.toLocaleString('vi-VN') + 'đ\n';
+            }
+            
+            thongTin += '\nTỔNG: ' + p.tongTien.toLocaleString('vi-VN') + 'đ';
+            
+            alert(thongTin);
+        }
+        
+        function inPhieu(index) {
+            localStorage.setItem('phieuNhapHienTai', index);
+            window.open('nhap-kho-in.html', '_blank');
+        }
+        
+        kiemTraDangNhap();
+        loadDanhSach();
+    </script>
+</body>
+</html>

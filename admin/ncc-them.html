@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm nhà cung cấp - Quản lý kho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            float: left;
+            min-height: 500px;
+            border-right: 1px solid #ddd;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sidebar a:hover {
+            background-color: #e8f5e9;
+        }
+        
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+            background-color: white;
+            min-height: 500px;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ddd;
+        }
+        
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-danger {
+            background-color: #f44336;
+        }
+        
+        .required {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
+        <span>Xin chào: <strong id="username">Admin</strong> | <a href="login.html" style="color: white;">Đăng xuất</a></span>
+    </div>
+    
+    <div class="sidebar">
+        <a href="dashboard.html">🏠 Trang chủ</a>
+        <a href="sach-them.html">➕ Thêm sách</a>
+        <a href="sach-sua.html">✏️ Sửa sách</a>
+        <a href="bien-muc.html">📋 Biên mục</a>
+        <a href="in-barcode.html">🏷️ In tem sách</a>
+        <a href="kiem-ke.html">📊 Kiểm kê</a>
+        <a href="nhap-kho-danh-sach.html">📥 Phiếu nhập</a>
+        <a href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
+        <a href="ncc-danh-sach.html" style="background-color: #e8f5e9;">🏭 Nhà cung cấp</a>
+        <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
+        <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
+    </div>
+    
+    <div class="content">
+        <h2 id="tieuDe">➕ Thêm nhà cung cấp mới</h2>
+        
+        <form onsubmit="luu(); return false;">
+            <label>Mã NCC: <span class="required">*</span></label>
+            <input type="text" id="maNCC" required style="width: 300px;">
+            
+            <label>Tên nhà cung cấp: <span class="required">*</span></label>
+            <input type="text" id="tenNCC" required style="width: 500px;">
+            
+            <label>Loại:</label>
+            <select id="loai" style="width: 300px;">
+                <option value="Nhà xuất bản">Nhà xuất bản</option>
+                <option value="Nhà phân phối">Nhà phân phối</option>
+                <option value="Khác">Khác</option>
+            </select>
+            
+            <label>Địa chỉ:</label>
+            <textarea id="diaChi" rows="2" style="width: 500px;"></textarea>
+            
+            <label>Điện thoại:</label>
+            <input type="text" id="sdt" style="width: 300px;">
+            
+            <label>Email:</label>
+            <input type="email" id="email" style="width: 300px;">
+            
+            <label>Website:</label>
+            <input type="text" id="website" style="width: 300px;">
+            
+            <label>Người liên hệ:</label>
+            <input type="text" id="nguoiLienHe" style="width: 300px;">
+            
+            <label>Mã số thuế:</label>
+            <input type="text" id="mst" style="width: 300px;">
+            
+            <div style="margin-top: 30px;">
+                <button type="submit">💾 Lưu</button>
+                <button type="button" onclick="window.location.href='ncc-danh-sach.html'" class="btn-danger">❌ Hủy</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        function kiemTraDangNhap() {
+            var admin = localStorage.getItem('currentAdmin');
+            if (!admin) {
+                alert('Bạn chưa đăng nhập!');
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('username').innerText = admin;
+            }
+        }
+        
+        var indexSua = localStorage.getItem('nccSua');
+        
+        if (indexSua !== null) {
+            // Chế độ s���a
+            document.getElementById('tieuDe').innerText = '✏️ Sửa thông tin nhà cung cấp';
+            
+            var ncc = JSON.parse(localStorage.getItem('danhSachNCC') || '[]');
+            var n = ncc[indexSua];
+            
+            document.getElementById('maNCC').value = n.maNCC;
+            document.getElementById('maNCC').readOnly = true;
+            document.getElementById('tenNCC').value = n.tenNCC;
+            document.getElementById('loai').value = n.loai || 'Nhà xuất bản';
+            document.getElementById('diaChi').value = n.diaChi || '';
+            document.getElementById('sdt').value = n.sdt || '';
+            document.getElementById('email').value = n.email || '';
+            document.getElementById('website').value = n.website || '';
+            document.getElementById('nguoiLienHe').value = n.nguoiLienHe || '';
+            document.getElementById('mst').value = n.mst || '';
+        } else {
+            // Chế độ thêm mới - tạo mã tự động
+            var ncc = JSON.parse(localStorage.getItem('danhSachNCC') || '[]');
+            var maNCC = 'NCC' + String(ncc.length + 1).padStart(3, '0');
+            document.getElementById('maNCC').value = maNCC;
+        }
+        
+        function luu() {
+            var ncc = JSON.parse(localStorage.getItem('danhSachNCC') || '[]');
+            
+            var nccMoi = {
+                maNCC: document.getElementById('maNCC').value,
+                tenNCC: document.getElementById('tenNCC').value,
+                loai: document.getElementById('loai').value,
+                diaChi: document.getElementById('diaChi').value,
+                sdt: document.getElementById('sdt').value,
+                email: document.getElementById('email').value,
+                website: document.getElementById('website').value,
+                nguoiLienHe: document.getElementById('nguoiLienHe').value,
+                mst: document.getElementById('mst').value
+            };
+            
+            if (indexSua !== null) {
+                // Cập nhật
+                ncc[indexSua] = nccMoi;
+                localStorage.removeItem('nccSua');
+                alert('✅ Đã cập nhật nhà cung cấp!');
+            } else {
+                // Thêm mới
+                ncc.push(nccMoi);
+                alert('✅ Đã thêm nhà cung cấp mới!');
+            }
+            
+            localStorage.setItem('danhSachNCC', JSON.stringify(ncc));
+            window.location.href = 'ncc-danh-sach.html';
+        }
+        
+        kiemTraDangNhap();
+    </script>
+</body>
+</html>

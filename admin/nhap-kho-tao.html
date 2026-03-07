@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo phiếu nhập kho - Quản lý kho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            float: left;
+            min-height: 500px;
+            border-right: 1px solid #ddd;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sidebar a:hover {
+            background-color: #e8f5e9;
+        }
+        
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+            background-color: white;
+            min-height: 500px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-danger {
+            background-color: #f44336;
+        }
+        
+        .section {
+            background: #e3f2fd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
+        <span>Xin chào: <strong id="username">Admin</strong> | <a href="login.html" style="color: white;">Đăng xuất</a></span>
+    </div>
+    
+    <div class="sidebar">
+        <a href="dashboard.html">🏠 Trang chủ</a>
+        <a href="sach-them.html">➕ Thêm sách</a>
+        <a href="sach-sua.html">✏️ Sửa sách</a>
+        <a href="bien-muc.html">📋 Biên mục</a>
+        <a href="in-barcode.html">🏷️ In tem sách</a>
+        <a href="kiem-ke.html">📊 Kiểm kê</a>
+        <a href="nhap-kho-danh-sach.html" style="background-color: #e8f5e9;">📥 Phiếu nhập</a>
+        <a href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
+        <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
+        <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
+        <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
+    </div>
+    
+    <div class="content">
+        <h2>📥 Tạo phiếu nhập kho</h2>
+        
+        <!-- Bước 1 -->
+        <div class="section">
+            <h3>Bước 1: Thông tin phiếu nhập</h3>
+            
+            <label>Mã phiếu: <strong id="maPhieu">PN001</strong></label><br>
+            
+            <label>Ngày nhập:</label>
+            <input type="date" id="ngayNhap" style="width: 200px;"><br>
+            
+            <label>Nhà cung cấp:</label>
+            <select id="ncc" style="width: 400px;">
+                <option value="">-- Chọn nhà cung cấp --</option>
+            </select>
+        </div>
+        
+        <!-- Bước 2 -->
+        <div class="section" style="background: #f1f8e9;">
+            <h3>Bước 2: Thêm sách vào phiếu</h3>
+            
+            <label>Tìm sách (Mã hoặc Tên):</label>
+            <input type="text" id="timSach" placeholder="Nhập mã hoặc tên sách..." style="width: 400px;">
+            <button onclick="themSach()">➕ Thêm sách</button>
+            
+            <table style="margin-top: 15px;">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã sách</th>
+                        <th>Tên sách</th>
+                        <th>Số lượng</th>
+                        <th>Giá nhập</th>
+                        <th>Thành tiền</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody id="danhSachSachNhap">
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #999;">Chưa có sách nào</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Bước 3 -->
+        <div class="section" style="background: #fff3e0;">
+            <h3>Bước 3: Tổng tiền</h3>
+            
+            <table style="width: 400px; float: right;">
+                <tr>
+                    <td>Tổng tiền hàng:</td>
+                    <td style="text-align: right;"><strong id="tongTienHang">0đ</strong></td>
+                </tr>
+                <tr>
+                    <td>VAT (10%):</td>
+                    <td style="text-align: right;"><span id="vat">0đ</span></td>
+                </tr>
+                <tr>
+                    <td>Chiết khấu (%):</td>
+                    <td style="text-align: right;">
+                        <input type="number" id="chietKhau" value="0" min="0" max="100" style="width: 60px;" onchange="tinhTong()"> %
+                    </td>
+                </tr>
+                <tr>
+                    <td>Giảm giá:</td>
+                    <td style="text-align: right;"><span id="giamGia">0đ</span></td>
+                </tr>
+                <tr style="font-size: 18px; font-weight: bold; background: #4CAF50; color: white;">
+                    <td>TỔNG THANH TOÁN:</td>
+                    <td style="text-align: right;"><span id="tongThanhToan">0đ</span></td>
+                </tr>
+            </table>
+            
+            <div style="clear: both;"></div>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <button onclick="xacNhanNhapKho()" style="font-size: 18px; padding: 15px 30px;">✅ Xác nhận nhập kho</button>
+            <button onclick="window.location.href='nhap-kho-danh-sach.html'" class="btn-danger">❌ Hủy</button>
+        </div>
+    </div>
+    
+    <script>
+        var sachDaChon = [];
+        
+        function kiemTraDangNhap() {
+            var admin = localStorage.getItem('currentAdmin');
+            if (!admin) {
+                alert('Bạn chưa đăng nhập!');
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('username').innerText = admin;
+            }
+        }
+        
+        function khoiTao() {
+            document.getElementById('ngayNhap').valueAsDate = new Date();
+            
+            var ncc = JSON.parse(localStorage.getItem('danhSachNCC') || '[]');
+            var html = '<option value="">-- Chọn nhà cung cấp --</option>';
+            for (var i = 0; i < ncc.length; i++) {
+                html += '<option value="' + ncc[i].maNCC + '">' + ncc[i].tenNCC + '</option>';
+            }
+            document.getElementById('ncc').innerHTML = html;
+            
+            var phieuNhap = JSON.parse(localStorage.getItem('phieuNhapKho') || '[]');
+            var maPhieu = 'PN' + String(phieuNhap.length + 1).padStart(3, '0');
+            document.getElementById('maPhieu').innerText = maPhieu;
+        }
+        
+        function themSach() {
+            var keyword = document.getElementById('timSach').value.trim().toLowerCase();
+            if (keyword === '') {
+                alert('Vui lòng nhập mã hoặc tên sách!');
+                return;
+            }
+            
+            var danhSachSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+            var timThay = null;
+            
+            for (var i = 0; i < danhSachSach.length; i++) {
+                if (danhSachSach[i].maSach.toLowerCase() === keyword || 
+                    danhSachSach[i].tenSach.toLowerCase().indexOf(keyword) !== -1) {
+                    timThay = danhSachSach[i];
+                    break;
+                }
+            }
+            
+            if (!timThay) {
+                alert('Không tìm thấy sách!');
+                return;
+            }
+            
+            for (var j = 0; j < sachDaChon.length; j++) {
+                if (sachDaChon[j].maSach === timThay.maSach) {
+                    alert('Sách này đã được thêm!');
+                    return;
+                }
+            }
+            
+            sachDaChon.push({
+                maSach: timThay.maSach,
+                tenSach: timThay.tenSach,
+                soLuong: 1,
+                giaNhap: timThay.giaNhap || 100000
+            });
+            
+            document.getElementById('timSach').value = '';
+            hienThiDanhSach();
+        }
+        
+        function hienThiDanhSach() {
+            if (sachDaChon.length === 0) {
+                document.getElementById('danhSachSachNhap').innerHTML = '<tr><td colspan="7" style="text-align: center; color: #999;">Chưa có sách nào</td></tr>';
+                tinhTong();
+                return;
+            }
+            
+            var html = '';
+            for (var i = 0; i < sachDaChon.length; i++) {
+                var s = sachDaChon[i];
+                var thanhTien = s.soLuong * s.giaNhap;
+                
+                html += '<tr>';
+                html += '<td>' + (i + 1) + '</td>';
+                html += '<td>' + s.maSach + '</td>';
+                html += '<td>' + s.tenSach + '</td>';
+                html += '<td><input type="number" value="' + s.soLuong + '" min="1" style="width: 60px;" onchange="capNhatSoLuong(' + i + ', this.value)"></td>';
+                html += '<td><input type="number" value="' + s.giaNhap + '" min="0" style="width: 100px;" onchange="capNhatGia(' + i + ', this.value)"></td>';
+                html += '<td>' + thanhTien.toLocaleString('vi-VN') + 'đ</td>';
+                html += '<td><button onclick="xoaSach(' + i + ')" class="btn-danger">🗑️</button></td>';
+                html += '</tr>';
+            }
+            
+            document.getElementById('danhSachSachNhap').innerHTML = html;
+            tinhTong();
+        }
+        
+        function capNhatSoLuong(index, value) {
+            sachDaChon[index].soLuong = parseInt(value) || 1;
+            hienThiDanhSach();
+        }
+        
+        function capNhatGia(index, value) {
+            sachDaChon[index].giaNhap = parseInt(value) || 0;
+            hienThiDanhSach();
+        }
+        
+        function xoaSach(index) {
+            if (confirm('Xóa sách này?')) {
+                sachDaChon.splice(index, 1);
+                hienThiDanhSach();
+            }
+        }
+        
+        function tinhTong() {
+            var tongTienHang = 0;
+            for (var i = 0; i < sachDaChon.length; i++) {
+                tongTienHang += sachDaChon[i].soLuong * sachDaChon[i].giaNhap;
+            }
+            
+            var vat = Math.round(tongTienHang * 0.1);
+            var chietKhau = parseInt(document.getElementById('chietKhau').value) || 0;
+            var giamGia = Math.round((tongTienHang + vat) * chietKhau / 100);
+            var tongThanhToan = tongTienHang + vat - giamGia;
+            
+            document.getElementById('tongTienHang').innerText = tongTienHang.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('vat').innerText = vat.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('giamGia').innerText = giamGia.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('tongThanhToan').innerText = tongThanhToan.toLocaleString('vi-VN') + 'đ';
+        }
+        
+        function xacNhanNhapKho() {
+            var ncc = document.getElementById('ncc').value;
+            if (ncc === '') {
+                alert('Vui lòng chọn nhà cung cấp!');
+                return;
+            }
+            
+            if (sachDaChon.length === 0) {
+                alert('Vui lòng thêm ít nhất 1 sách!');
+                return;
+            }
+            
+            if (!confirm('Xác nhận nhập kho?')) {
+                return;
+            }
+            
+            var tongTienHang = 0;
+            for (var i = 0; i < sachDaChon.length; i++) {
+                tongTienHang += sachDaChon[i].soLuong * sachDaChon[i].giaNhap;
+            }
+            var vat = Math.round(tongTienHang * 0.1);
+            var chietKhau = parseInt(document.getElementById('chietKhau').value) || 0;
+            var giamGia = Math.round((tongTienHang + vat) * chietKhau / 100);
+            var tongThanhToan = tongTienHang + vat - giamGia;
+            
+            var phieuNhap = JSON.parse(localStorage.getItem('phieuNhapKho') || '[]');
+            var danhSachNCC = JSON.parse(localStorage.getItem('danhSachNCC') || '[]');
+            var tenNCC = '';
+            for (var j = 0; j < danhSachNCC.length; j++) {
+                if (danhSachNCC[j].maNCC === ncc) {
+                    tenNCC = danhSachNCC[j].tenNCC;
+                    break;
+                }
+            }
+            
+            phieuNhap.push({
+                maPhieu: document.getElementById('maPhieu').innerText,
+                ngayNhap: document.getElementById('ngayNhap').value,
+                maNCC: ncc,
+                tenNCC: tenNCC,
+                danhSachSach: sachDaChon,
+                tongTien: tongThanhToan,
+                nguoiNhap: localStorage.getItem('currentAdmin') || 'Admin'
+            });
+            localStorage.setItem('phieuNhapKho', JSON.stringify(phieuNhap));
+            
+            var danhSachSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+            for (var k = 0; k < sachDaChon.length; k++) {
+                for (var m = 0; m < danhSachSach.length; m++) {
+                    if (danhSachSach[m].maSach === sachDaChon[k].maSach) {
+                        danhSachSach[m].soLuongCon += sachDaChon[k].soLuong;
+                        danhSachSach[m].soLuongTong += sachDaChon[k].soLuong;
+                        break;
+                    }
+                }
+            }
+            localStorage.setItem('danhSachSach', JSON.stringify(danhSachSach));
+            
+            alert('✅ Nhập kho thành công!');
+            window.location.href = 'nhap-kho-danh-sach.html';
+        }
+        
+        kiemTraDangNhap();
+        khoiTao();
+    </script>
+</body>
+</html>
