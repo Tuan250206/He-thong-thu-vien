@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Thủ Thư</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #e3f2fd;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Thanh tiêu đề trên cùng */
+        .tieu-de-trang {
+            background: #2196F3;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Khung đăng nhập căn giữa */
+        .hop-dang-nhap {
+            background: white;
+            border-radius: 10px;
+            padding: 45px 40px;
+            width: 420px;
+            margin: 70px auto 0;
+            box-shadow: 0 6px 20px rgba(33,150,243,0.18);
+        }
+
+        .bieu-tuong-form {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1565C0;
+            margin-bottom: 30px;
+            font-size: 22px;
+        }
+
+        /* Nhóm trường nhập liệu */
+        .nhom-nhap {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #444;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 11px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            color: #333;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33,150,243,0.12);
+        }
+
+        /* Nút đăng nhập */
+        .nut-dang-nhap {
+            width: 100%;
+            padding: 13px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .nut-dang-nhap:hover {
+            background: #1976D2;
+        }
+
+        .nut-dang-nhap:active {
+            background: #1565C0;
+        }
+
+        /* Khu vực liên kết bên dưới */
+        .lien-ket {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .lien-ket p {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .lien-ket a {
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .lien-ket a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hộp thông báo lỗi */
+        .thong-bao-loi {
+            background: #ffebee;
+            color: #b71c1c;
+            border: 1px solid #ef9a9a;
+            padding: 11px 14px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Đường kẻ phân cách */
+        .duong-phan-cach {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 18px 0 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tieu-de-trang">📚 HỆ THỐNG QUẢN LÝ THƯ VIỆN</div>
+
+    <div class="hop-dang-nhap">
+        <div class="bieu-tuong-form">👤</div>
+        <h2>Đăng Nhập Thủ Thư</h2>
+
+        <!-- Hộp hiển thị lỗi đăng nhập -->
+        <div id="thongBaoLoi" class="thong-bao-loi"></div>
+
+        <!-- Form đăng nhập -->
+        <form onsubmit="dangNhap(); return false;">
+            <div class="nhom-nhap">
+                <label for="tenDangNhap">Tên đăng nhập</label>
+                <input type="text" id="tenDangNhap" placeholder="Nhập tên đăng nhập" autocomplete="username" />
+            </div>
+
+            <div class="nhom-nhap">
+                <label for="matKhau">Mật khẩu</label>
+                <input type="password" id="matKhau" placeholder="Nhập mật khẩu" autocomplete="current-password" />
+            </div>
+
+            <button type="submit" class="nut-dang-nhap">🔐 Đăng nhập</button>
+        </form>
+
+        <hr class="duong-phan-cach" />
+
+        <div class="lien-ket">
+            <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+            <p><a href="../index.html">← Quay lại trang chủ</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Kiểm tra nếu đã đăng nhập thì chuyển thẳng vào dashboard
+        window.onload = function () {
+            var currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                window.location.href = 'dashboard.html';
+            }
+        };
+
+        // Hàm xử lý đăng nhập
+        function dangNhap() {
+            var tenDangNhap  = document.getElementById('tenDangNhap').value.trim();
+            var matKhau      = document.getElementById('matKhau').value;
+            var hienThiLoi   = document.getElementById('thongBaoLoi');
+
+            // Ẩn thông báo lỗi cũ
+            hienThiLoi.style.display = 'none';
+
+            // Kiểm tra nhập liệu đầy đủ
+            if (!tenDangNhap || !matKhau) {
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '⚠ Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!';
+                return;
+            }
+
+            // Lấy danh sách người dùng từ localStorage
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+
+            // Tìm tài khoản khớp với thông tin nhập vào
+            var nguoiDungTimDuoc = null;
+            var i;
+            for (i = 0; i < users.length; i++) {
+                if (users[i].username === tenDangNhap && users[i].password === matKhau) {
+                    nguoiDungTimDuoc = users[i];
+                    break;
+                }
+            }
+
+            if (nguoiDungTimDuoc) {
+                // Lưu thông tin phiên đăng nhập vào localStorage
+                localStorage.setItem('currentUser',     nguoiDungTimDuoc.username);
+                localStorage.setItem('currentUserInfo', JSON.stringify(nguoiDungTimDuoc));
+
+                // Chuyển hướng đến trang dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                // Hiển thị thông báo lỗi
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '✖ Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại!';
+
+                // Xóa ô mật khẩu để nhập lại
+                document.getElementById('matKhau').value = '';
+                document.getElementById('matKhau').focus();
+            }
+        }
+    </script>
+</body>
+</html>
