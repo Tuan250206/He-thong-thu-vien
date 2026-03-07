@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biên mục - Quản lý kho</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+.header { background: #4CAF50; color: white; padding: 15px 20px; overflow: hidden; }
+.header h1 { margin: 0; font-size: 22px; float: left; }
+.header span { float: right; line-height: 30px; }
+.header a { color: white; }
+.sidebar { width: 200px; background: #fff; float: left; min-height: 600px; border-right: 1px solid #ddd; }
+.sidebar a { display: block; padding: 10px 15px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; font-size: 13px; }
+.sidebar a:hover { background: #e8f5e9; }
+.content { margin-left: 210px; padding: 20px; background: white; min-height: 600px; }
+label { display: block; margin-top: 8px; font-weight: bold; font-size: 13px; }
+input[type="text"], select, textarea { width: 98%; padding: 7px; margin: 3px 0; border: 1px solid #ddd; font-size: 13px; }
+textarea { height: 60px; }
+button { background: #4CAF50; color: white; padding: 8px 16px; border: none; cursor: pointer; margin-right: 8px; font-size: 13px; }
+button:hover { background: #388E3C; }
+.search-bar { margin-bottom: 20px; padding: 15px; background: #e8f5e9; border: 1px solid #4CAF50; }
+.book-info { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; margin-bottom: 15px; }
+.form-row { overflow: hidden; }
+.col3 { width: 30%; float: left; margin-right: 3%; }
+.col2 { width: 48%; float: left; margin-right: 2%; }
+.clearfix { clear: both; }
+table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+table th { background: #4CAF50; color: white; padding: 8px; text-align: left; }
+table td { padding: 8px; border-bottom: 1px solid #ddd; }
+#formBienMuc { display: none; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>📚 Quản lý kho thư viện - ADMIN</h1>
+  <span>Xin chào: <strong id="adminName">Admin</strong> | <a href="login.html">Đăng xuất</a></span>
+</div>
+<div class="sidebar">
+  <a href="dashboard.html">🏠 Trang chủ</a>
+  <a href="sach-them.html">➕ Thêm sách</a>
+  <a href="sach-sua.html">✏️ Sửa sách</a>
+  <a href="bien-muc.html">📚 Biên mục</a>
+  <a href="in-barcode.html">🏷️ In tem sách</a>
+  <a href="kiem-ke.html">📋 Kiểm kê</a>
+  <a href="nhap-kho-danh-sach.html">📥 DS Phiếu nhập</a>
+  <a href="nhap-kho-tao.html">📦 Tạo phiếu nhập</a>
+  <a href="xuat-kho-danh-sach.html">📤 DS Phiếu xuất</a>
+  <a href="xuat-kho-tao.html">🚚 Tạo phiếu xuất</a>
+  <a href="ncc-danh-sach.html">🏢 DS Nhà CC</a>
+  <a href="ncc-them.html">➕ Thêm NCC</a>
+  <a href="lich-su-nhap-xuat.html">📊 Lịch sử N/X</a>
+  <a href="thong-ke-ton-kho.html">📈 Thống kê tồn kho</a>
+</div>
+<div class="content">
+  <h2>📚 Biên mục sách</h2>
+  <div class="search-bar">
+    <strong>Tìm sách để biên mục:</strong><br><br>
+    <input type="text" id="timMa" placeholder="Mã sách hoặc tên sách..." style="width:300px;">
+    <button onclick="timSach()">🔍 Tìm</button>
+  </div>
+
+  <div id="formBienMuc">
+    <div class="book-info">
+      <strong>Sách: </strong><span id="tenSachHienThi"></span> &nbsp;|&nbsp;
+      <strong>Tác giả: </strong><span id="tacGiaHienThi"></span> &nbsp;|&nbsp;
+      <strong>Mã: </strong><span id="maSachHienThi"></span>
+    </div>
+
+    <h3>Thông tin phân loại</h3>
+    <div class="form-row">
+      <div class="col2">
+        <label>Danh mục chính</label>
+        <select id="danhMucChinh">
+          <option value="">-- Chọn danh mục --</option>
+          <option value="Khoa học tự nhiên">Khoa học tự nhiên</option>
+          <option value="Công nghệ kỹ thuật">Công nghệ kỹ thuật</option>
+          <option value="Khoa học xã hội">Khoa học xã hội</option>
+          <option value="Văn học nghệ thuật">Văn học nghệ thuật</option>
+          <option value="Lịch sử địa lý">Lịch sử địa lý</option>
+          <option value="Ngôn ngữ học">Ngôn ngữ học</option>
+          <option value="Triết học tôn giáo">Triết học tôn giáo</option>
+          <option value="Kinh tế quản lý">Kinh tế quản lý</option>
+          <option value="Tổng quát">Tổng quát</option>
+        </select>
+      </div>
+      <div class="col2">
+        <label>Danh mục phụ</label>
+        <input type="text" id="danhMucPhu" placeholder="Ví dụ: Lập trình, Mạng máy tính...">
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <label>Từ khóa (cách nhau bởi dấu phẩy)</label>
+    <input type="text" id="tuKhoa" placeholder="python, lập trình, cơ bản...">
+    <div class="form-row">
+      <div class="col2">
+        <label>Chỉ số DDC (Dewey Decimal)</label>
+        <input type="text" id="ddc" placeholder="Ví dụ: 005.133">
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <label>Vị trí kệ sách (Khu - Kệ - Ngăn)</label>
+    <div class="form-row">
+      <div class="col3"><input type="text" id="viTriKhu" placeholder="Khu (A/B/C...)"></div>
+      <div class="col3"><input type="text" id="viTriKe" placeholder="Kệ (1/2/3...)"></div>
+      <div class="col3"><input type="text" id="viTriNgan" placeholder="Ngăn (1/2/3...)"></div>
+      <div class="clearfix"></div>
+    </div>
+    <label>Ghi chú</label>
+    <textarea id="ghiChu" placeholder="Ghi chú thêm về phân loại..."></textarea>
+    <br><br>
+    <button onclick="luuBienMuc()">💾 Lưu phân loại</button>
+    <button onclick="document.getElementById('formBienMuc').style.display='none'">❌ Hủy</button>
+  </div>
+
+  <h3>Danh sách biên mục</h3>
+  <table>
+    <thead><tr><th>Mã sách</th><th>Tên sách</th><th>Thể loại</th><th>Danh mục</th><th>DDC</th><th>Vị trí</th><th>Từ khóa</th></tr></thead>
+    <tbody id="tbodyBienMuc"></tbody>
+  </table>
+</div>
+<script>
+var sachHienTai = null;
+
+function kiemTraAdmin() {
+  var admin = localStorage.getItem('currentAdmin');
+  if (!admin) { window.location.href = 'login.html'; return; }
+  document.getElementById('adminName').innerText = admin;
+}
+
+function timSach() {
+  var tim = document.getElementById('timMa').value.trim().toLowerCase();
+  if (!tim) { alert('Vui lòng nhập mã hoặc tên sách!'); return; }
+  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+  sachHienTai = null;
+  for (var i = 0; i < ds.length; i++) {
+    if (ds[i].maSach.toLowerCase() === tim || ds[i].tenSach.toLowerCase().indexOf(tim) >= 0) {
+      sachHienTai = ds[i]; break;
+    }
+  }
+  if (!sachHienTai) { alert('Không tìm thấy sách!'); return; }
+  document.getElementById('tenSachHienThi').innerText = sachHienTai.tenSach;
+  document.getElementById('tacGiaHienThi').innerText = sachHienTai.tacGia;
+  document.getElementById('maSachHienThi').innerText = sachHienTai.maSach;
+  // Điền thông tin biên mục đã có
+  document.getElementById('danhMucChinh').value = sachHienTai.danhMucChinh || '';
+  document.getElementById('danhMucPhu').value = sachHienTai.danhMucPhu || '';
+  document.getElementById('tuKhoa').value = sachHienTai.tuKhoa || '';
+  document.getElementById('ddc').value = sachHienTai.ddc || '';
+  if (sachHienTai.viTri) {
+    var parts = sachHienTai.viTri.split('-');
+    document.getElementById('viTriKhu').value = parts[0] || '';
+    document.getElementById('viTriKe').value = parts[1] || '';
+    document.getElementById('viTriNgan').value = parts[2] || '';
+  }
+  document.getElementById('ghiChu').value = sachHienTai.ghiChu || '';
+  document.getElementById('formBienMuc').style.display = 'block';
+}
+
+function luuBienMuc() {
+  if (!sachHienTai) return;
+  var khu = document.getElementById('viTriKhu').value.trim();
+  var ke = document.getElementById('viTriKe').value.trim();
+  var ngan = document.getElementById('viTriNgan').value.trim();
+  var viTri = (khu && ke && ngan) ? khu + '-' + ke + '-' + ngan : sachHienTai.viTri;
+
+  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+  for (var i = 0; i < ds.length; i++) {
+    if (ds[i].maSach === sachHienTai.maSach) {
+      ds[i].danhMucChinh = document.getElementById('danhMucChinh').value;
+      ds[i].danhMucPhu = document.getElementById('danhMucPhu').value.trim();
+      ds[i].tuKhoa = document.getElementById('tuKhoa').value.trim();
+      ds[i].ddc = document.getElementById('ddc').value.trim();
+      ds[i].viTri = viTri;
+      ds[i].ghiChu = document.getElementById('ghiChu').value.trim();
+      break;
+    }
+  }
+  localStorage.setItem('danhSachSach', JSON.stringify(ds));
+  alert('Lưu biên mục thành công!');
+  document.getElementById('formBienMuc').style.display = 'none';
+  taiDanhSach();
+}
+
+function taiDanhSach() {
+  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+  var tbody = document.getElementById('tbodyBienMuc');
+  tbody.innerHTML = '';
+  for (var i = 0; i < ds.length; i++) {
+    var s = ds[i];
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + s.maSach + '</td><td>' + s.tenSach + '</td><td>' + s.theLoai + '</td>' +
+      '<td>' + (s.danhMucChinh || '-') + '</td><td>' + (s.ddc || '-') + '</td>' +
+      '<td>' + (s.viTri || '-') + '</td><td>' + (s.tuKhoa || '-') + '</td>';
+    tbody.appendChild(tr);
+  }
+}
+
+kiemTraAdmin();
+taiDanhSach();
+</script>
+</body>
+</html>
