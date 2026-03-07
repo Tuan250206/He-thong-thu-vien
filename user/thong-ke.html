@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thống kê - Hệ thống thư viện</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; font-size: 14px; background: #f0f2f5; color: #333; }
+  #header { background: #2196F3; color: #fff; padding: 12px 20px; position: fixed; top: 0; left: 0; right: 0; height: 50px; z-index: 100; overflow: hidden; }
+  #header h1 { font-size: 20px; display: inline-block; }
+  #header .user-info { float: right; font-size: 13px; margin-top: 2px; }
+  #header .user-info a { color: #fff; text-decoration: underline; cursor: pointer; margin-left: 10px; }
+  #sidebar { position: fixed; top: 50px; left: 0; bottom: 0; width: 200px; background: #1565C0; overflow-y: auto; z-index: 99; }
+  #sidebar a { display: block; padding: 10px 15px; color: #cce5ff; text-decoration: none; border-bottom: 1px solid #1976D2; font-size: 13px; }
+  #sidebar a:hover { background: #1976D2; color: #fff; }
+  #sidebar a.active { background: #2196F3; color: #fff; font-weight: bold; }
+  #content { margin-top: 50px; margin-left: 200px; padding: 20px; min-height: calc(100vh - 50px); }
+  .page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
+  .filter-box { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 15px 20px; margin-bottom: 20px; overflow: hidden; }
+  .filter-box label { float: left; padding-top: 7px; margin-right: 6px; font-weight: bold; color: #555; white-space: nowrap; }
+  .filter-box input[type=date] { float: left; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; width: 145px; margin-right: 16px; }
+  .btn-xem { float: left; padding: 7px 20px; background: #2196F3; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; }
+  .btn-xem:hover { background: #1565C0; }
+  /* Bảng thống kê */
+  .tk-section { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 16px 18px; margin-bottom: 22px; }
+  .tk-section h3 { font-size: 16px; color: #1565C0; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e3f2fd; }
+  .tk-section table { width: 100%; border-collapse: collapse; }
+  .tk-section thead tr { background: #1976D2; color: #fff; }
+  .tk-section thead th { padding: 9px 12px; text-align: left; font-size: 13px; }
+  .tk-section tbody tr:nth-child(even) { background: #f5f9ff; }
+  .tk-section tbody tr:hover { background: #e3f2fd; }
+  .tk-section tbody td { padding: 8px 12px; font-size: 13px; border-bottom: 1px solid #eee; }
+  .tk-section tfoot tr { background: #e3f2fd; font-weight: bold; }
+  .tk-section tfoot td { padding: 8px 12px; font-size: 13px; }
+  /* Bảng tổng quan dọc */
+  .tk-tong .row-label { font-weight: bold; color: #555; width: 220px; }
+  .tk-tong .row-value { color: #1565C0; font-weight: bold; font-size: 15px; }
+  /* Layout 2 cột */
+  .col-left { float: left; width: 48%; margin-right: 2%; }
+  .col-right { float: left; width: 50%; }
+  .clearfix::after { content: ""; display: table; clear: both; }
+  .empty-row td { text-align: center; color: #999; font-style: italic; padding: 20px; }
+  .so-do { color: #c62828; font-weight: bold; }
+  .so-xanh { color: #2e7d32; font-weight: bold; }
+</style>
+</head>
+<body>
+<div id="header">
+  <h1>📚 Hệ thống Thư viện</h1>
+  <div class="user-info">Xin chào: <strong id="tenNguoiDung">--</strong><a onclick="dangXuat()">Đăng xuất</a></div>
+</div>
+<div id="sidebar">
+  <a href="dashboard.html">🏠 Trang chủ</a>
+  <a href="doc-gia-danh-sach.html">👥 DS Độc giả</a>
+  <a href="doc-gia-them.html">➕ Thêm độc giả</a>
+  <a href="sach-danh-sach.html">📖 DS Sách</a>
+  <a href="sach-tim-kiem.html">🔍 Tìm sách</a>
+  <a href="cho-muon.html">🤝 Cho mượn</a>
+  <a href="tra-sach.html">↩️ Trả sách</a>
+  <a href="gia-han.html">⏰ Gia hạn</a>
+  <a href="xu-ly-phat.html">💰 Xử lý phạt</a>
+  <a href="dat-cho.html">📌 Đặt chỗ</a>
+  <a href="lich-su.html">📋 Lịch sử</a>
+  <a href="thong-ke.html" class="active">📊 Thống kê</a>
+</div>
+<div id="content">
+  <div class="page-title">📊 Thống kê thư viện</div>
+
+  <!-- Form lọc thời gian -->
+  <div class="filter-box clearfix">
+    <label>Từ ngày:</label>
+    <input type="date" id="tuNgay" />
+    <label>Đến ngày:</label>
+    <input type="date" id="denNgay" />
+    <button class="btn-xem" onclick="hienThiThongKe()">📊 Xem thống kê</button>
+  </div>
+
+  <!-- Bảng 1: Thống kê theo ngày -->
+  <div class="tk-section">
+    <h3>📅 Thống kê theo ngày</h3>
+    <table id="bangTheoNgay">
+      <thead>
+        <tr>
+          <th>Ngày</th>
+          <th>Số phiếu mượn</th>
+          <th>Số phiếu trả</th>
+          <th>Phí phạt (đ)</th>
+        </tr>
+      </thead>
+      <tbody id="bodyTheoNgay">
+        <tr class="empty-row"><td colspan="4">Chưa có dữ liệu</td></tr>
+      </tbody>
+      <tfoot id="footTheoNgay"></tfoot>
+    </table>
+  </div>
+
+  <!-- Bảng 2 và 3 xếp 2 cột -->
+  <div class="clearfix">
+    <div class="col-left">
+      <!-- Bảng 2: Top 10 sách mượn nhiều nhất -->
+      <div class="tk-section">
+        <h3>📖 Top 10 sách mượn nhiều nhất</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã sách</th>
+              <th>Tên sách</th>
+              <th>Số lần</th>
+              <th>Tác giả</th>
+            </tr>
+          </thead>
+          <tbody id="bodyTopSach">
+            <tr class="empty-row"><td colspan="5">Chưa có dữ liệu</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-right">
+      <!-- Bảng 3: Top 10 độc giả mượn nhiều nhất -->
+      <div class="tk-section">
+        <h3>👥 Top 10 độc giả mượn nhiều nhất</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã ĐG</th>
+              <th>Họ tên</th>
+              <th>Lớp</th>
+              <th>Số lần</th>
+            </tr>
+          </thead>
+          <tbody id="bodyTopDocGia">
+            <tr class="empty-row"><td colspan="5">Chưa có dữ liệu</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bảng 4: Thống kê tổng quan -->
+  <div class="tk-section tk-tong">
+    <h3>📋 Thống kê tổng quan</h3>
+    <table>
+      <thead>
+        <tr><th>Chỉ tiêu</th><th>Giá trị</th></tr>
+      </thead>
+      <tbody id="bodyTongQuan">
+        <tr><td class="row-label">Tổng phiếu mượn</td><td class="row-value" id="tk-tongMuon">--</td></tr>
+        <tr><td class="row-label">Tổng phiếu trả</td><td class="row-value" id="tk-tongTra">--</td></tr>
+        <tr><td class="row-label">Tổng vi phạm</td><td class="row-value" id="tk-tongVP">--</td></tr>
+        <tr><td class="row-label">Tổng phí phạt</td><td class="row-value" id="tk-tongPhi">--</td></tr>
+        <tr><td class="row-label">Trung bình sách/phiếu</td><td class="row-value" id="tk-tbSach">--</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<script>
+// Khởi tạo trang
+window.onload = function() {
+  var user = localStorage.getItem('currentUser') || 'Admin';
+  document.getElementById('tenNguoiDung').innerText = user;
+
+  // Mặc định: đầu tháng đến hôm nay
+  var hom_nay = new Date();
+  var dauThang = new Date(hom_nay.getFullYear(), hom_nay.getMonth(), 1);
+  document.getElementById('tuNgay').value = formatISO(dauThang);
+  document.getElementById('denNgay').value = formatISO(hom_nay);
+
+  hienThiThongKe();
+};
+
+// Định dạng YYYY-MM-DD
+function formatISO(d) {
+  var m = d.getMonth() + 1;
+  var day = d.getDate();
+  return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
+}
+
+// Định dạng DD/MM/YYYY
+function formatNgay(str) {
+  if (!str) return '--';
+  var p = str.split('-');
+  if (p.length === 3) return p[2] + '/' + p[1] + '/' + p[0];
+  return str;
+}
+
+// Định dạng tiền
+function formatTien(so) {
+  return Number(so || 0).toLocaleString('vi-VN');
+}
+
+// Tính toán thống kê từ dữ liệu localStorage
+function tinhThongKe(tuNgay, denNgay) {
+  var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+  var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
+  var dsDocGia = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
+  var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+
+  // Map tên độc giả
+  var mapDocGia = {};
+  for (var i = 0; i < dsDocGia.length; i++) {
+    mapDocGia[dsDocGia[i].maDG] = dsDocGia[i];
+  }
+
+  // Map tên sách
+  var mapSach = {};
+  for (var i = 0; i < dsSach.length; i++) {
+    mapSach[dsSach[i].maSach] = dsSach[i];
+  }
+
+  // Lọc phiếu mượn trong khoảng thời gian
+  var phieuMuonLoc = [];
+  for (var i = 0; i < dsPhieuMuon.length; i++) {
+    var pm = dsPhieuMuon[i];
+    var ngay = pm.ngayMuon || '';
+    if (tuNgay && ngay < tuNgay) continue;
+    if (denNgay && ngay > denNgay) continue;
+    phieuMuonLoc.push(pm);
+  }
+
+  // Lọc phiếu trả (trangThai = Đã trả) trong khoảng thời gian
+  var phieuTraLoc = [];
+  for (var i = 0; i < dsPhieuMuon.length; i++) {
+    var pm = dsPhieuMuon[i];
+    if (pm.trangThai !== 'Đã trả' && pm.trangThai !== 'Da tra') continue;
+    var ngay = pm.ngayTra || pm.hanTra || '';
+    if (tuNgay && ngay < tuNgay) continue;
+    if (denNgay && ngay > denNgay) continue;
+    phieuTraLoc.push(pm);
+  }
+
+  // Lọc phạt trong khoảng thời gian
+  var phatLoc = [];
+  for (var i = 0; i < dsPhat.length; i++) {
+    var p = dsPhat[i];
+    var ngay = p.ngayPhat || '';
+    if (tuNgay && ngay < tuNgay) continue;
+    if (denNgay && ngay > denNgay) continue;
+    phatLoc.push(p);
+  }
+
+  // ---- Bảng 1: Thống kê theo ngày ----
+  var theoNgay = {}; // key = ngay, value = {muon, tra, phi}
+  for (var i = 0; i < phieuMuonLoc.length; i++) {
+    var ngay = phieuMuonLoc[i].ngayMuon || '';
+    if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
+    theoNgay[ngay].muon++;
+  }
+  for (var i = 0; i < phieuTraLoc.length; i++) {
+    var ngay = phieuTraLoc[i].ngayTra || phieuTraLoc[i].hanTra || '';
+    if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
+    theoNgay[ngay].tra++;
+  }
+  for (var i = 0; i < phatLoc.length; i++) {
+    var ngay = phatLoc[i].ngayPhat || '';
+    if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
+    theoNgay[ngay].phi += Number(phatLoc[i].soTien || 0);
+  }
+  // Sắp xếp theo ngày
+  var dsNgay = [];
+  for (var k in theoNgay) {
+    if (theoNgay.hasOwnProperty(k)) {
+      dsNgay.push({ngay: k, muon: theoNgay[k].muon, tra: theoNgay[k].tra, phi: theoNgay[k].phi});
+    }
+  }
+  dsNgay.sort(function(a, b) { return a.ngay.localeCompare(b.ngay); });
+
+  // ---- Bảng 2: Top 10 sách mượn nhiều nhất ----
+  var demSach = {};
+  for (var i = 0; i < phieuMuonLoc.length; i++) {
+    var pm = phieuMuonLoc[i];
+    if (!pm.danhSachSach) continue;
+    for (var j = 0; j < pm.danhSachSach.length; j++) {
+      var ms = pm.danhSachSach[j].maSach;
+      if (!ms) continue;
+      if (!demSach[ms]) {
+        demSach[ms] = {
+          maSach: ms,
+          tenSach: pm.danhSachSach[j].tenSach || ms,
+          soLan: 0,
+          tacGia: (mapSach[ms] && mapSach[ms].tacGia) || '--'
+        };
+      }
+      demSach[ms].soLan++;
+    }
+  }
+  var topSach = [];
+  for (var k in demSach) {
+    if (demSach.hasOwnProperty(k)) topSach.push(demSach[k]);
+  }
+  topSach.sort(function(a, b) { return b.soLan - a.soLan; });
+  if (topSach.length > 10) topSach = topSach.slice(0, 10);
+
+  // ---- Bảng 3: Top 10 độc giả mượn nhiều nhất ----
+  var demDG = {};
+  for (var i = 0; i < phieuMuonLoc.length; i++) {
+    var pm = phieuMuonLoc[i];
+    var maDG = pm.maDG || '';
+    if (!maDG) continue;
+    if (!demDG[maDG]) {
+      demDG[maDG] = {
+        maDG: maDG,
+        tenDG: pm.tenDG || maDG,
+        lop: (mapDocGia[maDG] && mapDocGia[maDG].lop) || '--',
+        soLan: 0
+      };
+    }
+    demDG[maDG].soLan++;
+  }
+  var topDG = [];
+  for (var k in demDG) {
+    if (demDG.hasOwnProperty(k)) topDG.push(demDG[k]);
+  }
+  topDG.sort(function(a, b) { return b.soLan - a.soLan; });
+  if (topDG.length > 10) topDG = topDG.slice(0, 10);
+
+  // ---- Bảng 4: Tổng quan ----
+  var tongPhi = 0;
+  for (var i = 0; i < phatLoc.length; i++) {
+    tongPhi += Number(phatLoc[i].soTien || 0);
+  }
+  var tongSach = 0;
+  for (var i = 0; i < phieuMuonLoc.length; i++) {
+    var pm = phieuMuonLoc[i];
+    if (pm.danhSachSach) tongSach += pm.danhSachSach.length;
+  }
+  var tbSach = phieuMuonLoc.length > 0 ? (tongSach / phieuMuonLoc.length).toFixed(2) : '0';
+
+  return {
+    theoNgay: dsNgay,
+    topSach: topSach,
+    topDG: topDG,
+    tongQuan: {
+      tongMuon: phieuMuonLoc.length,
+      tongTra: phieuTraLoc.length,
+      tongVP: phatLoc.length,
+      tongPhi: tongPhi,
+      tbSach: tbSach
+    }
+  };
+}
+
+// Hiển thị toàn bộ thống kê
+function hienThiThongKe() {
+  var tuNgay = document.getElementById('tuNgay').value;
+  var denNgay = document.getElementById('denNgay').value;
+
+  if (!tuNgay || !denNgay) {
+    alert('Vui lòng chọn khoảng thời gian!');
+    return;
+  }
+  if (tuNgay > denNgay) {
+    alert('Từ ngày không được lớn hơn đến ngày!');
+    return;
+  }
+
+  var kq = tinhThongKe(tuNgay, denNgay);
+
+  // --- Hiển thị bảng 1: Theo ngày ---
+  var bodyNgay = document.getElementById('bodyTheoNgay');
+  var footNgay = document.getElementById('footTheoNgay');
+  if (kq.theoNgay.length === 0) {
+    bodyNgay.innerHTML = '<tr class="empty-row"><td colspan="4">Không có dữ liệu trong khoảng thời gian này</td></tr>';
+    footNgay.innerHTML = '';
+  } else {
+    var html = '';
+    var tMuon = 0, tTra = 0, tPhi = 0;
+    for (var i = 0; i < kq.theoNgay.length; i++) {
+      var row = kq.theoNgay[i];
+      tMuon += row.muon; tTra += row.tra; tPhi += row.phi;
+      html += '<tr>';
+      html += '<td><strong>' + formatNgay(row.ngay) + '</strong></td>';
+      html += '<td><span class="so-xanh">' + row.muon + '</span></td>';
+      html += '<td>' + row.tra + '</td>';
+      html += '<td>' + (row.phi > 0 ? '<span class="so-do">' + formatTien(row.phi) + '</span>' : '0') + '</td>';
+      html += '</tr>';
+    }
+    bodyNgay.innerHTML = html;
+    footNgay.innerHTML = '<tr><td><strong>Tổng cộng</strong></td>' +
+      '<td><strong class="so-xanh">' + tMuon + '</strong></td>' +
+      '<td><strong>' + tTra + '</strong></td>' +
+      '<td><strong class="so-do">' + formatTien(tPhi) + '</strong></td></tr>';
+  }
+
+  // --- Hiển thị bảng 2: Top sách ---
+  var bodyTopSach = document.getElementById('bodyTopSach');
+  if (kq.topSach.length === 0) {
+    bodyTopSach.innerHTML = '<tr class="empty-row"><td colspan="5">Không có dữ liệu</td></tr>';
+  } else {
+    var html = '';
+    for (var i = 0; i < kq.topSach.length; i++) {
+      var s = kq.topSach[i];
+      html += '<tr>';
+      html += '<td>' + (i + 1) + '</td>';
+      html += '<td>' + s.maSach + '</td>';
+      html += '<td>' + s.tenSach + '</td>';
+      html += '<td><strong class="so-xanh">' + s.soLan + '</strong></td>';
+      html += '<td>' + s.tacGia + '</td>';
+      html += '</tr>';
+    }
+    bodyTopSach.innerHTML = html;
+  }
+
+  // --- Hiển thị bảng 3: Top độc giả ---
+  var bodyTopDG = document.getElementById('bodyTopDocGia');
+  if (kq.topDG.length === 0) {
+    bodyTopDG.innerHTML = '<tr class="empty-row"><td colspan="5">Không có dữ liệu</td></tr>';
+  } else {
+    var html = '';
+    for (var i = 0; i < kq.topDG.length; i++) {
+      var dg = kq.topDG[i];
+      html += '<tr>';
+      html += '<td>' + (i + 1) + '</td>';
+      html += '<td>' + dg.maDG + '</td>';
+      html += '<td>' + dg.tenDG + '</td>';
+      html += '<td>' + dg.lop + '</td>';
+      html += '<td><strong class="so-xanh">' + dg.soLan + '</strong></td>';
+      html += '</tr>';
+    }
+    bodyTopDG.innerHTML = html;
+  }
+
+  // --- Hiển thị bảng 4: Tổng quan ---
+  var tq = kq.tongQuan;
+  document.getElementById('tk-tongMuon').innerText = tq.tongMuon + ' phiếu';
+  document.getElementById('tk-tongTra').innerText = tq.tongTra + ' phiếu';
+  document.getElementById('tk-tongVP').innerText = tq.tongVP + ' trường hợp';
+  document.getElementById('tk-tongPhi').innerText = formatTien(tq.tongPhi) + ' đ';
+  document.getElementById('tk-tbSach').innerText = tq.tbSach + ' cuốn/phiếu';
+}
+
+// Đăng xuất
+function dangXuat() {
+  if (confirm('Bạn có muốn đăng xuất không?')) {
+    localStorage.removeItem('currentUser');
+    window.location.href = '../index.html';
+  }
+}
+</script>
+</body>
+</html>
