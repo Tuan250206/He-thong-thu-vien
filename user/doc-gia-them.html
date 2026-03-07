@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thêm Độc Giả - Thư Viện</title>
+<style>
+/* === RESET VÀ CƠ BẢN === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; background: #f0f2f5; font-size: 14px; color: #333; }
+
+/* === THANH TIÊU ĐỀ === */
+#header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: #2196F3; color: white; height: 50px;
+    padding: 0 20px; overflow: hidden;
+}
+#header h1 { float: left; font-size: 18px; line-height: 50px; font-weight: bold; }
+#header .user-area { float: right; line-height: 50px; }
+#header .user-area span { margin-right: 10px; font-size: 13px; }
+#header .btn-logout {
+    color: white; text-decoration: none;
+    background: rgba(0,0,0,0.18); padding: 5px 12px;
+    border-radius: 3px; font-size: 13px;
+}
+#header .btn-logout:hover { background: rgba(0,0,0,0.28); }
+
+/* === THANH BÊN === */
+#sidebar {
+    position: fixed; top: 50px; left: 0; bottom: 0;
+    width: 200px; background: #1565C0;
+    overflow-y: auto; z-index: 900;
+}
+#sidebar a {
+    display: block; color: #cce4ff; text-decoration: none;
+    padding: 10px 15px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 13px;
+}
+#sidebar a:hover { background: #1976D2; color: white; }
+#sidebar a.active {
+    background: #0D47A1; color: white;
+    font-weight: bold; border-left: 3px solid #64B5F6;
+    padding-left: 12px;
+}
+
+/* === KHU VỰC NỘI DUNG === */
+#content {
+    margin-left: 200px;
+    padding: 70px 20px 20px 20px;
+    min-height: 100vh;
+}
+
+/* === TIÊU ĐỀ TRANG === */
+.page-title {
+    font-size: 22px; font-weight: bold; color: #1565C0;
+    margin-bottom: 15px; padding-bottom: 10px;
+    border-bottom: 2px solid #2196F3;
+}
+
+/* === THẺ NỘI DUNG === */
+.card {
+    background: white; border-radius: 5px; padding: 25px;
+    margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    max-width: 750px;
+}
+
+/* === NHÓM FORM === */
+.form-group {
+    margin-bottom: 16px; overflow: hidden;
+}
+.form-group label {
+    float: left; width: 160px; padding-top: 9px;
+    font-weight: bold; color: #555; font-size: 13px;
+}
+.form-group .ctrl {
+    margin-left: 160px;
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="date"],
+.form-group input[type="tel"],
+.form-group select,
+.form-group textarea {
+    width: 100%; padding: 8px 12px;
+    border: 1px solid #ccc; border-radius: 3px;
+    font-size: 14px; outline: none; font-family: Arial, sans-serif;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3);
+}
+.form-group input[readonly] {
+    background: #f0f0f0; color: #888; cursor: not-allowed;
+}
+.form-group textarea { resize: vertical; min-height: 70px; }
+
+/* === CHÚ THÍCH BẮT BUỘC === */
+.required { color: #e53935; }
+.note-required { font-size: 12px; color: #e53935; margin-bottom: 15px; }
+
+/* === THÔNG BÁO LỖI === */
+.error-msg {
+    color: #e53935; font-size: 12px;
+    margin-top: 4px; display: none;
+}
+.error-msg.show { display: block; }
+.ctrl.has-error input,
+.ctrl.has-error select,
+.ctrl.has-error textarea { border-color: #e53935; }
+
+/* === ĐƯỜNG PHÂN CÁCH === */
+.form-divider {
+    border: none; border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+/* === NÚT BẤM === */
+.btn-row { margin-top: 20px; overflow: hidden; }
+.btn {
+    padding: 9px 22px; border: none; border-radius: 3px;
+    cursor: pointer; font-size: 14px; text-decoration: none;
+    display: inline-block; line-height: normal;
+}
+.btn-save { background: #2196F3; color: white; margin-right: 10px; }
+.btn-save:hover { background: #1976D2; }
+.btn-cancel { background: #9E9E9E; color: white; }
+.btn-cancel:hover { background: #757575; }
+
+/* === NHÃN PHẦN === */
+.section-label {
+    font-size: 15px; font-weight: bold; color: #1565C0;
+    margin-bottom: 15px; padding-bottom: 6px;
+    border-bottom: 1px solid #BBDEFB;
+}
+
+/* === CLEARFIX === */
+.cf::after { content: ""; display: table; clear: both; }
+</style>
+</head>
+<body>
+
+<!-- Thanh tiêu đề trên cùng -->
+<div id="header">
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-area">
+        <span id="lblNguoiDung">👤 Khách</span>
+        <a href="../index.html" class="btn-logout" onclick="return dangXuat()">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<!-- Thanh điều hướng bên trái -->
+<div id="sidebar">
+    <a href="dashboard.html">🏠 Trang chủ</a>
+    <a href="doc-gia-danh-sach.html">👥 DS Độc giả</a>
+    <a href="doc-gia-them.html" class="active">➕ Thêm độc giả</a>
+    <a href="sach-danh-sach.html">📖 DS Sách</a>
+    <a href="sach-tim-kiem.html">🔍 Tìm sách</a>
+    <a href="cho-muon.html">🤝 Cho mượn</a>
+    <a href="tra-sach.html">↩️ Trả sách</a>
+    <a href="gia-han.html">⏰ Gia hạn</a>
+    <a href="xu-ly-phat.html">💰 Xử lý phạt</a>
+    <a href="dat-cho.html">📌 Đặt chỗ</a>
+    <a href="lich-su.html">📋 Lịch sử</a>
+    <a href="thong-ke.html">📊 Thống kê</a>
+</div>
+
+<!-- Khu vực nội dung chính -->
+<div id="content">
+    <div class="page-title">➕ Thêm Độc Giả Mới</div>
+
+    <div class="card">
+        <p class="note-required"><span class="required">*</span> Trường bắt buộc nhập</p>
+
+        <!-- Phần thông tin cơ bản -->
+        <div class="section-label">📋 Thông tin cơ bản</div>
+
+        <!-- Mã độc giả - tự động tạo, chỉ đọc -->
+        <div class="form-group">
+            <label>Mã độc giả</label>
+            <div class="ctrl">
+                <input type="text" id="maDG" readonly placeholder="Tự động tạo..." />
+            </div>
+        </div>
+
+        <!-- Họ tên - bắt buộc -->
+        <div class="form-group">
+            <label>Họ và tên <span class="required">*</span></label>
+            <div class="ctrl" id="ctrl_hoTen">
+                <input type="text" id="hoTen" placeholder="Nhập họ và tên đầy đủ..." maxlength="100" />
+                <div class="error-msg" id="err_hoTen">Vui lòng nhập họ và tên!</div>
+            </div>
+        </div>
+
+        <!-- Ngày sinh -->
+        <div class="form-group">
+            <label>Ngày sinh</label>
+            <div class="ctrl">
+                <input type="date" id="ngaySinh" />
+            </div>
+        </div>
+
+        <!-- Giới tính -->
+        <div class="form-group">
+            <label>Giới tính</label>
+            <div class="ctrl">
+                <select id="gioiTinh">
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                </select>
+            </div>
+        </div>
+
+        <hr class="form-divider" />
+
+        <!-- Phần thông tin học tập -->
+        <div class="section-label">🎓 Thông tin học tập</div>
+
+        <!-- Lớp - bắt buộc -->
+        <div class="form-group">
+            <label>Lớp <span class="required">*</span></label>
+            <div class="ctrl" id="ctrl_lop">
+                <input type="text" id="lop" placeholder="Ví dụ: 12A1, CNTT01..." maxlength="50" />
+                <div class="error-msg" id="err_lop">Vui lòng nhập tên lớp!</div>
+            </div>
+        </div>
+
+        <!-- Khoa / Ban -->
+        <div class="form-group">
+            <label>Khoa / Ban</label>
+            <div class="ctrl">
+                <input type="text" id="khoa" placeholder="Ví dụ: Công nghệ thông tin..." maxlength="100" />
+            </div>
+        </div>
+
+        <hr class="form-divider" />
+
+        <!-- Phần thông tin liên lạc -->
+        <div class="section-label">📞 Thông tin liên lạc</div>
+
+        <!-- Email - bắt buộc -->
+        <div class="form-group">
+            <label>Email <span class="required">*</span></label>
+            <div class="ctrl" id="ctrl_email">
+                <input type="email" id="email" placeholder="Ví dụ: nguyenvan@email.com..." maxlength="100" />
+                <div class="error-msg" id="err_email">Vui lòng nhập email hợp lệ!</div>
+            </div>
+        </div>
+
+        <!-- Số điện thoại - bắt buộc -->
+        <div class="form-group">
+            <label>Số điện thoại <span class="required">*</span></label>
+            <div class="ctrl" id="ctrl_sdt">
+                <input type="tel" id="sdt" placeholder="Ví dụ: 0901234567..." maxlength="15" />
+                <div class="error-msg" id="err_sdt">Vui lòng nhập số điện thoại!</div>
+            </div>
+        </div>
+
+        <!-- Địa chỉ -->
+        <div class="form-group">
+            <label>Địa chỉ</label>
+            <div class="ctrl">
+                <textarea id="diaChi" placeholder="Nhập địa chỉ..." maxlength="200"></textarea>
+            </div>
+        </div>
+
+        <hr class="form-divider" />
+
+        <!-- Trạng thái tài khoản -->
+        <div class="form-group">
+            <label>Trạng thái</label>
+            <div class="ctrl">
+                <select id="trangThai">
+                    <option value="Hoạt động">Hoạt động</option>
+                    <option value="Khóa">Khóa</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Nút Lưu và Hủy -->
+        <div class="btn-row">
+            <button class="btn btn-save" onclick="luuDocGia()">💾 Lưu độc giả</button>
+            <button class="btn btn-cancel" onclick="huy()">✖ Hủy</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* === KIỂM TRA ĐĂNG NHẬP === */
+function kiemTraDangNhap() {
+    var nguoiDung = localStorage.getItem('currentUser');
+    if (!nguoiDung) {
+        alert('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!');
+        window.location.href = '../index.html';
+        return false;
+    }
+    document.getElementById('lblNguoiDung').innerHTML = '👤 ' + nguoiDung;
+    return true;
+}
+
+/* === LẤY DANH SÁCH ĐỘC GIẢ TỪ LOCALSTORAGE === */
+function layDanhSachDocGia() {
+    var data = localStorage.getItem('danhSachDocGia');
+    if (!data) return [];
+    try { return JSON.parse(data); }
+    catch (e) { return []; }
+}
+
+/* === TẠO MÃ ĐỘC GIẢ TỰ ĐỘNG === */
+/* Định dạng: DG + số thứ tự, tối thiểu 3 chữ số (DG001, DG002, ..., DG999, DG1000, ...) */
+function taoMaDG() {
+    var danhSach = layDanhSachDocGia();
+    var soLonNhat = 0;
+
+    /* Tìm số thứ tự lớn nhất đang tồn tại để tránh trùng lặp */
+    for (var i = 0; i < danhSach.length; i++) {
+        var ma = danhSach[i].maDG || '';
+        if (ma.length > 2 && ma.substring(0, 2) === 'DG') {
+            var so = parseInt(ma.substring(2), 10);
+            if (!isNaN(so) && so > soLonNhat) soLonNhat = so;
+        }
+    }
+
+    /* Tăng thêm 1 để tạo số mới, đệm 0 để đủ tối thiểu 3 chữ số */
+    var soMoi = soLonNhat + 1;
+    var soStr = '' + soMoi;
+    while (soStr.length < 3) soStr = '0' + soStr;
+    return 'DG' + soStr;
+}
+
+/* === KIỂM TRA HỢP LỆ CỦA EMAIL === */
+function kiemTraEmail(email) {
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+/* === ẨN HIỆN THÔNG BÁO LỖI === */
+function hienLoi(idCtrl, idLoi, hien) {
+    var ctrl = document.getElementById(idCtrl);
+    var loi = document.getElementById(idLoi);
+    if (hien) {
+        ctrl.className = 'ctrl has-error';
+        loi.className = 'error-msg show';
+    } else {
+        ctrl.className = 'ctrl';
+        loi.className = 'error-msg';
+    }
+}
+
+/* === KIỂM TRA DỮ LIỆU FORM === */
+function kiemTraForm() {
+    var hopLe = true;
+
+    /* Kiểm tra họ tên */
+    var hoTen = document.getElementById('hoTen').value.trim();
+    if (!hoTen) {
+        hienLoi('ctrl_hoTen', 'err_hoTen', true);
+        hopLe = false;
+    } else {
+        hienLoi('ctrl_hoTen', 'err_hoTen', false);
+    }
+
+    /* Kiểm tra lớp */
+    var lop = document.getElementById('lop').value.trim();
+    if (!lop) {
+        hienLoi('ctrl_lop', 'err_lop', true);
+        hopLe = false;
+    } else {
+        hienLoi('ctrl_lop', 'err_lop', false);
+    }
+
+    /* Kiểm tra email */
+    var email = document.getElementById('email').value.trim();
+    if (!email || !kiemTraEmail(email)) {
+        hienLoi('ctrl_email', 'err_email', true);
+        hopLe = false;
+    } else {
+        hienLoi('ctrl_email', 'err_email', false);
+    }
+
+    /* Kiểm tra số điện thoại */
+    var sdt = document.getElementById('sdt').value.trim();
+    if (!sdt) {
+        hienLoi('ctrl_sdt', 'err_sdt', true);
+        hopLe = false;
+    } else {
+        hienLoi('ctrl_sdt', 'err_sdt', false);
+    }
+
+    return hopLe;
+}
+
+/* === LƯU ĐỘC GIẢ MỚI VÀO LOCALSTORAGE === */
+function luuDocGia() {
+    /* Kiểm tra dữ liệu trước khi lưu */
+    if (!kiemTraForm()) {
+        alert('⚠ Vui lòng điền đầy đủ các trường bắt buộc!');
+        return;
+    }
+
+    /* Tạo đối tượng độc giả mới */
+    var docGiaMoi = {
+        maDG: document.getElementById('maDG').value,
+        hoTen: document.getElementById('hoTen').value.trim(),
+        ngaySinh: document.getElementById('ngaySinh').value,
+        gioiTinh: document.getElementById('gioiTinh').value,
+        lop: document.getElementById('lop').value.trim(),
+        khoa: document.getElementById('khoa').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        sdt: document.getElementById('sdt').value.trim(),
+        diaChi: document.getElementById('diaChi').value.trim(),
+        trangThai: document.getElementById('trangThai').value
+    };
+
+    /* Lấy danh sách hiện tại và thêm mới */
+    var danhSach = layDanhSachDocGia();
+
+    /* Kiểm tra email đã tồn tại chưa */
+    for (var i = 0; i < danhSach.length; i++) {
+        if (danhSach[i].email === docGiaMoi.email) {
+            alert('⚠ Email [' + docGiaMoi.email + '] đã được sử dụng bởi độc giả khác!');
+            return;
+        }
+    }
+
+    danhSach.push(docGiaMoi);
+    localStorage.setItem('danhSachDocGia', JSON.stringify(danhSach));
+
+    alert('✅ Đã thêm độc giả [' + docGiaMoi.maDG + ' - ' + docGiaMoi.hoTen + '] thành công!');
+
+    /* Chuyển về trang danh sách */
+    window.location.href = 'doc-gia-danh-sach.html';
+}
+
+/* === HỦY THÊM, QUAY LẠI DANH SÁCH === */
+function huy() {
+    if (confirm('Bạn có muốn hủy thêm độc giả và quay lại danh sách không?')) {
+        window.location.href = 'doc-gia-danh-sach.html';
+    }
+}
+
+/* === HÀM ĐĂNG XUẤT === */
+function dangXuat() {
+    if (confirm('Bạn có muốn đăng xuất không?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = '../index.html';
+    }
+    return false;
+}
+
+/* === KHỞI TẠO TRANG === */
+if (kiemTraDangNhap()) {
+    /* Tự động tạo mã độc giả và hiển thị */
+    document.getElementById('maDG').value = taoMaDG();
+}
+</script>
+</body>
+</html>
