@@ -307,12 +307,12 @@ function layDanhSachDocGia() {
 }
 
 /* === TẠO MÃ ĐỘC GIẢ TỰ ĐỘNG === */
-/* Định dạng: DG + 3 chữ số (DG001, DG002, ...) */
+/* Định dạng: DG + số thứ tự, tối thiểu 3 chữ số (DG001, DG002, ..., DG999, DG1000, ...) */
 function taoMaDG() {
     var danhSach = layDanhSachDocGia();
     var soLonNhat = 0;
 
-    /* Tìm số thứ tự lớn nhất hiện có trong danh sách */
+    /* Tìm số thứ tự lớn nhất đang tồn tại để tránh trùng lặp */
     for (var i = 0; i < danhSach.length; i++) {
         var ma = danhSach[i].maDG || '';
         if (ma.length > 2 && ma.substring(0, 2) === 'DG') {
@@ -321,10 +321,9 @@ function taoMaDG() {
         }
     }
 
-    /* Tăng thêm 1 để tạo mã mới */
+    /* Tăng thêm 1 để tạo số mới, đệm 0 để đủ tối thiểu 3 chữ số */
     var soMoi = soLonNhat + 1;
     var soStr = '' + soMoi;
-    /* Đệm số 0 phía trước để đủ 3 chữ số */
     while (soStr.length < 3) soStr = '0' + soStr;
     return 'DG' + soStr;
 }
