@@ -31,6 +31,31 @@
 .btn-cancel:hover { background: #757575; }
 .section-label { font-size: 15px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 6px; border-bottom: 1px solid #BBDEFB; }
 .cf::after { content: ""; display: table; clear: both; }
+
+/* Thêm style cho nút quay lại */
+.back-button {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    max-width: 750px;
+}
+.btn-back {
+    background: #757575;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-back:hover {
+    background: #616161;
+}
 </style>
 </head>
 <body>
@@ -71,19 +96,12 @@
     </a>
 
     <div class="menu-nhom">Quản lý</div>
-    <a href="doc-gia-danh-sach.html" class="menu-item">
+    <a href="doc-gia-danh-sach.html" class="menu-item active">
         <span class="menu-icon">👥</span>Độc giả
-    </a>
-    <a href="doc-gia-them.html" class="menu-item active">
-        <span class="menu-icon">➕</span>Thêm ĐG
     </a>
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
-    </a>
-
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -97,7 +115,6 @@
     <div class="page-title">➕ Thêm Độc Giả Mới</div>
 
     <div class="card">
-        <p class="note-required"><span class="required">*</span> Trường bắt buộc nhập</p>
 
         <div class="section-label">📋 Thông tin cơ bản</div>
 
@@ -138,17 +155,67 @@
         <div class="section-label">🎓 Thông tin học tập</div>
 
         <div class="form-group">
-            <label>Lớp <span class="required">*</span></label>
-            <div class="ctrl" id="ctrl_lop">
-                <input type="text" id="lop" placeholder="Ví dụ: 12A1, CNTT01..." maxlength="50" />
-                <div class="error-msg" id="err_lop">Vui lòng nhập tên lớp!</div>
+            <label>CMND/CCCD <span class="required">*</span></label>
+            <div class="ctrl" id="ctrl_cccd">
+                <input type="text" id="cccd" pattern="[0-9]{9,12}" required maxlength="12" 
+                    placeholder="VD: 001085012345" />
+                <div class="error-msg" id="err_cccd">Vui lòng nhập CMND/CCCD (9-12 chữ số)!</div>
             </div>
         </div>
 
         <div class="form-group">
-            <label>Khoa / Ban</label>
+            <label>Nghề nghiệp</label>
             <div class="ctrl">
-                <input type="text" id="khoa" placeholder="Ví dụ: Công nghệ thông tin..." maxlength="100" />
+                <input type="text" id="ngheNghiep" maxlength="100" 
+                    placeholder="VD: Giáo viên, Bác sĩ, Học sinh..." />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Nơi làm việc / Học tập</label>
+            <div class="ctrl">
+                <input type="text" id="noiLamViec" maxlength="100" 
+                    placeholder="VD: Trường THPT Chu Văn An" />
+            </div>
+        </div>
+
+        <hr class="form-divider" />
+
+        <div class="section-label">💳 Đăng ký thẻ thư viện</div>
+
+        <div class="form-group">
+            <label>Chọn gói thẻ <span class="required">*</span></label>
+            <div class="ctrl">
+                <select id="thoiHan" required onchange="capNhatThongTinThe()">
+                    <option value="">-- Chọn thời hạn thẻ --</option>
+                    <option value="3">3 tháng - 40,000đ</option>
+                    <option value="6">6 tháng - 70,000đ 🔥</option>
+                    <option value="12" selected>1 năm - 120,000đ ⭐</option>
+                    <option value="24">2 năm - 200,000đ 💎</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Ngày cấp thẻ</label>
+            <div class="ctrl">
+                <input type="text" id="ngayCapThe" readonly style="background: #f0f0f0;" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Ngày hết hạn</label>
+            <div class="ctrl">
+                <input type="text" id="ngayHetHan" readonly style="background: #f0f0f0;" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Phí thẻ</label>
+            <div class="ctrl">
+                <input type="text" id="phiThe" readonly 
+                    style="background: #e8f5e9; font-size: 18px; font-weight: bold; 
+                            color: #2e7d32; text-align: center;" />
             </div>
         </div>
 
@@ -196,9 +263,15 @@
             <button class="btn btn-cancel" onclick="huy()">✖ Hủy</button>
         </div>
     </div>
+
+    <!-- NÚT QUAY LẠI Ở CUỐI TRANG -->
+    <div class="back-button">
+        <a href="doc-gia-danh-sach.html" class="btn-back">← Quay lại danh sách độc giả</a>
+    </div>
 </div>
 
 <script>
+// ... (giữ nguyên toàn bộ JavaScript như cũ)
 function kiemTraDangNhap() {
     var nguoiDung = localStorage.getItem('currentUser');
     if (!nguoiDung) {
@@ -254,6 +327,55 @@ function hienLoi(idCtrl, idLoi, hien) {
     }
 }
 
+var BANG_GIA_THE = {
+    3:  { phi: 40000,  ten: '3 tháng' },
+    6:  { phi: 70000,  ten: '6 tháng' },
+    12: { phi: 120000, ten: '1 năm' },
+    24: { phi: 200000, ten: '2 năm' }
+};
+
+window.onload = function() {
+    if (kiemTraDangNhap()) {
+        document.getElementById('maDG').value = taoMaDG();
+        capNhatThongTinThe();
+    }
+};
+
+function capNhatThongTinThe() {
+    var thoiHan = parseInt(document.getElementById('thoiHan').value);
+    
+    if (!thoiHan) {
+        document.getElementById('ngayCapThe').value = '';
+        document.getElementById('ngayHetHan').value = '';
+        document.getElementById('phiThe').value = '';
+        return;
+    }
+    
+    var ngayCapThe = new Date();
+    var ngayHetHan = new Date(ngayCapThe);
+    ngayHetHan.setMonth(ngayHetHan.getMonth() + thoiHan);
+    
+    var phiThe = BANG_GIA_THE[thoiHan].phi;
+    
+    document.getElementById('ngayCapThe').value = formatNgayVN(ngayCapThe);
+    document.getElementById('ngayHetHan').value = formatNgayVN(ngayHetHan);
+    document.getElementById('phiThe').value = phiThe.toLocaleString('vi-VN') + 'đ';
+}
+
+function formatNgayVN(date) {
+    var d = ('0' + date.getDate()).slice(-2);
+    var m = ('0' + (date.getMonth() + 1)).slice(-2);
+    var y = date.getFullYear();
+    return d + '/' + m + '/' + y;
+}
+
+function formatNgaySQL(date) {
+    var y = date.getFullYear();
+    var m = ('0' + (date.getMonth() + 1)).slice(-2);
+    var d = ('0' + date.getDate()).slice(-2);
+    return y + '-' + m + '-' + d;
+}
+
 function kiemTraForm() {
     var hopLe = true;
 
@@ -265,12 +387,12 @@ function kiemTraForm() {
         hienLoi('ctrl_hoTen', 'err_hoTen', false);
     }
 
-    var lop = document.getElementById('lop').value.trim();
-    if (!lop) {
-        hienLoi('ctrl_lop', 'err_lop', true);
+    var cccd = document.getElementById('cccd').value.trim();
+    if (!cccd || !/^[0-9]{9,12}$/.test(cccd)) {
+        hienLoi('ctrl_cccd', 'err_cccd', true);
         hopLe = false;
     } else {
-        hienLoi('ctrl_lop', 'err_lop', false);
+        hienLoi('ctrl_cccd', 'err_cccd', false);
     }
 
     var email = document.getElementById('email').value.trim();
@@ -298,24 +420,49 @@ function luuDocGia() {
         return;
     }
 
+    var thoiHan = parseInt(document.getElementById('thoiHan').value);
+    if (!thoiHan) {
+        alert('⚠ Vui lòng chọn gói thẻ!');
+        return;
+    }
+
+    var ngayCapThe = new Date();
+    var ngayHetHan = new Date(ngayCapThe);
+    ngayHetHan.setMonth(ngayHetHan.getMonth() + thoiHan);
+    
+    var phiThe = BANG_GIA_THE[thoiHan].phi;
+
     var docGiaMoi = {
         maDG: document.getElementById('maDG').value,
         hoTen: document.getElementById('hoTen').value.trim(),
-        ngaySinh: document.getElementById('ngaySinh').value,
+        ngaySinh: document.getElementById('ngaySinh').value || '',
         gioiTinh: document.getElementById('gioiTinh').value,
-        lop: document.getElementById('lop').value.trim(),
-        khoa: document.getElementById('khoa').value.trim(),
+        cccd: document.getElementById('cccd').value.trim(),
         email: document.getElementById('email').value.trim(),
         sdt: document.getElementById('sdt').value.trim(),
         diaChi: document.getElementById('diaChi').value.trim(),
-        trangThai: document.getElementById('trangThai').value
+        ngheNghiep: document.getElementById('ngheNghiep').value.trim(),
+        noiLamViec: document.getElementById('noiLamViec').value.trim(),
+        maThe: taoMaThe(),
+        ngayCapThe: formatNgaySQL(ngayCapThe),
+        thoiHan: thoiHan,
+        ngayHetHan: formatNgaySQL(ngayHetHan),
+        phiThe: phiThe,
+        trangThaiThe: 'Hoạt động'
     };
 
     var danhSach = layDanhSachDocGia();
 
     for (var i = 0; i < danhSach.length; i++) {
+        if (danhSach[i].cccd === docGiaMoi.cccd) {
+            alert('⚠ CMND/CCCD [' + docGiaMoi.cccd + '] đã được sử dụng!');
+            return;
+        }
+    }
+
+    for (var i = 0; i < danhSach.length; i++) {
         if (danhSach[i].email === docGiaMoi.email) {
-            alert('⚠ Email [' + docGiaMoi.email + '] đã được sử dụng bởi độc giả khác!');
+            alert('⚠ Email [' + docGiaMoi.email + '] đã được sử dụng!');
             return;
         }
     }
@@ -323,8 +470,21 @@ function luuDocGia() {
     danhSach.push(docGiaMoi);
     localStorage.setItem('danhSachDocGia', JSON.stringify(danhSach));
 
-    alert('✅ Đã thêm độc giả [' + docGiaMoi.maDG + ' - ' + docGiaMoi.hoTen + '] thành công!');
+    alert('✅ Đã thêm độc giả và cấp thẻ thành công!\n\n' +
+          '📋 Mã độc giả: ' + docGiaMoi.maDG + '\n' +
+          '💳 Mã thẻ: ' + docGiaMoi.maThe + '\n' +
+          '👤 Họ tên: ' + docGiaMoi.hoTen + '\n' +
+          '📦 Gói thẻ: ' + BANG_GIA_THE[thoiHan].ten + '\n' +
+          '📅 Hạn thẻ: ' + formatNgayVN(ngayHetHan) + '\n' +
+          '💰 Phí đã thu: ' + phiThe.toLocaleString('vi-VN') + 'đ');
+    
     window.location.href = 'doc-gia-danh-sach.html';
+}
+
+function taoMaThe() {
+    var ds = layDanhSachDocGia();
+    var soThuTu = ds.length + 1;
+    return 'T' + ('000' + soThuTu).slice(-3);
 }
 
 function huy() {
@@ -339,10 +499,6 @@ function dangXuat() {
         window.location.href = '../index.html';
     }
     return false;
-}
-
-if (kiemTraDangNhap()) {
-    document.getElementById('maDG').value = taoMaDG();
 }
 </script>
 </body>

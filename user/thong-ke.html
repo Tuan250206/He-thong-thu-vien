@@ -70,16 +70,9 @@
     <a href="doc-gia-danh-sach.html" class="menu-item">
         <span class="menu-icon">👥</span>Độc giả
     </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
-    </a>
-
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -143,14 +136,14 @@
         <h3>👥 Top 10 độc giả mượn nhiều nhất</h3>
         <table>
           <thead>
-            <tr>
-              <th>STT</th>
-              <th>Mã ĐG</th>
-              <th>Họ tên</th>
-              <th>Lớp</th>
-              <th>Số lần</th>
-            </tr>
-          </thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã ĐG</th>
+            <th>Họ tên</th>
+            <th>Nghề nghiệp</th>
+            <th>Số lần</th>
+          </tr>
+        </thead>
           <tbody id="bodyTopDocGia">
             <tr class="empty-row"><td colspan="5">Chưa có dữ liệu</td></tr>
           </tbody>
@@ -303,7 +296,12 @@ function tinhThongKe(tuNgay, denNgay) {
     var maDG = pm.maDG || '';
     if (!maDG) continue;
     if (!demDG[maDG]) {
-      demDG[maDG] = { maDG: maDG, tenDG: pm.tenDG || maDG, lop: (mapDocGia[maDG] && mapDocGia[maDG].lop) || '--', soLan: 0 };
+      demDG[maDG] = { 
+        maDG: maDG, 
+        tenDG: pm.tenDG || maDG, 
+        ngheNghiep: (mapDocGia[maDG] && mapDocGia[maDG].ngheNghiep) || '--', 
+        soLan: 0 
+      };
     }
     demDG[maDG].soLan++;
   }
@@ -388,8 +386,7 @@ function hienThiThongKe() {
   } else {
     var html = '';
     for (var i = 0; i < kq.topDG.length; i++) {
-      var dg = kq.topDG[i];
-      html += '<tr><td>' + (i + 1) + '</td><td>' + dg.maDG + '</td><td>' + dg.tenDG + '</td><td>' + dg.lop + '</td><td><strong class="so-xanh">' + dg.soLan + '</strong></td></tr>';
+      var dg = kq.topDG[i];html += '<tr><td>' + (i + 1) + '</td><td>' + dg.maDG + '</td><td>' + dg.tenDG + '</td><td>' + dg.ngheNghiep + '</td><td><strong class="so-xanh">' + dg.soLan + '</strong></td></tr>';
     }
     bodyTopDG.innerHTML = html;
   }
