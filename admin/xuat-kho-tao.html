@@ -4,112 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tạo phiếu xuất kho - Quản lý kho</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        
-        .header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        
-        .sidebar {
-            width: 200px;
-            background-color: #fff;
-            float: left;
-            min-height: 500px;
-            border-right: 1px solid #ddd;
-        }
-        
-        .sidebar a {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .sidebar a:hover {
-            background-color: #e8f5e9;
-        }
-        
-        .content {
-            margin-left: 220px;
-            padding: 20px;
-            background-color: white;
-            min-height: 500px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        table th {
-            background-color: #f44336;
-            color: white;
-            padding: 10px;
-            text-align: left;
-        }
-        
-        table td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-        }
-        
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        
-        button:hover {
-            background-color: #45a049;
-        }
-        
-        .btn-danger {
-            background-color: #f44336;
-        }
-        
-        .section {
-            background: #ffebee;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="header">
+    <div id="header">
         <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
-        <span>Xin chào: <strong id="username">Admin</strong> | <a href="login.html" style="color: white;">Đăng xuất</a></span>
+        <div class="userInfo">
+            Xin chào: <strong id="tenAdmin">Admin</strong>
+            <a href="login.html" onclick="dangXuat()">Đăng xuất</a>
+        </div>
     </div>
     
-    <div class="sidebar">
+    <div id="sidebar">
         <a href="dashboard.html">🏠 Trang chủ</a>
         <a href="sach-them.html">➕ Thêm sách</a>
         <a href="sach-sua.html">✏️ Sửa sách</a>
@@ -117,44 +23,50 @@
         <a href="in-barcode.html">🏷️ In tem sách</a>
         <a href="kiem-ke.html">📊 Kiểm kê</a>
         <a href="nhap-kho-danh-sach.html">📥 Phiếu nhập</a>
-        <a href="xuat-kho-danh-sach.html" style="background-color: #e8f5e9;">📤 Phiếu xuất</a>
+        <a class="active" href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
         <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
         <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
         <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
+         <hr style="border-top: 1px solid #ccc; margin: 10px 0;"> <a class="active" href="tai-khoan.html">👥 Quản lý tài khoản</a> </div>
     </div>
     
-    <div class="content">
-        <h2>📤 Tạo phiếu xuất kho</h2>
+    <div id="content">
+        <h2>📤 Tạo phiếu xuất kho mới</h2>
         
-        <div class="section">
+        <div class="section" style="background: #fef2f2; border: 1px solid #fecaca;">
             <h3>Bước 1: Thông tin phiếu xuất</h3>
-            
-            <label>Mã phiếu: <strong id="maPhieu">PX001</strong></label><br>
-            
-            <label>Ngày xuất:</label>
-            <input type="date" id="ngayXuat" style="width: 200px;"><br>
+            <div class="form-row">
+                <div class="col2">
+                    <label>Mã phiếu: <strong id="maPhieuXuat" style="color: #ef4444; font-size: 16px;">PX001</strong></label>
+                </div>
+                <div class="col2">
+                    <label>Ngày xuất:</label>
+                    <input type="date" id="ngayXuat" style="width: 200px;">
+                </div>
+            </div>
             
             <label>Lý do xuất kho:</label>
-            <select id="lyDo" style="width: 400px;">
+            <select id="lyDoXuat" style="width: 400px;">
                 <option value="Thanh lý">Thanh lý</option>
                 <option value="Hư hỏng">Hư hỏng</option>
                 <option value="Mất">Mất</option>
                 <option value="Chuyển kho">Chuyển kho</option>
                 <option value="Khác">Khác</option>
-            </select><br>
+            </select>
             
-            <label>Ghi chú:</label>
-            <textarea id="ghiChu" rows="2" style="width: 400px;"></textarea>
+            <label>Ghi chú thêm:</label>
+            <textarea id="ghiChuXuat" rows="2" placeholder="Nhập chi tiết lý do nếu cần..."></textarea>
         </div>
         
         <div class="section">
-            <h3>Bước 2: Thêm sách xuất kho</h3>
-            
+            <h3>Bước 2: Chọn sách cần xuất</h3>
             <label>Tìm sách (Mã hoặc Tên):</label>
-            <input type="text" id="timSach" placeholder="Nhập mã hoặc tên sách..." style="width: 400px;">
-            <button onclick="themSach()">➕ Thêm sách</button>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <input type="text" id="timSachXuat" placeholder="Nhập mã hoặc tên sách..." style="width: 400px; margin: 0;">
+                <button onclick="themSachVaoPhieuXuat()" class="btn-danger">➕ Thêm vào phiếu</button>
+            </div>
             
-            <table style="margin-top: 15px;">
+            <table>
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -162,174 +74,24 @@
                         <th>Tên sách</th>
                         <th>Tồn kho</th>
                         <th>Số lượng xuất</th>
-                        <th>Xóa</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
-                <tbody id="danhSachSachXuat">
+                <tbody id="danhSachSachXuatTable">
                     <tr>
-                        <td colspan="6" style="text-align: center; color: #999;">Chưa có sách nào</td>
+                        <td colspan="6" style="text-align: center; color: #999;">Chưa có sách nào được chọn</td>
                     </tr>
                 </tbody>
             </table>
         </div>
         
-        <div style="margin-top: 20px; text-align: center;">
-            <button onclick="xacNhanXuatKho()" class="btn-danger" style="font-size: 18px; padding: 15px 30px;">✅ Xác nhận xuất kho</button>
-            <button onclick="window.location.href='xuat-kho-danh-sach.html'" class="btn-danger">❌ Hủy</button>
+        <div style="margin-top: 30px; text-align: center;">
+            <button onclick="xacNhanLuuPhieuXuat()" class="btn-danger" style="font-size: 16px; padding: 15px 40px;">🚀 Xác nhận xuất kho</button>
+            <button onclick="window.location.href='xuat-kho-danh-sach.html'" style="background: #94a3b8; font-size: 16px; padding: 15px 40px;">❌ Hủy bỏ</button>
         </div>
     </div>
+ 
+    <script src="script.js"></script>
     
-    <script>
-        var sachDaChon = [];
-        
-        function kiemTraDangNhap() {
-            var admin = localStorage.getItem('currentAdmin');
-            if (!admin) {
-                alert('Bạn chưa đăng nhập!');
-                window.location.href = 'login.html';
-            } else {
-                document.getElementById('username').innerText = admin;
-            }
-        }
-        
-        function khoiTao() {
-            document.getElementById('ngayXuat').valueAsDate = new Date();
-            
-            var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
-            var maPhieu = 'PX' + String(phieuXuat.length + 1).padStart(3, '0');
-            document.getElementById('maPhieu').innerText = maPhieu;
-        }
-        
-        function themSach() {
-            var keyword = document.getElementById('timSach').value.trim().toLowerCase();
-            if (keyword === '') {
-                alert('Vui lòng nhập mã hoặc tên sách!');
-                return;
-            }
-            
-            var danhSachSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-            var timThay = null;
-            
-            for (var i = 0; i < danhSachSach.length; i++) {
-                if (danhSachSach[i].maSach.toLowerCase() === keyword || 
-                    danhSachSach[i].tenSach.toLowerCase().indexOf(keyword) !== -1) {
-                    timThay = danhSachSach[i];
-                    break;
-                }
-            }
-            
-            if (!timThay) {
-                alert('Không tìm thấy sách!');
-                return;
-            }
-            
-            if (timThay.soLuongCon <= 0) {
-                alert('Sách này đã hết trong kho!');
-                return;
-            }
-            
-            for (var j = 0; j < sachDaChon.length; j++) {
-                if (sachDaChon[j].maSach === timThay.maSach) {
-                    alert('Sách này đã được thêm!');
-                    return;
-                }
-            }
-            
-            sachDaChon.push({
-                maSach: timThay.maSach,
-                tenSach: timThay.tenSach,
-                tonKho: timThay.soLuongCon,
-                soLuong: 1
-            });
-            
-            document.getElementById('timSach').value = '';
-            hienThiDanhSach();
-        }
-        
-        function hienThiDanhSach() {
-            if (sachDaChon.length === 0) {
-                document.getElementById('danhSachSachXuat').innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">Chưa có sách nào</td></tr>';
-                return;
-            }
-            
-            var html = '';
-            for (var i = 0; i < sachDaChon.length; i++) {
-                var s = sachDaChon[i];
-                
-                html += '<tr>';
-                html += '<td>' + (i + 1) + '</td>';
-                html += '<td>' + s.maSach + '</td>';
-                html += '<td>' + s.tenSach + '</td>';
-                html += '<td>' + s.tonKho + '</td>';
-                html += '<td><input type="number" value="' + s.soLuong + '" min="1" max="' + s.tonKho + '" style="width: 60px;" onchange="capNhatSoLuong(' + i + ', this.value)"></td>';
-                html += '<td><button onclick="xoaSach(' + i + ')" class="btn-danger">🗑️</button></td>';
-                html += '</tr>';
-            }
-            
-            document.getElementById('danhSachSachXuat').innerHTML = html;
-        }
-        
-        function capNhatSoLuong(index, value) {
-            var sl = parseInt(value) || 1;
-            if (sl > sachDaChon[index].tonKho) {
-                alert('Số lượng xuất không được vượt quá tồn kho (' + sachDaChon[index].tonKho + ')!');
-                sachDaChon[index].soLuong = sachDaChon[index].tonKho;
-            } else {
-                sachDaChon[index].soLuong = sl;
-            }
-            hienThiDanhSach();
-        }
-        
-        function xoaSach(index) {
-            if (confirm('Xóa sách này?')) {
-                sachDaChon.splice(index, 1);
-                hienThiDanhSach();
-            }
-        }
-        
-        function xacNhanXuatKho() {
-            if (sachDaChon.length === 0) {
-                alert('Vui lòng thêm ít nhất 1 sách!');
-                return;
-            }
-            
-            if (!confirm('Xác nhận xuất kho?\n\nSố lượng tồn kho sẽ bị GIẢM!')) {
-                return;
-            }
-            
-            var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
-            
-            phieuXuat.push({
-                maPhieu: document.getElementById('maPhieu').innerText,
-                ngayXuat: document.getElementById('ngayXuat').value,
-                lyDo: document.getElementById('lyDo').value,
-                ghiChu: document.getElementById('ghiChu').value,
-                danhSachSach: sachDaChon,
-                tongTien: 0,
-                nguoiXuat: localStorage.getItem('currentAdmin') || 'Admin'
-            });
-            localStorage.setItem('phieuXuatKho', JSON.stringify(phieuXuat));
-            
-            var danhSachSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-            for (var k = 0; k < sachDaChon.length; k++) {
-                for (var m = 0; m < danhSachSach.length; m++) {
-                    if (danhSachSach[m].maSach === sachDaChon[k].maSach) {
-                        danhSachSach[m].soLuongCon -= sachDaChon[k].soLuong;
-                        if (danhSachSach[m].soLuongCon < 0) {
-                            danhSachSach[m].soLuongCon = 0;
-                        }
-                        break;
-                    }
-                }
-            }
-            localStorage.setItem('danhSachSach', JSON.stringify(danhSachSach));
-            
-            alert('✅ Xuất kho thành công!');
-            window.location.href = 'xuat-kho-danh-sach.html';
-        }
-        
-        kiemTraDangNhap();
-        khoiTao();
-    </script>
 </body>
 </html>

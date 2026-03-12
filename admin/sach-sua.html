@@ -1,245 +1,124 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sửa sách - Quản lý kho</title>
-<style>
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
-.header { background: #4CAF50; color: white; padding: 15px 20px; overflow: hidden; }
-.header h1 { margin: 0; font-size: 22px; float: left; }
-.header span { float: right; line-height: 30px; }
-.header a { color: white; }
-.sidebar { width: 200px; background: #fff; float: left; min-height: 600px; border-right: 1px solid #ddd; }
-.sidebar a { display: block; padding: 10px 15px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; font-size: 13px; }
-.sidebar a:hover { background: #e8f5e9; }
-.content { margin-left: 210px; padding: 20px; background: white; min-height: 600px; }
-label { display: block; margin-top: 8px; font-weight: bold; font-size: 13px; }
-input[type="text"], input[type="number"], select, textarea { width: 98%; padding: 7px; margin: 3px 0; border: 1px solid #ddd; font-size: 13px; }
-textarea { height: 60px; }
-button { background: #4CAF50; color: white; padding: 8px 16px; border: none; cursor: pointer; margin-right: 8px; font-size: 13px; }
-button:hover { background: #388E3C; }
-.btn-danger { background: #f44336; }
-.btn-danger:hover { background: #c62828; }
-.btn-cancel { background: #9E9E9E; }
-.search-bar { margin-bottom: 20px; padding: 15px; background: #e8f5e9; border: 1px solid #4CAF50; }
-.form-row { overflow: hidden; }
-.col2 { width: 48%; float: left; margin-right: 2%; }
-.clearfix { clear: both; }
-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-table th { background: #4CAF50; color: white; padding: 8px; text-align: left; font-size: 13px; }
-table td { padding: 8px; border-bottom: 1px solid #ddd; font-size: 13px; cursor: pointer; }
-table tr:hover { background: #e8f5e9; }
-#formSua { display: none; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sửa sách - Quản lý kho</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="header">
-  <h1>📚 Quản lý kho thư viện - ADMIN</h1>
-  <span>Xin chào: <strong id="adminName">Admin</strong> | <a href="login.html">Đăng xuất</a></span>
-</div>
-<div class="sidebar">
-  <a href="dashboard.html">🏠 Trang chủ</a>
-  <a href="sach-them.html">➕ Thêm sách</a>
-  <a href="sach-sua.html">✏️ Sửa sách</a>
-  <a href="bien-muc.html">📚 Biên mục</a>
-  <a href="in-barcode.html">🏷️ In tem sách</a>
-  <a href="kiem-ke.html">📋 Kiểm kê</a>
-  <a href="nhap-kho-danh-sach.html">📥 DS Phiếu nhập</a>
-  <a href="nhap-kho-tao.html">📦 Tạo phiếu nhập</a>
-  <a href="xuat-kho-danh-sach.html">📤 DS Phiếu xuất</a>
-  <a href="xuat-kho-tao.html">🚚 Tạo phiếu xuất</a>
-  <a href="ncc-danh-sach.html">🏢 DS Nhà CC</a>
-  <a href="ncc-them.html">➕ Thêm NCC</a>
-  <a href="lich-su-nhap-xuat.html">📊 Lịch sử N/X</a>
-  <a href="thong-ke-ton-kho.html">📈 Thống kê tồn kho</a>
-</div>
-<div class="content">
-  <h2>✏️ Sửa thông tin sách</h2>
-  <div class="search-bar">
-    <strong>Tìm sách cần sửa:</strong><br><br>
-    <input type="text" id="timMa" placeholder="Nhập mã sách hoặc tên sách..." style="width:300px;">
-    <button onclick="timSach()">🔍 Tìm</button>
-  </div>
-
-  <!-- Form sửa sách -->
-  <div id="formSua">
-    <h3>Thông tin sách</h3>
-    <div class="form-row">
-      <div class="col2">
-        <label>Mã sách</label>
-        <input type="text" id="maSach" readonly style="background:#f0f0f0;">
-      </div>
-      <div class="col2">
-        <label>Thể loại</label>
-        <select id="theLoai">
-          <option value="CNTT">Công nghệ thông tin</option>
-          <option value="Toán">Toán học</option>
-          <option value="Vật lý">Vật lý</option>
-          <option value="Hóa học">Hóa học</option>
-          <option value="Sinh học">Sinh học</option>
-          <option value="Ngôn ngữ">Ngôn ngữ</option>
-          <option value="Văn học">Văn học</option>
-          <option value="Lịch sử">Lịch sử</option>
-          <option value="Địa lý">Địa lý</option>
-          <option value="Kinh tế">Kinh tế</option>
-          <option value="Khác">Khác</option>
-        </select>
-      </div>
-      <div class="clearfix"></div>
+    <div id="header">
+        <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
+        <div class="userInfo">
+            Xin chào: <strong id="tenAdmin">Admin</strong>
+            <a href="login.html" onclick="dangXuat()">Đăng xuất</a>
+        </div>
     </div>
-    <label>Tên sách *</label>
-    <input type="text" id="tenSach">
-    <div class="form-row">
-      <div class="col2"><label>Tác giả *</label><input type="text" id="tacGia"></div>
-      <div class="col2"><label>Nhà xuất bản</label><input type="text" id="nxb"></div>
-      <div class="clearfix"></div>
+    
+    <div id="sidebar">
+        <a href="dashboard.html">🏠 Trang chủ</a>
+        <a href="sach-them.html">➕ Thêm sách</a>
+        <a class="active" href="sach-sua.html">✏️ Sửa sách</a>
+        <a href="bien-muc.html">📋 Biên mục</a>
+        <a href="in-barcode.html">🏷️ In tem sách</a>
+        <a href="kiem-ke.html">📊 Kiểm kê</a>
+        <a href="nhap-kho-danh-sach.html">📥 Phiếu nhập</a>
+        <a href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
+        <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
+        <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
+        <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
+         <hr style="border-top: 1px solid #ccc; margin: 10px 0;"> <a href="tai-khoan.html">👥 Quản lý tài khoản</a> 
     </div>
-    <div class="form-row">
-      <div class="col2"><label>Năm XB</label><input type="number" id="namXB"></div>
-      <div class="col2"><label>ISBN</label><input type="text" id="isbn"></div>
-      <div class="clearfix"></div>
+    
+    <div id="content">
+        <h2>✏️ Sửa thông tin sách</h2>
+        
+        <div class="filter-box">
+            <strong style="margin-right: 15px;">Tìm sách cần sửa:</strong>
+            <input type="text" id="timMaSua" placeholder="Nhập mã sách hoặc tên sách..." style="width: 300px; margin: 0 10px 0 0;">
+            <button class="btn-primary" onclick="timSachSua()">🔍 Tìm</button>
+        </div>
+
+        <div id="formSuaSach" class="section" style="display: none; background: #f0fdf4;">
+            <h3>Thông tin sách</h3>
+            
+            <div class="form-row">
+                <div class="col2">
+                    <label>Mã sách</label>
+                    <input type="text" id="maSachSua" readonly style="background: #e2e8f0; color: #64748b; font-weight: bold;">
+                </div>
+                <div class="col2">
+                    <label>Thể loại</label>
+                    <select id="theLoaiSua" onchange="hienThiTheLoaiKhacSua(this.value)">
+                        <option value="CNTT">Công nghệ thông tin</option>
+                        <option value="Toán">Toán học</option>
+                        <option value="Vật lý">Vật lý</option>
+                        <option value="Hóa học">Hóa học</option>
+                        <option value="Sinh học">Sinh học</option>
+                        <option value="Ngôn ngữ">Ngôn ngữ</option>
+                        <option value="Văn học">Văn học</option>
+                        <option value="Lịch sử">Lịch sử</option>
+                        <option value="Địa lý">Địa lý</option>
+                        <option value="Kinh tế">Kinh tế</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                    <input type="text" id="theLoaiKhacSua" placeholder="Nhập thể loại mới..." style="display: none; margin-top: 8px;">
+                </div>
+            </div>
+            
+            <label>Tên sách <span class="required">*</span></label>
+            <input type="text" id="tenSachSua">
+            
+            <div class="form-row">
+                <div class="col2"><label>Tác giả <span class="required">*</span></label><input type="text" id="tacGiaSua"></div>
+                <div class="col2"><label>Nhà xuất bản</label><input type="text" id="nxbSua"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="col2"><label>Năm XB</label><input type="number" id="namXBSua"></div>
+                <div class="col2"><label>ISBN</label><input type="text" id="isbnSua"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="col2"><label>Số lượng tổng</label><input type="number" id="soLuongTongSua"></div>
+                <div class="col2"><label>Số lượng còn</label><input type="number" id="soLuongConSua"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="col2"><label>Giá nhập (đ)</label><input type="number" id="giaNhapSua"></div>
+                <div class="col2"><label>Giá bồi thường (đ)</label><input type="number" id="giaBTSua"></div>
+            </div>
+            
+            <label>Vị trí kệ</label>
+            <input type="text" id="viTriSua" placeholder="Ví dụ: A-1-2">
+            
+            <label>Mô tả</label>
+            <textarea id="moTaSua" rows="3"></textarea>
+            
+            <div style="margin-top: 20px;">
+                <button onclick="capNhatSachSua()">💾 Cập nhật</button>
+                <button class="btn-danger" onclick="xoaSachSua()">🗑️ Xóa sách</button>
+                <button onclick="huySuaSach()" style="background: #94a3b8;">❌ Hủy</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Danh sách sách trong kho (Click để sửa)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã sách</th>
+                        <th>Tên sách</th>
+                        <th>Tác giả</th>
+                        <th>Thể loại</th>
+                        <th>Còn lại/Tổng</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodySachSua">
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="form-row">
-      <div class="col2"><label>Số lượng tổng</label><input type="number" id="soLuongTong"></div>
-      <div class="col2"><label>Số lượng còn</label><input type="number" id="soLuongCon"></div>
-      <div class="clearfix"></div>
-    </div>
-    <div class="form-row">
-      <div class="col2"><label>Giá nhập (đ)</label><input type="number" id="giaNhap"></div>
-      <div class="col2"><label>Giá bồi thường (đ)</label><input type="number" id="giaBT"></div>
-      <div class="clearfix"></div>
-    </div>
-    <label>Vị trí kệ</label>
-    <input type="text" id="viTri">
-    <label>Mô tả</label>
-    <textarea id="moTa"></textarea>
-    <br><br>
-    <button onclick="capNhatSach()">💾 Cập nhật</button>
-    <button class="btn-danger" onclick="xoaSach()">🗑️ Xóa sách</button>
-    <button class="btn-cancel" onclick="huy()">❌ Hủy</button>
-  </div>
-
-  <!-- Danh sách tất cả sách -->
-  <h3>Danh sách sách (click để chọn)</h3>
-  <table id="bangSach">
-    <thead><tr><th>Mã sách</th><th>Tên sách</th><th>Tác giả</th><th>Thể loại</th><th>Còn lại</th></tr></thead>
-    <tbody id="tbodySach"></tbody>
-  </table>
-</div>
-<script>
-var sachDangSua = null;
-
-function kiemTraAdmin() {
-  var admin = localStorage.getItem('currentAdmin');
-  if (!admin) { window.location.href = 'login.html'; return; }
-  document.getElementById('adminName').innerText = admin;
-}
-
-function taiDanhSach() {
-  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  var tbody = document.getElementById('tbodySach');
-  tbody.innerHTML = '';
-  for (var i = 0; i < ds.length; i++) {
-    var s = ds[i];
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td>' + s.maSach + '</td><td>' + s.tenSach + '</td><td>' + s.tacGia + '</td><td>' + s.theLoai + '</td><td>' + s.soLuongCon + '/' + s.soLuongTong + '</td>';
-    tr.onclick = (function(sach) { return function() { hienThiForm(sach); }; })(s);
-    tbody.appendChild(tr);
-  }
-}
-
-function timSach() {
-  var tim = document.getElementById('timMa').value.trim().toLowerCase();
-  if (!tim) { alert('Nhập mã hoặc tên sách!'); return; }
-  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  var found = null;
-  for (var i = 0; i < ds.length; i++) {
-    if (ds[i].maSach.toLowerCase() === tim || ds[i].tenSach.toLowerCase().indexOf(tim) >= 0) {
-      found = ds[i]; break;
-    }
-  }
-  if (!found) { alert('Không tìm thấy sách!'); return; }
-  hienThiForm(found);
-}
-
-function hienThiForm(s) {
-  sachDangSua = s;
-  document.getElementById('maSach').value = s.maSach;
-  document.getElementById('tenSach').value = s.tenSach;
-  document.getElementById('tacGia').value = s.tacGia;
-  document.getElementById('nxb').value = s.nxb || '';
-  document.getElementById('namXB').value = s.namXB || '';
-  document.getElementById('isbn').value = s.isbn || '';
-  document.getElementById('soLuongTong').value = s.soLuongTong;
-  document.getElementById('soLuongCon').value = s.soLuongCon;
-  document.getElementById('giaNhap').value = s.giaNhap;
-  document.getElementById('giaBT').value = s.giaBT;
-  document.getElementById('viTri').value = s.viTri || '';
-  document.getElementById('moTa').value = s.moTa || '';
-  document.getElementById('theLoai').value = s.theLoai || 'CNTT';
-  document.getElementById('formSua').style.display = 'block';
-  window.scrollTo(0, 0);
-}
-
-function capNhatSach() {
-  if (!sachDangSua) return;
-  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  for (var i = 0; i < ds.length; i++) {
-    if (ds[i].maSach === sachDangSua.maSach) {
-      ds[i].tenSach = document.getElementById('tenSach').value.trim();
-      ds[i].tacGia = document.getElementById('tacGia').value.trim();
-      ds[i].nxb = document.getElementById('nxb').value.trim();
-      ds[i].namXB = parseInt(document.getElementById('namXB').value) || ds[i].namXB;
-      ds[i].isbn = document.getElementById('isbn').value.trim();
-      ds[i].theLoai = document.getElementById('theLoai').value;
-      ds[i].soLuongTong = parseInt(document.getElementById('soLuongTong').value) || ds[i].soLuongTong;
-      ds[i].soLuongCon = parseInt(document.getElementById('soLuongCon').value) || ds[i].soLuongCon;
-      ds[i].giaNhap = parseInt(document.getElementById('giaNhap').value) || ds[i].giaNhap;
-      ds[i].giaBT = parseInt(document.getElementById('giaBT').value) || ds[i].giaBT;
-      ds[i].viTri = document.getElementById('viTri').value.trim();
-      ds[i].moTa = document.getElementById('moTa').value.trim();
-      break;
-    }
-  }
-  localStorage.setItem('danhSachSach', JSON.stringify(ds));
-  alert('Cập nhật sách thành công!');
-  huy();
-  taiDanhSach();
-}
-
-function xoaSach() {
-  if (!sachDangSua) return;
-  if (!confirm('Bạn có chắc muốn xóa sách "' + sachDangSua.tenSach + '"?')) return;
-  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  var moi = [];
-  for (var i = 0; i < ds.length; i++) {
-    if (ds[i].maSach !== sachDangSua.maSach) moi.push(ds[i]);
-  }
-  localStorage.setItem('danhSachSach', JSON.stringify(moi));
-  alert('Đã xóa sách!');
-  huy();
-  taiDanhSach();
-}
-
-function huy() {
-  sachDangSua = null;
-  document.getElementById('formSua').style.display = 'none';
-  document.getElementById('timMa').value = '';
-}
-
-kiemTraAdmin();
-taiDanhSach();
-
-// Tự động load sách từ URL param
-var params = new URLSearchParams(window.location.search);
-var maTu = params.get('ma');
-if (maTu) {
-  var ds2 = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  for (var j = 0; j < ds2.length; j++) {
-    if (ds2[j].maSach === maTu) { hienThiForm(ds2[j]); break; }
-  }
-}
-</script>
+    <script src="script.js"></script>
 </body>
 </html>

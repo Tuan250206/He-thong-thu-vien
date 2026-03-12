@@ -3,38 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Dashboard - Quản Lý Kho</title>
-<style>
-* { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:Arial,sans-serif; background:#f5f5f5; }
-/* Header */
-#header { background:#4CAF50; color:#fff; padding:12px 20px; overflow:hidden; position:fixed; top:0; left:0; right:0; z-index:100; }
-#header h1 { float:left; font-size:20px; line-height:36px; }
-#header .userInfo { float:right; font-size:14px; line-height:36px; }
-#header .userInfo a { color:#fff; text-decoration:none; background:#388E3C; padding:6px 14px; border-radius:4px; margin-left:10px; }
-/* Sidebar */
-#sidebar { position:fixed; top:56px; left:0; width:200px; bottom:0; background:#fff; border-right:2px solid #4CAF50; overflow-y:auto; }
-#sidebar a { display:block; padding:10px 16px; color:#333; text-decoration:none; font-size:13px; border-bottom:1px solid #f0f0f0; }
-#sidebar a:hover, #sidebar a.active { background:#E8F5E9; color:#4CAF50; font-weight:bold; }
-/* Content */
-#content { margin-left:200px; margin-top:56px; padding:20px; }
-/* Stat boxes */
-.statRow { overflow:hidden; margin-bottom:20px; }
-.statBox { float:left; width:23%; margin-right:2%; background:#fff; border-radius:6px; padding:18px; box-shadow:0 1px 4px rgba(0,0,0,0.1); border-top:4px solid #4CAF50; }
-.statBox:last-child { margin-right:0; }
-.statBox .num { font-size:28px; font-weight:bold; color:#4CAF50; }
-.statBox .lbl { font-size:13px; color:#777; margin-top:4px; }
-/* Tables */
-.section { background:#fff; border-radius:6px; padding:16px; margin-bottom:20px; box-shadow:0 1px 4px rgba(0,0,0,0.1); }
-.section h3 { color:#4CAF50; margin-bottom:12px; font-size:16px; border-bottom:2px solid #E8F5E9; padding-bottom:8px; }
-table { width:100%; border-collapse:collapse; font-size:13px; }
-th { background:#4CAF50; color:#fff; padding:8px 10px; text-align:left; }
-td { padding:7px 10px; border-bottom:1px solid #eee; }
-tr:hover td { background:#f9f9f9; }
-.warn { color:#e65100; font-weight:bold; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- Header -->
+
 <div id="header">
   <h1>📚 Hệ thống quản lý kho thư viện</h1>
   <div class="userInfo">
@@ -43,7 +15,6 @@ tr:hover td { background:#f9f9f9; }
   </div>
 </div>
 
-<!-- Sidebar -->
 <div id="sidebar">
   <a class="active" href="dashboard.html">🏠 Trang chủ</a>
   <a href="sach-them.html">➕ Thêm sách</a>
@@ -59,11 +30,10 @@ tr:hover td { background:#f9f9f9; }
   <a href="ncc-them.html">➕ Thêm NCC</a>
   <a href="lich-su-nhap-xuat.html">📊 Lịch sử N/X</a>
   <a href="thong-ke-ton-kho.html">📈 Thống kê tồn kho</a>
+   <hr style="border-top: 1px solid #ccc; margin: 10px 0;"> <a class="active" href="tai-khoan.html">👥 Quản lý tài khoản</a> </div>
 </div>
 
-<!-- Nội dung chính -->
 <div id="content">
-  <!-- 4 ô thống kê -->
   <div class="statRow">
     <div class="statBox"><div class="num" id="tongSach">0</div><div class="lbl">Tổng số sách</div></div>
     <div class="statBox"><div class="num" id="giaTriTon">0</div><div class="lbl">Giá trị tồn kho (VNĐ)</div></div>
@@ -71,7 +41,6 @@ tr:hover td { background:#f9f9f9; }
     <div class="statBox"><div class="num" id="phieuXuatThang">0</div><div class="lbl">Phiếu xuất tháng này</div></div>
   </div>
 
-  <!-- Tồn kho theo danh mục -->
   <div class="section">
     <h3>📂 Tồn kho theo danh mục</h3>
     <table>
@@ -80,7 +49,6 @@ tr:hover td { background:#f9f9f9; }
     </table>
   </div>
 
-  <!-- Cảnh báo sách sắp hết -->
   <div class="section">
     <h3>⚠️ Cảnh báo sách sắp hết (tồn &lt; 3)</h3>
     <table>
@@ -89,7 +57,6 @@ tr:hover td { background:#f9f9f9; }
     </table>
   </div>
 
-  <!-- Phiếu nhập gần đây -->
   <div class="section">
     <h3>📥 Phiếu nhập gần đây</h3>
     <table>
@@ -99,102 +66,7 @@ tr:hover td { background:#f9f9f9; }
   </div>
 </div>
 
-<script>
-// Kiểm tra đăng nhập
-function kiemTraDangNhap() {
-    var user = localStorage.getItem('currentAdmin');
-    if (!user) { window.location.href = 'login.html'; return; }
-    var admins = JSON.parse(localStorage.getItem('admins') || '[]');
-    for (var i = 0; i < admins.length; i++) {
-        if (admins[i].username === user) {
-            document.getElementById('tenAdmin').textContent = admins[i].hoTen || user;
-            break;
-        }
-    }
-}
+<script src="script.js"></script>
 
-// Đăng xuất
-function dangXuat() {
-    localStorage.removeItem('currentAdmin');
-}
-
-// Định dạng số tiền
-function formatTien(n) {
-    return Number(n || 0).toLocaleString('vi-VN');
-}
-
-// Tải thống kê
-function taiThongKe() {
-    var sachs = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-    var nhaps = JSON.parse(localStorage.getItem('danhSachPhieuNhap') || '[]');
-    var xuats = JSON.parse(localStorage.getItem('danhSachPhieuXuat') || '[]');
-
-    // Tổng số sách
-    var tongSach = 0;
-    for (var i = 0; i < sachs.length; i++) tongSach += Number(sachs[i].soLuongTong || 0);
-    document.getElementById('tongSach').textContent = tongSach;
-
-    // Giá trị tồn kho
-    var giaTri = 0;
-    for (var i = 0; i < sachs.length; i++) giaTri += Number(sachs[i].soLuongCon || 0) * Number(sachs[i].giaNhap || 0);
-    document.getElementById('giaTriTon').textContent = formatTien(giaTri);
-
-    // Phiếu nhập tháng này
-    var thang = new Date().getMonth() + 1;
-    var nam = new Date().getFullYear();
-    var demNhap = 0, demXuat = 0;
-    for (var i = 0; i < nhaps.length; i++) {
-        var d = new Date(nhaps[i].ngay);
-        if (d.getMonth()+1 === thang && d.getFullYear() === nam) demNhap++;
-    }
-    for (var i = 0; i < xuats.length; i++) {
-        var d = new Date(xuats[i].ngay);
-        if (d.getMonth()+1 === thang && d.getFullYear() === nam) demXuat++;
-    }
-    document.getElementById('phieuNhapThang').textContent = demNhap;
-    document.getElementById('phieuXuatThang').textContent = demXuat;
-
-    // Tồn kho theo danh mục
-    var dmMap = {};
-    for (var i = 0; i < sachs.length; i++) {
-        var dm = sachs[i].theLoai || 'Chưa phân loại';
-        if (!dmMap[dm]) dmMap[dm] = { soDau:0, tongTon:0, giaTri:0 };
-        dmMap[dm].soDau++;
-        dmMap[dm].tongTon += Number(sachs[i].soLuongCon || 0);
-        dmMap[dm].giaTri += Number(sachs[i].soLuongCon || 0) * Number(sachs[i].giaNhap || 0);
-    }
-    var tbDM = document.getElementById('tbDanhMuc');
-    tbDM.innerHTML = '';
-    for (var dm in dmMap) {
-        tbDM.innerHTML += '<tr><td>'+dm+'</td><td>'+dmMap[dm].soDau+'</td><td>'+dmMap[dm].tongTon+'</td><td>'+formatTien(dmMap[dm].giaTri)+'</td></tr>';
-    }
-    if (!tbDM.innerHTML) tbDM.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999">Không có dữ liệu</td></tr>';
-
-    // Cảnh báo sách sắp hết
-    var tbSH = document.getElementById('tbSapHet');
-    tbSH.innerHTML = '';
-    var co = false;
-    for (var i = 0; i < sachs.length; i++) {
-        if (Number(sachs[i].soLuongCon || 0) < 3) {
-            tbSH.innerHTML += '<tr><td>'+sachs[i].maSach+'</td><td>'+sachs[i].tenSach+'</td><td>'+sachs[i].tacGia+'</td><td class="warn">'+sachs[i].soLuongCon+'</td></tr>';
-            co = true;
-        }
-    }
-    if (!co) tbSH.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999">Không có sách sắp hết</td></tr>';
-
-    // Phiếu nhập gần đây (5 phiếu cuối)
-    var tbPN = document.getElementById('tbPhieuNhap');
-    tbPN.innerHTML = '';
-    var ganDay = nhaps.slice(-5).reverse();
-    for (var i = 0; i < ganDay.length; i++) {
-        var p = ganDay[i];
-        tbPN.innerHTML += '<tr><td>'+p.maPhieu+'</td><td>'+p.ngay+'</td><td>'+p.tenNCC+'</td><td>'+formatTien(p.tongThanhToan)+'</td><td>'+p.trangThai+'</td></tr>';
-    }
-    if (!ganDay.length) tbPN.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999">Không có dữ liệu</td></tr>';
-}
-
-kiemTraDangNhap();
-taiThongKe();
-</script>
 </body>
 </html>

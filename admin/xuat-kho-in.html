@@ -106,38 +106,6 @@
         </div>
     </div>
     
-    <script>
-        var phieuIndex = localStorage.getItem('phieuXuatHienTai');
-        var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
-        
-        if (phieuIndex && phieuXuat[phieuIndex]) {
-            var phieu = phieuXuat[phieuIndex];
-            
-            var htmlInfo = '';
-            htmlInfo += '<div><strong>Mã phiếu:</strong> ' + phieu.maPhieu + '</div>';
-            htmlInfo += '<div><strong>Ngày xuất:</strong> ' + phieu.ngayXuat + '</div>';
-            htmlInfo += '<div><strong>Lý do:</strong> ' + phieu.lyDo + '</div>';
-            if (phieu.ghiChu) {
-                htmlInfo += '<div><strong>Ghi chú:</strong> ' + phieu.ghiChu + '</div>';
-            }
-            htmlInfo += '<div><strong>Người xuất:</strong> ' + phieu.nguoiXuat + '</div>';
-            document.getElementById('thongTinPhieu').innerHTML = htmlInfo;
-            
-            var htmlSach = '';
-            for (var i = 0; i < phieu.danhSachSach.length; i++) {
-                var s = phieu.danhSachSach[i];
-                
-                htmlSach += '<tr>';
-                htmlSach += '<td>' + (i + 1) + '</td>';
-                htmlSach += '<td>' + s.maSach + '</td>';
-                htmlSach += '<td>' + s.tenSach + '</td>';
-                htmlSach += '<td>' + s.soLuong + '</td>';
-                htmlSach += '</tr>';
-            }
-            document.getElementById('danhSachSach').innerHTML = htmlSach;
-        } else {
-            document.body.innerHTML = '<p style="text-align: center; color: red;">Không tìm thấy phiếu xuất!</p>';
-        }
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
