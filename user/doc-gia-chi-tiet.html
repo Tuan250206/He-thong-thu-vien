@@ -12,17 +12,17 @@
 .info-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
 .info-table tr { border-bottom: 1px solid #f0f0f0; }
 .info-table tr:last-child { border-bottom: none; }
-.info-table th { width: 160px; padding: 10px 12px; background: #f5f9ff; color: #555; font-weight: bold; font-size: 13px; text-align: left; white-space: nowrap; vertical-align: top; }
+.info-table th { width: 180px; padding: 10px 12px; background: #f5f9ff; color: #555; font-weight: bold; font-size: 13px; text-align: left; white-space: nowrap; vertical-align: top; }
 .info-table td { padding: 10px 12px; font-size: 13px; color: #333; }
-.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; }
+.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; white-space: nowrap; }
 .badge-active { background: #E8F5E9; color: #2E7D32; border: 1px solid #81C784; }
 .badge-locked { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
 .badge-pending { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
 .badge-returned { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
 .badge-overdue { background: #FCE4EC; color: #AD1457; border: 1px solid #F48FB1; }
 .form-group { margin-bottom: 14px; overflow: hidden; }
-.form-group label { float: left; width: 160px; padding-top: 9px; font-weight: bold; color: #555; font-size: 13px; }
-.form-group .ctrl { margin-left: 160px; }
+.form-group label { float: left; width: 180px; padding-top: 9px; font-weight: bold; color: #555; font-size: 13px; }
+.form-group .ctrl { margin-left: 180px; }
 .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="date"], .form-group input[type="tel"], .form-group select, .form-group textarea {
     width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; outline: none; font-family: Arial, sans-serif;
 }
@@ -48,6 +48,134 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
 .no-data { text-align: center; color: #aaa; padding: 20px; font-style: italic; }
 .not-found { background: #FFF3E0; border: 1px solid #FFB74D; border-radius: 5px; padding: 20px; color: #E65100; text-align: center; }
 .cf::after { content: ""; display: table; clear: both; }
+.canh-bao { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin-top: 15px; border-radius: 4px; }
+.canh-bao strong { color: #e65100; }
+.canh-bao {
+    background: #fff3e0;
+    border-left: 4px solid #ff9800;
+    padding: 12px 16px;
+    margin-top: 15px;
+    border-radius: 4px;
+}
+.canh-bao strong {
+    color: #e65100;
+}
+/* Modal gia hạn thẻ */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background: white;
+    margin: 5% auto;
+    padding: 25px;
+    width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1565C0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #2196F3;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-body .form-group {
+    margin-bottom: 15px;
+}
+
+.modal-body label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.modal-body select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-footer {
+    text-align: right;
+}
+
+.btn-modal-success {
+    background: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.btn-modal-success:hover {
+    background: #388E3C;
+}
+
+.btn-modal-cancel {
+    background: #9E9E9E;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-modal-cancel:hover {
+    background: #757575;
+}
+
+.thong-tin-gia-han {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.thong-tin-gia-han p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.thong-tin-gia-han strong {
+    color: #1565C0;
+}
+.btn-khoa {
+    background: #f44336 !important;
+    color: white !important;
+}
+
+.btn-khoa:hover {
+    background: #d32f2f !important;
+}
+
+.btn-mo {
+    background: #4caf50 !important;
+    color: white !important;
+}
+
+.btn-mo:hover {
+    background: #388e3c !important;
+}
 </style>
 </head>
 <body>
@@ -77,6 +205,9 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
     <a href="xu-ly-phat.html" class="menu-item">
         <span class="menu-icon">💰</span>Xử lý phạt
     </a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📄</span>Phiếu mượn
+    </a>
     <a href="dat-cho.html" class="menu-item">
         <span class="menu-icon">🔖</span>Đặt chỗ
     </a>
@@ -88,16 +219,9 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
     <a href="doc-gia-danh-sach.html" class="menu-item active">
         <span class="menu-icon">👥</span>Độc giả
     </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
-    </a>
-
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -117,15 +241,29 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
     </div>
 
     <div id="vungChiTiet" style="display:none">
+        <!-- PHẦN 1: THÔNG TIN CÁ NHÂN -->
         <div class="card" id="cardXemInfo">
-            <div class="section-label">📋 Thông tin độc giả</div>
+            <div class="section-label">📋 Thông tin cá nhân</div>
             <table class="info-table" id="bangThongTin"></table>
             <div style="margin-top:15px">
                 <button class="btn btn-orange" onclick="batDauSua()">✏ Sửa thông tin</button>
-                <a href="doc-gia-danh-sach.html" class="btn btn-grey">← Quay lại</a>
             </div>
         </div>
 
+        <!-- PHẦN 2: THÔNG TIN THẺ -->
+        <div class="card">
+            <div class="section-label">💳 Thông tin thẻ thư viện</div>
+            <table class="info-table" id="bangThongTinThe"></table>
+            <div id="canhBaoHetHan" style="display:none" class="canh-bao">
+                ⚠️ <strong>Chú ý:</strong> Thẻ này <span id="textCanhBao"></span>. Vui lòng nhắc độc giả gia hạn thẻ.
+            </div>
+            <div style="margin-top:15px">
+                <button class="btn btn-orange" onclick="moModalGiaHanThe()">🔄 Gia hạn thẻ</button>
+                <button class="btn" id="btnKhoaMoThe" onclick="khoaMoThe()" style="background: #f44336; color: white;">🔒 Khóa thẻ</button>
+            </div>
+        </div>
+
+        <!-- FORM SỬA (ẨN) -->
         <div class="card" id="cardSuaInfo" style="display:none">
             <div class="section-label">✏ Chỉnh sửa thông tin</div>
             <div style="max-width:650px">
@@ -158,18 +296,11 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
                 </div>
                 <hr class="form-divider" />
                 <div class="form-group">
-                    <label>Lớp <span style="color:red">*</span></label>
+                    <label>CMND/CCCD <span style="color:red">*</span></label>
                     <div class="ctrl">
-                        <input type="text" id="sua_lop" maxlength="50" />
+                        <input type="text" id="sua_cccd" maxlength="12" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Khoa / Ban</label>
-                    <div class="ctrl">
-                        <input type="text" id="sua_khoa" maxlength="100" />
-                    </div>
-                </div>
-                <hr class="form-divider" />
                 <div class="form-group">
                     <label>Email <span style="color:red">*</span></label>
                     <div class="ctrl">
@@ -189,9 +320,22 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Trạng thái</label>
+                    <label>Nghề nghiệp</label>
                     <div class="ctrl">
-                        <select id="sua_trangThai">
+                        <input type="text" id="sua_ngheNghiep" maxlength="100" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Nơi làm việc / Học tập</label>
+                    <div class="ctrl">
+                        <input type="text" id="sua_noiLamViec" maxlength="100" />
+                    </div>
+                </div>
+                <hr class="form-divider" />
+                <div class="form-group">
+                    <label>Trạng thái thẻ</label>
+                    <div class="ctrl">
+                        <select id="sua_trangThaiThe">
                             <option value="Hoạt động">Hoạt động</option>
                             <option value="Khóa">Khóa</option>
                         </select>
@@ -204,6 +348,7 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
             </div>
         </div>
 
+        <!-- PHẦN 3: LỊCH SỬ MƯỢN -->
         <div class="card">
             <div class="section-label">📖 Lịch sử mượn sách</div>
             <div class="table-wrap">
@@ -222,6 +367,9 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div style="margin:15px">
+                <a href="doc-gia-danh-sach.html" class="btn btn-grey"  style="min-width: 150px; text-align: center;">← Quay lại danh sách độc giả</a>
         </div>
     </div>
 </div>
@@ -269,23 +417,73 @@ function dinhDangNgay(ngay) {
     return ngay;
 }
 
-function hienThiThongTin(dg) {
-    var trangThai = dg.trangThai || 'Hoạt động';
-    var badgeClass = (trangThai === 'Khóa') ? 'badge-locked' : 'badge-active';
+function layTenGoiThe(thoiHan) {
+    var bangGia = { 3: '3 tháng', 6: '6 tháng', 12: '1 năm', 24: '2 năm' };
+    return bangGia[thoiHan] || (thoiHan + ' tháng');
+}
 
+function layTrangThaiThe(docGia) {
+    var ngayHienTai = new Date();
+    var ngayHetHan = new Date(docGia.ngayHetHan);
+    var soNgayConLai = Math.floor((ngayHetHan - ngayHienTai) / (1000*60*60*24));
+    
+    if (docGia.trangThaiThe === 'Khóa') {
+        return { ten: '🔒 Khóa', class: 'badge-locked', canhBao: false };
+    }
+    
+    if (soNgayConLai < 0) {
+        return { ten: '🔴 Hết hạn (' + Math.abs(soNgayConLai) + ' ngày)', class: 'badge-locked', canhBao: true, textCanhBao: 'đã hết hạn ' + Math.abs(soNgayConLai) + ' ngày' };
+    }
+    
+    if (soNgayConLai <= 30) {
+        return { ten: '🟡 Sắp hết hạn (còn ' + soNgayConLai + ' ngày)', class: 'badge-pending', canhBao: true, textCanhBao: 'sắp hết hạn (còn ' + soNgayConLai + ' ngày)' };
+    }
+    
+    return { ten: '🟢 Hoạt động', class: 'badge-active', canhBao: false };
+}
+
+function hienThiThongTin(dg) {
     var html = '';
     html += '<tr><th>Mã độc giả</th><td><strong>' + (dg.maDG || '—') + '</strong></td></tr>';
     html += '<tr><th>Họ và tên</th><td>' + (dg.hoTen || '—') + '</td></tr>';
     html += '<tr><th>Ngày sinh</th><td>' + dinhDangNgay(dg.ngaySinh) + '</td></tr>';
     html += '<tr><th>Giới tính</th><td>' + (dg.gioiTinh || '—') + '</td></tr>';
-    html += '<tr><th>Lớp</th><td>' + (dg.lop || '—') + '</td></tr>';
-    html += '<tr><th>Khoa / Ban</th><td>' + (dg.khoa || '—') + '</td></tr>';
+    html += '<tr><th>CMND/CCCD</th><td>' + (dg.cccd || '—') + '</td></tr>';
     html += '<tr><th>Email</th><td>' + (dg.email || '—') + '</td></tr>';
     html += '<tr><th>Số điện thoại</th><td>' + (dg.sdt || '—') + '</td></tr>';
     html += '<tr><th>Địa chỉ</th><td>' + (dg.diaChi || '—') + '</td></tr>';
-    html += '<tr><th>Trạng thái</th><td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td></tr>';
-
+    html += '<tr><th>Nghề nghiệp</th><td>' + (dg.ngheNghiep || '—') + '</td></tr>';
+    html += '<tr><th>Nơi làm việc / Học tập</th><td>' + (dg.noiLamViec || '—') + '</td></tr>';
+    
     document.getElementById('bangThongTin').innerHTML = html;
+}
+
+function hienThiThongTinThe(dg) {
+    var trangThai = layTrangThaiThe(dg);
+    
+    var html = '';
+    html += '<tr><th>Mã thẻ</th><td><strong>' + (dg.maThe || '—') + '</strong></td></tr>';
+    html += '<tr><th>Ngày cấp thẻ</th><td>' + dinhDangNgay(dg.ngayCapThe) + '</td></tr>';
+    html += '<tr><th>Gói thẻ</th><td>' + layTenGoiThe(dg.thoiHan) + '</td></tr>';
+    html += '<tr><th>Ngày hết hạn</th><td>' + dinhDangNgay(dg.ngayHetHan) + '</td></tr>';
+    html += '<tr><th>Phí thẻ đã đóng</th><td>' + ((dg.phiThe || 0).toLocaleString('vi-VN')) + ' đ</td></tr>';
+    html += '<tr><th>Trạng thái</th><td><span class="badge ' + trangThai.class + '">' + trangThai.ten + '</span></td></tr>';
+    
+    // Hiển thị lý do khóa nếu thẻ bị khóa
+    if (dg.trangThaiThe === 'Khóa' && dg.lyDoKhoa) {
+        html += '<tr><th>Lý do khóa</th><td style="color:#c62828;"><strong>' + dg.lyDoKhoa + '</strong></td></tr>';
+        html += '<tr><th>Ngày khóa</th><td>' + dinhDangNgay(dg.ngayKhoa) + '</td></tr>';
+    }
+    
+    document.getElementById('bangThongTinThe').innerHTML = html;
+    
+    // Cập nhật nút khóa/mở
+    capNhatNutKhoaMo(dg.trangThaiThe || 'Hoạt động');
+    
+    if (trangThai.canhBao) {
+        document.getElementById('textCanhBao').textContent = trangThai.textCanhBao;
+        document.getElementById('canhBaoHetHan').style.display = 'block';
+    }
 }
 
 function batDauSua() {
@@ -300,12 +498,13 @@ function batDauSua() {
     document.getElementById('sua_hoTen').value = dg.hoTen || '';
     document.getElementById('sua_ngaySinh').value = dg.ngaySinh || '';
     document.getElementById('sua_gioiTinh').value = dg.gioiTinh || 'Nam';
-    document.getElementById('sua_lop').value = dg.lop || '';
-    document.getElementById('sua_khoa').value = dg.khoa || '';
+    document.getElementById('sua_cccd').value = dg.cccd || '';
     document.getElementById('sua_email').value = dg.email || '';
     document.getElementById('sua_sdt').value = dg.sdt || '';
     document.getElementById('sua_diaChi').value = dg.diaChi || '';
-    document.getElementById('sua_trangThai').value = dg.trangThai || 'Hoạt động';
+    document.getElementById('sua_ngheNghiep').value = dg.ngheNghiep || '';
+    document.getElementById('sua_noiLamViec').value = dg.noiLamViec || '';
+    document.getElementById('sua_trangThaiThe').value = dg.trangThaiThe || 'Hoạt động';
 
     document.getElementById('cardXemInfo').style.display = 'none';
     document.getElementById('cardSuaInfo').style.display = 'block';
@@ -318,12 +517,12 @@ function huyChinhSua() {
 
 function luuThayDoi() {
     var hoTen = document.getElementById('sua_hoTen').value.trim();
-    var lop = document.getElementById('sua_lop').value.trim();
+    var cccd = document.getElementById('sua_cccd').value.trim();
     var email = document.getElementById('sua_email').value.trim();
     var sdt = document.getElementById('sua_sdt').value.trim();
 
     if (!hoTen) { alert('⚠ Vui lòng nhập họ và tên!'); return; }
-    if (!lop) { alert('⚠ Vui lòng nhập tên lớp!'); return; }
+    if (!cccd) { alert('⚠ Vui lòng nhập CMND/CCCD!'); return; }
     if (!email) { alert('⚠ Vui lòng nhập email!'); return; }
     if (!sdt) { alert('⚠ Vui lòng nhập số điện thoại!'); return; }
 
@@ -333,16 +532,18 @@ function luuThayDoi() {
             danhSach[i].hoTen = hoTen;
             danhSach[i].ngaySinh = document.getElementById('sua_ngaySinh').value;
             danhSach[i].gioiTinh = document.getElementById('sua_gioiTinh').value;
-            danhSach[i].lop = lop;
-            danhSach[i].khoa = document.getElementById('sua_khoa').value.trim();
+            danhSach[i].cccd = cccd;
             danhSach[i].email = email;
             danhSach[i].sdt = sdt;
             danhSach[i].diaChi = document.getElementById('sua_diaChi').value.trim();
-            danhSach[i].trangThai = document.getElementById('sua_trangThai').value;
+            danhSach[i].ngheNghiep = document.getElementById('sua_ngheNghiep').value.trim();
+            danhSach[i].noiLamViec = document.getElementById('sua_noiLamViec').value.trim();
+            danhSach[i].trangThaiThe = document.getElementById('sua_trangThaiThe').value;
 
             localStorage.setItem('danhSachDocGia', JSON.stringify(danhSach));
             alert('✅ Đã lưu thay đổi thành công!');
             hienThiThongTin(danhSach[i]);
+            hienThiThongTinThe(danhSach[i]);
             huyChinhSua();
             return;
         }
@@ -433,10 +634,277 @@ function khoiTao() {
     document.getElementById('tieuDeTrang').innerHTML = '👤 Chi Tiết Độc Giả: ' + docGia.hoTen;
     document.getElementById('vungChiTiet').style.display = 'block';
     hienThiThongTin(docGia);
+    hienThiThongTinThe(docGia);
+    capNhatNutKhoaMo(docGia.trangThaiThe || 'Hoạt động');
     taiLichSuMuon();
 }
 
 khoiTao();
+// ========== GIA HẠN THẺ ==========
+
+var BANG_GIA_THE = {
+    3:  { phi: 40000,  ten: '3 tháng' },
+    6:  { phi: 70000,  ten: '6 tháng' },
+    12: { phi: 120000, ten: '1 năm' },
+    24: { phi: 200000, ten: '2 năm' }
+};
+
+function moModalGiaHanThe() {
+    var danhSach = layDanhSachDocGia();
+    var docGia = null;
+    for (var i = 0; i < danhSach.length; i++) {
+        if (danhSach[i].maDG === maDGHienTai) {
+            docGia = danhSach[i];
+            break;
+        }
+    }
+    
+    if (!docGia) {
+        alert('⚠ Không tìm thấy thông tin độc giả!');
+        return;
+    }
+    
+    // Hiển thị thông tin hiện tại
+    document.getElementById('hanTheCu').textContent = formatNgayVN2(docGia.ngayHetHan);
+    document.getElementById('ngayGiaHan').textContent = formatNgayVN2(layNgayHienTai());
+    
+    // Reset dropdown
+    document.getElementById('goiGiaHan').value = '12';
+    capNhatThongTinGiaHan();
+    
+    // Hiển thị modal
+    document.getElementById('modalGiaHanThe').style.display = 'block';
+}
+
+function dongModalGiaHanThe() {
+    document.getElementById('modalGiaHanThe').style.display = 'none';
+}
+
+function capNhatThongTinGiaHan() {
+    var thoiHan = parseInt(document.getElementById('goiGiaHan').value);
+    
+    if (!thoiHan) {
+        document.getElementById('hanTheMoi').textContent = '--';
+        document.getElementById('phiGiaHan').textContent = '--';
+        return;
+    }
+    
+    // Tính ngày hết hạn mới từ NGÀY HIỆN TẠI
+    var ngayHienTai = new Date();
+    var ngayHetHanMoi = new Date(ngayHienTai);
+    ngayHetHanMoi.setMonth(ngayHetHanMoi.getMonth() + thoiHan);
+    
+    var phiThe = BANG_GIA_THE[thoiHan].phi;
+    
+    document.getElementById('hanTheMoi').textContent = formatNgayVN2(formatNgaySQL(ngayHetHanMoi));
+    document.getElementById('phiGiaHan').textContent = phiThe.toLocaleString('vi-VN') + 'đ';
+}
+
+function xacNhanGiaHanThe() {
+    var thoiHan = parseInt(document.getElementById('goiGiaHan').value);
+    
+    if (!thoiHan) {
+        alert('⚠ Vui lòng chọn gói gia hạn!');
+        return;
+    }
+    
+    var phiThe = BANG_GIA_THE[thoiHan].phi;
+    var ngayHienTai = new Date();
+    var ngayHetHanMoi = new Date(ngayHienTai);
+    ngayHetHanMoi.setMonth(ngayHetHanMoi.getMonth() + thoiHan);
+    
+    var xacNhan = confirm(
+        '✅ XÁC NHẬN GIA HẠN THẺ\n\n' +
+        '📦 Gói: ' + BANG_GIA_THE[thoiHan].ten + '\n' +
+        '📅 Hạn mới: ' + formatNgayVN2(formatNgaySQL(ngayHetHanMoi)) + '\n' +
+        '💰 Phí: ' + phiThe.toLocaleString('vi-VN') + 'đ\n\n' +
+        'Bạn có chắc muốn gia hạn không?'
+    );
+    
+    if (!xacNhan) return;
+    
+    // Cập nhật thông tin thẻ
+    var danhSach = layDanhSachDocGia();
+    var updated = false;
+    
+    for (var i = 0; i < danhSach.length; i++) {
+        if (danhSach[i].maDG === maDGHienTai) {
+            danhSach[i].thoiHan = thoiHan;
+            danhSach[i].ngayHetHan = formatNgaySQL(ngayHetHanMoi);
+            danhSach[i].phiThe = phiThe;
+            danhSach[i].trangThaiThe = 'Hoạt động';
+            updated = true;
+            break;
+        }
+    }
+    
+    if (!updated) {
+        alert('⚠ Không thể cập nhật thông tin thẻ!');
+        return;
+    }
+    
+    localStorage.setItem('danhSachDocGia', JSON.stringify(danhSach));
+    
+    alert('✅ Gia hạn thẻ thành công!\n\n' +
+          '📅 Hạn mới: ' + formatNgayVN2(formatNgaySQL(ngayHetHanMoi)) + '\n' +
+          '💰 Đã thu: ' + phiThe.toLocaleString('vi-VN') + 'đ');
+    
+    dongModalGiaHanThe();
+    location.reload(); // Tải lại trang để cập nhật giao diện
+}
+
+// Hàm format ngày từ Date object
+function formatNgaySQL(date) {
+    var y = date.getFullYear();
+    var m = ('0' + (date.getMonth() + 1)).slice(-2);
+    var d = ('0' + date.getDate()).slice(-2);
+    return y + '-' + m + '-' + d;
+}
+
+// Hàm format ngày từ chuỗi yyyy-mm-dd sang dd/mm/yyyy
+function formatNgayVN2(ngay) {
+    if (!ngay) return '—';
+    var parts = ngay.split('-');
+    if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+    return ngay;
+}
+
+// Hàm lấy ngày hiện tại yyyy-mm-dd
+function layNgayHienTai() {
+    var d = new Date();
+    return formatNgaySQL(d);
+}
+// ========== KHÓA / MỞ THẺ ==========
+
+function capNhatNutKhoaMo(trangThaiThe) {
+    var btn = document.getElementById('btnKhoaMoThe');
+    
+    if (trangThaiThe === 'Khóa') {
+        btn.innerHTML = '🔓 Mở khóa thẻ';
+        btn.className = 'btn btn-mo';
+    } else {
+        btn.innerHTML = '🔒 Khóa thẻ';
+        btn.className = 'btn btn-khoa';
+    }
+}
+
+function khoaMoThe() {
+    var danhSach = layDanhSachDocGia();
+    var docGia = null;
+    
+    for (var i = 0; i < danhSach.length; i++) {
+        if (danhSach[i].maDG === maDGHienTai) {
+            docGia = danhSach[i];
+            break;
+        }
+    }
+    
+    if (!docGia) {
+        alert('⚠ Không tìm thấy thông tin độc giả!');
+        return;
+    }
+    
+    var trangThaiHienTai = docGia.trangThaiThe || 'Hoạt động';
+    var hanhDong = trangThaiHienTai === 'Khóa' ? 'mở khóa' : 'khóa';
+    var trangThaiMoi = trangThaiHienTai === 'Khóa' ? 'Hoạt động' : 'Khóa';
+    
+    var lyDo = '';
+    if (hanhDong === 'khóa') {
+        lyDo = prompt('📝 Vui lòng nhập lý do khóa thẻ:\n(Ví dụ: Vi phạm quy định, Mất thẻ, Yêu cầu của độc giả...)');
+        
+        if (lyDo === null) return; // Người dùng nhấn Cancel
+        
+        if (!lyDo.trim()) {
+            alert('⚠ Vui lòng nhập lý do khóa thẻ!');
+            return;
+        }
+    }
+    
+    var xacNhan = confirm(
+        '⚠️ XÁC NHẬN ' + hanhDong.toUpperCase() + ' THẺ\n\n' +
+        '👤 Độc giả: ' + docGia.hoTen + ' (' + docGia.maDG + ')\n' +
+        '💳 Mã thẻ: ' + docGia.maThe + '\n' +
+        '📊 Trạng thái hiện tại: ' + trangThaiHienTai + '\n' +
+        '🔄 Trạng thái mới: ' + trangThaiMoi + '\n' +
+        (lyDo ? '\n📝 Lý do: ' + lyDo + '\n' : '') +
+        '\nBạn có chắc muốn ' + hanhDong + ' thẻ này không?'
+    );
+    
+    if (!xacNhan) return;
+    
+    // Cập nhật trạng thái thẻ
+    var updated = false;
+    
+    for (var i = 0; i < danhSach.length; i++) {
+        if (danhSach[i].maDG === maDGHienTai) {
+            danhSach[i].trangThaiThe = trangThaiMoi;
+            
+            // Lưu lý do khóa (nếu có)
+            if (hanhDong === 'khóa') {
+                danhSach[i].lyDoKhoa = lyDo.trim();
+                danhSach[i].ngayKhoa = layNgayHienTai();
+            } else {
+                // Xóa thông tin khóa khi mở
+                delete danhSach[i].lyDoKhoa;
+                delete danhSach[i].ngayKhoa;
+            }
+            
+            updated = true;
+            break;
+        }
+    }
+    
+    if (!updated) {
+        alert('⚠ Không thể cập nhật trạng thái thẻ!');
+        return;
+    }
+    
+    localStorage.setItem('danhSachDocGia', JSON.stringify(danhSach));
+    
+    if (hanhDong === 'khóa') {
+        alert('🔒 Đã khóa thẻ thành công!\n\n' +
+              '👤 Độc giả: ' + docGia.hoTen + '\n' +
+              '💳 Mã thẻ: ' + docGia.maThe + '\n' +
+              '📝 Lý do: ' + lyDo.trim() + '\n\n' +
+              '⚠️ Độc giả này sẽ không thể mượn sách cho đến khi mở khóa thẻ.');
+    } else {
+        alert('🔓 Đã mở khóa thẻ thành công!\n\n' +
+              '👤 Độc giả: ' + docGia.hoTen + '\n' +
+              '💳 Mã thẻ: ' + docGia.maThe + '\n\n' +
+              '✅ Độc giả có thể tiếp tục sử dụng dịch vụ thư viện.');
+    }
+    
+    location.reload(); // Tải lại trang để cập nhật giao diện
+}
 </script>
+<!-- Modal gia hạn thẻ -->
+<div id="modalGiaHanThe" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">🔄 Gia hạn thẻ thư viện</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Chọn gói gia hạn <span style="color:red">*</span></label>
+                <select id="goiGiaHan" onchange="capNhatThongTinGiaHan()">
+                    <option value="">-- Chọn thời hạn --</option>
+                    <option value="3">3 tháng - 40,000đ</option>
+                    <option value="6">6 tháng - 70,000đ 🔥</option>
+                    <option value="12" selected>1 năm - 120,000đ ⭐</option>
+                    <option value="24">2 năm - 200,000đ 💎</option>
+                </select>
+            </div>
+            
+            <div class="thong-tin-gia-han">
+                <p><strong>Ngày gia hạn:</strong> <span id="ngayGiaHan">--</span></p>
+                <p><strong>Hạn thẻ cũ:</strong> <span id="hanTheCu">--</span></p>
+                <p><strong>Hạn thẻ mới:</strong> <span id="hanTheMoi" style="color:#2e7d32; font-weight:bold; font-size:15px;">--</span></p>
+                <p><strong>Phí gia hạn:</strong> <span id="phiGiaHan" style="color:#d32f2f; font-weight:bold; font-size:15px;">--</span></p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-cancel" onclick="dongModalGiaHanThe()">✖ Hủy</button>
+            <button class="btn-modal-success" onclick="xacNhanGiaHanThe()">✅ Xác nhận gia hạn</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danh Sách Phiếu Mượn - Thư Viện</title>
+<link rel="stylesheet" href="common.css">
+<style>
+.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
+.card { background: white; border-radius: 5px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.filter-bar { overflow: hidden; margin-bottom: 15px; }
+.filter-bar input[type="text"] { float: left; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; width: 260px; outline: none; }
+.filter-bar input[type="text"]:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
+.filter-bar select { float: left; padding: 8px 10px; margin-left: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; outline: none; background: white; width: 180px; }
+.filter-bar select:focus { border-color: #2196F3; }
+.btn { padding: 8px 15px; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; line-height: normal; vertical-align: middle; }
+.btn-blue { background: #2196F3; color: white; margin-left: 8px; float: left; }
+.btn-blue:hover { background: #1976D2; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-teal { background: #009688; color: white; margin-right: 4px; }
+.btn-teal:hover { background: #00796B; }
+.btn-orange { background: #FF9800; color: white; }
+.btn-orange:hover { background: #F57C00; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+table thead tr { background: #2196F3; color: white; }
+table th { padding: 10px 8px; text-align: left; font-size: 13px; white-space: nowrap; }
+table td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
+table tbody tr:hover { background: #e3f2fd; }
+table tbody tr:nth-child(even) { background: #fafafa; }
+table tbody tr:nth-child(even):hover { background: #e3f2fd; }
+.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; white-space: nowrap; }
+.badge-pending { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
+.badge-overdue { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+.badge-returned { background: #E8F5E9; color: #2E7D32; border: 1px solid #81C784; }
+.qua-han { color: #D32F2F; font-weight: bold; }
+.con-han { color: #388E3C; }
+.sap-den { color: #F57C00; font-weight: bold; }
+.no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
+.count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
+.cf::after { content: ""; display: table; clear: both; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-info">
+        <span id="lblNguoiDung">👤 Khách</span>
+        <a href="../index.html" onclick="return dangXuat()">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<div class="sidebar">
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item active">
+        <span class="menu-icon">📄</span>Phiếu mượn
+    </a>
+    <a href="dat-cho.html" class="menu-item">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
+</div>
+
+<div class="content">
+    <div class="page-title">📄 Danh Sách Phiếu Mượn</div>
+
+    <div class="card">
+        <div class="filter-bar cf">
+            <input type="text" id="tuKhoa" placeholder="Tìm theo mã phiếu hoặc mã độc giả..." onkeypress="xuLyEnter(event)" />
+            <select id="locTrangThai" onchange="timKiemPhieu()">
+                <option value="">📂 Tất cả trạng thái</option>
+                <option value="Đang mượn">Đang mượn</option>
+                <option value="Quá hạn">Quá hạn</option>
+                <option value="Đã trả">Đã trả</option>
+            </select>
+            <button class="btn btn-blue" onclick="timKiemPhieu()">🔍 Tìm</button>
+        </div>
+
+        <div class="count-info" id="lblSoLuong">Đang tải...</div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:45px">STT</th>
+                        <th style="width:90px">Mã phiếu</th>
+                        <th style="width:90px">Mã ĐG</th>
+                        <th>Tên độc giả</th>
+                        <th style="width:100px">Ngày mượn</th>
+                        <th style="width:100px">Hạn trả</th>
+                        <th style="width:70px">Số sách</th>
+                        <th style="width:120px">Trạng thái</th>
+                        <th style="width:160px">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="bangPhieuMuon">
+                    <tr><td colspan="9" class="no-data">Đang tải dữ liệu...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function kiemTraDangNhap() {
+    var nguoiDung = localStorage.getItem('currentUser');
+    if (!nguoiDung) {
+        alert('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!');
+        window.location.href = '../index.html';
+        return false;
+    }
+    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+    var tenHienThi = userInfo.hoTen || nguoiDung;
+    document.getElementById('lblNguoiDung').innerHTML = '👤 ' + tenHienThi;
+    return true;
+}
+
+function layDanhSachPhieuMuon() {
+    var data = localStorage.getItem('danhSachPhieuMuon');
+    if (!data) return [];
+    try { return JSON.parse(data); }
+    catch (e) { return []; }
+}
+
+function layNgayHomNay() {
+    var d = new Date();
+    var thang = String(d.getMonth() + 1).padStart(2, '0');
+    var ngay = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + thang + '-' + ngay;
+}
+
+function tinhSoNgay(ngay1Str, ngay2Str) {
+    var d1 = new Date(ngay1Str);
+    var d2 = new Date(ngay2Str);
+    return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+}
+
+function dinhDangNgay(ngay) {
+    if (!ngay) return '—';
+    var parts = ngay.split('-');
+    if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+    return ngay;
+}
+
+function capNhatTrangThaiPhieu() {
+    var danhSach = layDanhSachPhieuMuon();
+    var homNay = layNgayHomNay();
+    var daCapNhat = false;
+
+    for (var i = 0; i < danhSach.length; i++) {
+        if (danhSach[i].trangThai === 'Đang mượn' && danhSach[i].hanTra < homNay) {
+            danhSach[i].trangThai = 'Quá hạn';
+            daCapNhat = true;
+        }
+    }
+
+    if (daCapNhat) {
+        localStorage.setItem('danhSachPhieuMuon', JSON.stringify(danhSach));
+    }
+}
+
+function taiDanhSach() {
+    capNhatTrangThaiPhieu();
+
+    var danhSach = layDanhSachPhieuMuon();
+    var tuKhoa = document.getElementById('tuKhoa').value.trim().toLowerCase();
+    var trangThaiLoc = document.getElementById('locTrangThai').value;
+
+    var ketQua = [];
+    for (var i = 0; i < danhSach.length; i++) {
+        var pm = danhSach[i];
+
+        var tuKhoaKhop = true;
+        if (tuKhoa) {
+            var maPhieuKhop = pm.maPhieu && pm.maPhieu.toLowerCase().indexOf(tuKhoa) !== -1;
+            var maDGKhop = pm.maDG && pm.maDG.toLowerCase().indexOf(tuKhoa) !== -1;
+            var tenDGKhop = pm.tenDG && pm.tenDG.toLowerCase().indexOf(tuKhoa) !== -1;
+            tuKhoaKhop = maPhieuKhop || maDGKhop || tenDGKhop;
+        }
+
+        var trangThaiKhop = !trangThaiLoc || (pm.trangThai === trangThaiLoc);
+
+        if (tuKhoaKhop && trangThaiKhop) ketQua.push(pm);
+    }
+
+    ketQua.sort(function(a, b) {
+        if (a.trangThai === 'Quá hạn' && b.trangThai !== 'Quá hạn') return -1;
+        if (a.trangThai !== 'Quá hạn' && b.trangThai === 'Quá hạn') return 1;
+        if (a.trangThai === 'Đang mượn' && b.trangThai === 'Đã trả') return -1;
+        if (a.trangThai === 'Đã trả' && b.trangThai === 'Đang mượn') return 1;
+        return (b.ngayMuon || '').localeCompare(a.ngayMuon || '');
+    });
+
+    var lblSoLuong = document.getElementById('lblSoLuong');
+    if (tuKhoa || trangThaiLoc) {
+        lblSoLuong.innerHTML = 'Tìm thấy <strong>' + ketQua.length + '</strong> / ' + danhSach.length + ' phiếu mượn';
+    } else {
+        lblSoLuong.innerHTML = 'Tổng số: <strong>' + danhSach.length + '</strong> phiếu mượn';
+    }
+
+    var bang = document.getElementById('bangPhieuMuon');
+    if (ketQua.length === 0) {
+        bang.innerHTML = '<tr><td colspan="9" class="no-data">⚠ Không tìm thấy phiếu mượn nào</td></tr>';
+        return;
+    }
+
+    var homNay = layNgayHomNay();
+    var html = '';
+    for (var j = 0; j < ketQua.length; j++) {
+        var pm = ketQua[j];
+        var trangThai = pm.trangThai || 'Đang mượn';
+        var badgeClass = 'badge-pending';
+        if (trangThai === 'Quá hạn') badgeClass = 'badge-overdue';
+        else if (trangThai === 'Đã trả') badgeClass = 'badge-returned';
+
+        var soNgayQuaHan = tinhSoNgay(pm.hanTra, homNay);
+        var trangThaiText = trangThai;
+        if (trangThai === 'Quá hạn') {
+            trangThaiText = 'Quá hạn ' + soNgayQuaHan + ' ngày';
+        } else if (trangThai === 'Đang mượn') {
+            var soNgayConLai = tinhSoNgay(homNay, pm.hanTra);
+            if (soNgayConLai <= 2) {
+                trangThaiText = 'Sắp đến hạn (' + soNgayConLai + ' ngày)';
+                badgeClass = 'badge-overdue';
+            }
+        }
+
+        var hanhDong = '';
+        if (trangThai === 'Đang mượn' || trangThai === 'Quá hạn') {
+            hanhDong = '<a href="tra-sach.html?ma=' + encodeURIComponent(pm.maPhieu) + '" class="btn btn-sm btn-teal">↩️ Trả</a>';
+            if (trangThai !== 'Quá hạn') {
+                hanhDong += '<a href="gia-han.html?ma=' + encodeURIComponent(pm.maPhieu) + '" class="btn btn-sm btn-orange">⏰ Gia hạn</a>';
+            }
+        } else {
+            hanhDong = '<span style="color:#888;font-size:12px;">✓ Đã hoàn tất</span>';
+        }
+
+        html += '<tr>';
+        html += '<td>' + (j + 1) + '</td>';
+        html += '<td><strong>' + (pm.maPhieu || '') + '</strong></td>';
+        html += '<td>' + (pm.maDG || '') + '</td>';
+        html += '<td>' + (pm.tenDG || '') + '</td>';
+        html += '<td>' + dinhDangNgay(pm.ngayMuon) + '</td>';
+        html += '<td>' + dinhDangNgay(pm.hanTra) + '</td>';
+        html += '<td style="text-align:center;">' + (pm.danhSachSach ? pm.danhSachSach.length : 0) + '</td>';
+        html += '<td><span class="badge ' + badgeClass + '">' + trangThaiText + '</span></td>';
+        html += '<td>' + hanhDong + '</td>';
+        html += '</tr>';
+    }
+    bang.innerHTML = html;
+}
+
+function timKiemPhieu() {
+    taiDanhSach();
+}
+
+function xuLyEnter(event) {
+    if (event.keyCode === 13) timKiemPhieu();
+}
+
+function dangXuat() {
+    if (confirm('Bạn có muốn đăng xuất không?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = '../index.html';
+    }
+    return false;
+}
+
+if (kiemTraDangNhap()) {
+    taiDanhSach();
+}
+</script>
+</body>
+</html>

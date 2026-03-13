@@ -55,6 +55,9 @@
     <a href="xu-ly-phat.html" class="menu-item">
         <span class="menu-icon">💰</span>Xử lý phạt
     </a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📄</span>Phiếu mượn
+    </a>
     <a href="dat-cho.html" class="menu-item active">
         <span class="menu-icon">🔖</span>Đặt chỗ
     </a>
@@ -66,16 +69,9 @@
     <a href="doc-gia-danh-sach.html" class="menu-item">
         <span class="menu-icon">👥</span>Độc giả
     </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
-    </a>
-
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -99,8 +95,8 @@
       <table>
         <tr><td>Mã độc giả:</td><td id="dg-ma">--</td></tr>
         <tr><td>Họ tên:</td><td id="dg-ten">--</td></tr>
-        <tr><td>Lớp:</td><td id="dg-lop">--</td></tr>
-        <tr><td>Khoa:</td><td id="dg-khoa">--</td></tr>
+        <tr><td>Nghề nghiệp:</td><td id="dg-ngheNghiep">--</td></tr>
+        <tr><td>Nơi làm việc:</td><td id="dg-noiLamViec">--</td></tr>
         <tr><td>Email:</td><td id="dg-email">--</td></tr>
         <tr><td>Trạng thái:</td><td id="dg-trangThai">--</td></tr>
       </table>
@@ -202,7 +198,7 @@ function timDocGia() {
     return;
   }
 
-  if (docGia.trangThai === 'Khóa' || docGia.trangThai === 'Ngừng hoạt động') {
+  if (docGia.trangThaiThe === 'Khóa' || docGia.trangThaiThe === 'Ngừng hoạt động') {
     alert('Độc giả này đang bị khóa, không thể đặt chỗ!');
     document.getElementById('infoDG').style.display = 'none';
     docGiaDaChon = null;
@@ -212,10 +208,10 @@ function timDocGia() {
 
   document.getElementById('dg-ma').innerText = docGia.maDG;
   document.getElementById('dg-ten').innerText = docGia.hoTen;
-  document.getElementById('dg-lop').innerText = docGia.lop || '--';
-  document.getElementById('dg-khoa').innerText = docGia.khoa || '--';
+  document.getElementById('dg-ngheNghiep').innerText = docGia.ngheNghiep || '--';
+  document.getElementById('dg-noiLamViec').innerText = docGia.noiLamViec || '--';
   document.getElementById('dg-email').innerText = docGia.email || '--';
-  document.getElementById('dg-trangThai').innerText = docGia.trangThai || 'Hoạt động';
+  document.getElementById('dg-trangThai').innerText = docGia.trangThaiThe || 'Hoạt động';
   document.getElementById('infoDG').style.display = 'block';
 
   docGiaDaChon = docGia;
