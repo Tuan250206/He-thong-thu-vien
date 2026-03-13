@@ -364,7 +364,11 @@ function chonSach(maSach) {
         }
     }
 
-    sachDaChon = sach;
+    sachDaChon = {
+        maSach: sach.maSach,
+        tenSach: sach.tenSach,
+        tacGia: sach.tacGia || '---'
+    };
     capNhatThongTinXacNhan();
     document.getElementById('buoc3').className = 'card';
 }

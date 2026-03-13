@@ -448,6 +448,10 @@ function xacNhanLaySach(maDatCho) {
     }
     
     if (datCho) {
+        // Lấy thông tin đầy đủ của sách từ danhSachSach
+        var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+        var sach = dsSach.find(function(s) { return s.maSach === datCho.maSach; });
+        
         // Tạo phiếu mượn tự động
         var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
         var maPhieu = 'PM' + Date.now();
@@ -462,15 +466,13 @@ function xacNhanLaySach(maDatCho) {
             danhSachSach: [{
                 maSach: datCho.maSach,
                 tenSach: datCho.tenSach,
-                tacGia: datCho.tacGia || '---'
+                tacGia: sach ? (sach.tacGia || '---') : '---'
             }],
             trangThai: 'Đang mượn',
             ghiChu: 'Từ đặt chỗ ' + maDatCho
         });
         
         // Giảm số lượng sách
-        var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-        var sach = dsSach.find(function(s) { return s.maSach === datCho.maSach; });
         if (sach) {
             sach.soLuongCon = Math.max(0, parseInt(sach.soLuongCon || 0) - 1);
         }
