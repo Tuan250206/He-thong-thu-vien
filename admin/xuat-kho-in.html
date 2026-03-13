@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>In phiếu xuất kho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .phieu {
+            border: 2px solid #f44336;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #f44336;
+        }
+        
+        .info {
+            margin-bottom: 20px;
+        }
+        
+        .info div {
+            margin: 5px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table th, table td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        table th {
+            background-color: #ffebee;
+        }
+        
+        .btn-print {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        @media print {
+            .btn-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="btn-print" onclick="window.print()">🖨️ In phiếu</button>
+    
+    <div class="phieu">
+        <div class="header">
+            <h1>📤 PHIẾU XUẤT KHO</h1>
+            <p>THƯ VIỆN ABC</p>
+            <p>Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM</p>
+        </div>
+        
+        <div class="info" id="thongTinPhieu">
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã sách</th>
+                    <th>Tên sách</th>
+                    <th>Số lượng</th>
+                </tr>
+            </thead>
+            <tbody id="danhSachSach">
+            </tbody>
+        </table>
+        
+        <div style="margin-top: 50px;">
+            <div style="float: left; text-align: center; width: 40%;">
+                <p><strong>Người lập phiếu</strong></p>
+                <p style="margin-top: 60px;">________________________</p>
+            </div>
+            <div style="float: right; text-align: center; width: 40%;">
+                <p><strong>Thủ kho</strong></p>
+                <p style="margin-top: 60px;">________________________</p>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+    
+    <script>
+        var phieuIndex = localStorage.getItem('phieuXuatHienTai');
+        var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
+        
+        if (phieuIndex && phieuXuat[phieuIndex]) {
+            var phieu = phieuXuat[phieuIndex];
+            
+            var htmlInfo = '';
+            htmlInfo += '<div><strong>Mã phiếu:</strong> ' + phieu.maPhieu + '</div>';
+            htmlInfo += '<div><strong>Ngày xuất:</strong> ' + phieu.ngayXuat + '</div>';
+            htmlInfo += '<div><strong>Lý do:</strong> ' + phieu.lyDo + '</div>';
+            if (phieu.ghiChu) {
+                htmlInfo += '<div><strong>Ghi chú:</strong> ' + phieu.ghiChu + '</div>';
+            }
+            htmlInfo += '<div><strong>Người xuất:</strong> ' + phieu.nguoiXuat + '</div>';
+            document.getElementById('thongTinPhieu').innerHTML = htmlInfo;
+            
+            var htmlSach = '';
+            for (var i = 0; i < phieu.danhSachSach.length; i++) {
+                var s = phieu.danhSachSach[i];
+                
+                htmlSach += '<tr>';
+                htmlSach += '<td>' + (i + 1) + '</td>';
+                htmlSach += '<td>' + s.maSach + '</td>';
+                htmlSach += '<td>' + s.tenSach + '</td>';
+                htmlSach += '<td>' + s.soLuong + '</td>';
+                htmlSach += '</tr>';
+            }
+            document.getElementById('danhSachSach').innerHTML = htmlSach;
+        } else {
+            document.body.innerHTML = '<p style="text-align: center; color: red;">Không tìm thấy phiếu xuất!</p>';
+        }
+    </script>
+</body>
+</html>

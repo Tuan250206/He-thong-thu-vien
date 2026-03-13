@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chi Tiết Sách - Thư Viện</title>
+<link rel="stylesheet" href="common.css">
+<style>
+.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
+.card { background: white; border-radius: 5px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.section-label { font-size: 15px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 6px; border-bottom: 1px solid #BBDEFB; }
+.info-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+.info-table tr { border-bottom: 1px solid #f0f0f0; }
+.info-table tr:last-child { border-bottom: none; }
+.info-table th { width: 160px; padding: 10px 12px; background: #f5f9ff; color: #555; font-weight: bold; font-size: 13px; text-align: left; white-space: nowrap; vertical-align: top; }
+.info-table td { padding: 10px 12px; font-size: 13px; color: #333; }
+.stat-box { display: inline-block; text-align: center; padding: 12px 20px; border-radius: 5px; margin-right: 10px; margin-bottom: 10px; min-width: 110px; vertical-align: top; }
+.stat-box .stat-num { font-size: 26px; font-weight: bold; display: block; }
+.stat-box .stat-label { font-size: 12px; display: block; margin-top: 3px; }
+.stat-tong { background: #E3F2FD; border: 1px solid #90CAF9; }
+.stat-tong .stat-num { color: #1565C0; }
+.stat-tong .stat-label { color: #1976D2; }
+.stat-dang-muon { background: #FFF8E1; border: 1px solid #FFE082; }
+.stat-dang-muon .stat-num { color: #F57F17; }
+.stat-dang-muon .stat-label { color: #F9A825; }
+.stat-con-lai-xanh { background: #E8F5E9; border: 1px solid #A5D6A7; }
+.stat-con-lai-xanh .stat-num { color: #2E7D32; }
+.stat-con-lai-xanh .stat-label { color: #388E3C; }
+.stat-con-lai-do { background: #FFEBEE; border: 1px solid #EF9A9A; }
+.stat-con-lai-do .stat-num { color: #C62828; }
+.stat-con-lai-do .stat-label { color: #D32F2F; }
+.stat-con-lai-cam { background: #FBE9E7; border: 1px solid #FFAB91; }
+.stat-con-lai-cam .stat-num { color: #BF360C; }
+.stat-con-lai-cam .stat-label { color: #D84315; }
+.canh-bao { background: #FFFDE7; border: 1px solid #F9A825; border-left: 4px solid #F9A825; border-radius: 4px; padding: 12px 15px; margin-top: 15px; font-size: 13px; color: #795548; }
+.canh-bao strong { color: #E65100; }
+.btn { padding: 8px 18px; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; line-height: normal; margin-right: 8px; }
+.btn-grey { background: #9E9E9E; color: white; }
+.btn-grey:hover { background: #757575; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 550px; }
+table thead tr { background: #2196F3; color: white; }
+table th { padding: 10px 8px; text-align: left; font-size: 13px; white-space: nowrap; }
+table td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
+table tbody tr:hover { background: #e3f2fd; }
+table tbody tr:nth-child(even) { background: #fafafa; }
+table tbody tr:nth-child(even):hover { background: #e3f2fd; }
+.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; white-space: nowrap; }
+.badge-pending { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
+.badge-returned { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
+.badge-overdue { background: #FCE4EC; color: #AD1457; border: 1px solid #F48FB1; }
+.no-data { text-align: center; color: #aaa; padding: 20px; font-style: italic; }
+.not-found { background: #FFF3E0; border: 1px solid #FFB74D; border-radius: 5px; padding: 20px; color: #E65100; text-align: center; }
+.cf::after { content: ""; display: table; clear: both; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-info">
+        <span id="lblNguoiDung">👤 Khách</span>
+        <a href="../index.html" onclick="return dangXuat()">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<div class="sidebar">
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📄</span>Phiếu mượn
+    </a>
+    <a href="dat-cho.html" class="menu-item">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="doc-gia-them.html" class="menu-item">
+        <span class="menu-icon">➕</span>Thêm ĐG
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item active">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <a href="sach-tim-kiem.html" class="menu-item">
+        <span class="menu-icon">🔍</span>Tìm sách
+    </a>
+
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
+</div>
+
+<div class="content">
+    <div class="page-title" id="tieuDeTrang">📖 Chi Tiết Sách</div>
+
+    <div id="khongTimThay" style="display:none">
+        <div class="not-found">
+            ⚠ Không tìm thấy sách với mã đã cho. <a href="sach-danh-sach.html">Quay lại danh sách</a>
+        </div>
+    </div>
+
+    <div id="vungChiTiet" style="display:none">
+        <div class="card">
+            <div class="section-label">📋 Thông tin sách</div>
+            <table class="info-table" id="bangThongTinSach"></table>
+        </div>
+
+        <div class="card">
+            <div class="section-label">📊 Tình trạng số lượng</div>
+            <div id="vungThongKe"></div>
+            <div id="canhBaoSoLuong" style="display:none" class="canh-bao">
+                ⚠ <strong>Chú ý:</strong> Sách này còn ít (<strong id="soLuongConHienThi">0</strong> cuốn).
+                Cần bổ sung thêm sách để phục vụ nhu cầu mượn của độc giả.
+            </div>
+        </div>
+
+        <div style="margin-bottom:15px">
+            <a href="sach-danh-sach.html" class="btn btn-grey">← Quay lại danh sách</a>
+        </div>
+
+        <div class="card">
+            <div class="section-label">📖 Lịch sử mượn sách này</div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:90px">Mã phiếu</th>
+                            <th>Độc giả</th>
+                            <th style="width:100px">Ngày mượn</th>
+                            <th style="width:110px">Ngày trả / Hạn trả</th>
+                            <th style="width:110px">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bangLichSuMuon">
+                        <tr><td colspan="5" class="no-data">Đang tải...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var maSachHienTai = '';
+
+function kiemTraDangNhap() {
+    var nguoiDung = localStorage.getItem('currentUser');
+    if (!nguoiDung) {
+        alert('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!');
+        window.location.href = '../index.html';
+        return false;
+    }
+    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+    var tenHienThi = userInfo.hoTen || nguoiDung;
+    document.getElementById('lblNguoiDung').innerHTML = '👤 ' + tenHienThi;
+    return true;
+}
+
+
+function layThamSoURL(ten) {
+    var search = window.location.search;
+    if (!search) return '';
+    var thamSo = search.substring(1).split('&');
+    for (var i = 0; i < thamSo.length; i++) {
+        var cap = thamSo[i].split('=');
+        if (cap[0] === ten) {
+            return decodeURIComponent(cap[1] || '');
+        }
+    }
+    return '';
+}
+
+function layDanhSachSach() {
+    var data = localStorage.getItem('danhSachSach');
+    if (!data) return [];
+    try { return JSON.parse(data); }
+    catch (e) { return []; }
+}
+
+function dinhDangNgay(ngay) {
+    if (!ngay) return '—';
+    var parts = ngay.split('-');
+    if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+    return ngay;
+}
+
+function hienThiThongTinSach(sach) {
+    var html = '';
+    html += '<tr><th>Mã sách</th><td><strong>' + (sach.maSach || '—') + '</strong></td></tr>';
+    html += '<tr><th>Tên sách</th><td><strong style="font-size:15px">' + (sach.tenSach || '—') + '</strong></td></tr>';
+    html += '<tr><th>Tác giả</th><td>' + (sach.tacGia || '—') + '</td></tr>';
+    html += '<tr><th>Nhà xuất bản</th><td>' + (sach.nxb || '—') + '</td></tr>';
+    html += '<tr><th>Năm xuất bản</th><td>' + (sach.namXB || '—') + '</td></tr>';
+    html += '<tr><th>Thể loại</th><td>' + (sach.theLoai || '—') + '</td></tr>';
+    html += '<tr><th>ISBN</th><td>' + (sach.isbn || '—') + '</td></tr>';
+    html += '<tr><th>Vị trí kệ sách</th><td>' + (sach.viTri || '—') + '</td></tr>';
+    html += '<tr><th>Giá nhập</th><td>' + (sach.giaNhap ? soTienVND(sach.giaNhap) : '—') + '</td></tr>';
+    html += '<tr><th>Giá bồi thường</th><td>' + (sach.giaBT ? soTienVND(sach.giaBT) : '—') + '</td></tr>';
+    html += '<tr><th>Mô tả</th><td>' + (sach.moTa || '—') + '</td></tr>';
+    document.getElementById('bangThongTinSach').innerHTML = html;
+}
+
+function soTienVND(so) {
+    var n = parseInt(so, 10) || 0;
+    return n.toLocaleString('vi-VN') + ' đ';
+}
+
+function hienThiThongKe(sach) {
+    var soLuongTong = parseInt(sach.soLuongTong, 10) || 0;
+    var soLuongCon = parseInt(sach.soLuongCon, 10) || 0;
+    var dangMuon = soLuongTong - soLuongCon;
+    if (dangMuon < 0) dangMuon = 0;
+
+    var classConLai = 'stat-con-lai-xanh';
+    if (soLuongCon === 0) classConLai = 'stat-con-lai-do';
+    else if (soLuongCon <= 2) classConLai = 'stat-con-lai-cam';
+
+    var html = '';
+    html += '<div class="stat-box stat-tong">';
+    html += '<span class="stat-num">' + soLuongTong + '</span>';
+    html += '<span class="stat-label">📚 Tổng số</span>';
+    html += '</div>';
+
+    html += '<div class="stat-box stat-dang-muon">';
+    html += '<span class="stat-num">' + dangMuon + '</span>';
+    html += '<span class="stat-label">📤 Đang mượn</span>';
+    html += '</div>';
+
+    html += '<div class="stat-box ' + classConLai + '">';
+    html += '<span class="stat-num">' + soLuongCon + '</span>';
+    html += '<span class="stat-label">✅ Còn lại</span>';
+    html += '</div>';
+
+    document.getElementById('vungThongKe').innerHTML = html;
+
+    if (soLuongCon < 3) {
+        document.getElementById('soLuongConHienThi').textContent = soLuongCon;
+        document.getElementById('canhBaoSoLuong').style.display = 'block';
+    }
+}
+
+function taiLichSuMuon() {
+    var dsPhieuMuon = [];
+    try { dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]'); }
+    catch (e) { dsPhieuMuon = []; }
+
+    var lichSu = [];
+    for (var i = 0; i < dsPhieuMuon.length; i++) {
+        var pm = dsPhieuMuon[i];
+        var dsSachTrongPhieu = pm.danhSachSach || [];
+        for (var k = 0; k < dsSachTrongPhieu.length; k++) {
+            if (dsSachTrongPhieu[k].maSach === maSachHienTai) {
+                lichSu.push({
+                    maPhieu: pm.maPhieu,
+                    maDG: pm.maDG,
+                    tenDG: pm.tenDG,
+                    ngayMuon: pm.ngayMuon,
+                    hanTra: pm.hanTra,
+                    tinhTrang: dsSachTrongPhieu[k].tinhTrang,
+                    trangThai: pm.trangThai
+                });
+                break;
+            }
+        }
+    }
+
+    var bang = document.getElementById('bangLichSuMuon');
+
+    if (lichSu.length === 0) {
+        bang.innerHTML = '<tr><td colspan="5" class="no-data">Sách này chưa có lịch sử được mượn</td></tr>';
+        return;
+    }
+
+    lichSu.sort(function(a, b) {
+        return (b.ngayMuon || '').localeCompare(a.ngayMuon || '');
+    });
+
+    var html = '';
+    for (var j = 0; j < lichSu.length; j++) {
+        var ls = lichSu[j];
+
+        var trangThai = ls.trangThai || 'Đang mượn';
+        var badgeClass = 'badge-pending';
+        if (trangThai === 'Đã trả') badgeClass = 'badge-returned';
+        else if (trangThai === 'Quá hạn') badgeClass = 'badge-overdue';
+
+        var ngayTraHienThi = '';
+        if (trangThai === 'Đã trả' && ls.tinhTrang) {
+            ngayTraHienThi = ls.tinhTrang;
+        } else {
+            ngayTraHienThi = 'Hạn: ' + dinhDangNgay(ls.hanTra);
+        }
+
+        html += '<tr>';
+        html += '<td><strong>' + (ls.maPhieu || '') + '</strong></td>';
+        html += '<td>' + (ls.tenDG || ls.maDG || '') + '</td>';
+        html += '<td>' + dinhDangNgay(ls.ngayMuon) + '</td>';
+        html += '<td>' + ngayTraHienThi + '</td>';
+        html += '<td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td>';
+        html += '</tr>';
+    }
+    bang.innerHTML = html;
+}
+
+function dangXuat() {
+    if (confirm('Bạn có muốn đăng xuất không?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = '../index.html';
+    }
+    return false;
+}
+
+function khoiTao() {
+    if (!kiemTraDangNhap()) return;
+
+    maSachHienTai = layThamSoURL('ma');
+
+    if (!maSachHienTai) {
+        document.getElementById('khongTimThay').style.display = 'block';
+        return;
+    }
+
+    var danhSach = layDanhSachSach();
+    var sach = null;
+    for (var i = 0; i < danhSach.length; i++) {
+        if (danhSach[i].maSach === maSachHienTai) {
+            sach = danhSach[i];
+            break;
+        }
+    }
+
+    if (!sach) {
+        document.getElementById('khongTimThay').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('tieuDeTrang').innerHTML = '📖 Chi Tiết: ' + sach.tenSach;
+    document.getElementById('vungChiTiet').style.display = 'block';
+
+    hienThiThongTinSach(sach);
+    hienThiThongKe(sach);
+    taiLichSuMuon();
+}
+
+khoiTao();
+</script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê tồn kho - Quản lý kho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            float: left;
+            min-height: 500px;
+            border-right: 1px solid #ddd;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sidebar a:hover {
+            background-color: #e8f5e9;
+        }
+        
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+            background-color: white;
+            min-height: 500px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        input[type="date"] {
+            padding: 8px;
+            margin: 5px 10px 5px 0;
+            border: 1px solid #ddd;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .filter-box {
+            background: #f5f5f5;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-box {
+            background: #e3f2fd;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-box {
+            background: #fff3cd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
+        <span>Xin chào: <strong id="username">Admin</strong> | <a href="login.html" style="color: white;">Đăng xuất</a></span>
+    </div>
+    
+    <div class="sidebar">
+        <a href="dashboard.html">🏠 Trang chủ</a>
+        <a href="sach-them.html">➕ Thêm sách</a>
+        <a href="sach-sua.html">✏️ Sửa sách</a>
+        <a href="bien-muc.html">📋 Biên mục</a>
+        <a href="in-barcode.html">🏷️ In tem sách</a>
+        <a href="kiem-ke.html">📊 Kiểm kê</a>
+        <a href="nhap-kho-danh-sach.html">📥 Phiếu nhập</a>
+        <a href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
+        <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
+        <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
+        <a href="thong-ke-ton-kho.html" style="background-color: #e8f5e9;">📊 Thống kê</a>
+    </div>
+    
+    <div class="content">
+        <h2>📊 Thống kê tồn kho</h2>
+        
+        <div class="filter-box">
+            <label>Thời điểm:</label>
+            <input type="date" id="thoiDiem">
+            <button onclick="xemThongKe()">📊 Xem thống kê</button>
+        </div>
+        
+        <!-- Tổng quan -->
+        <div class="summary-box">
+            <h3>📋 Tổng quan</h3>
+            <div id="tongQuan"></div>
+        </div>
+        
+        <!-- Tồn kho theo thể loại -->
+        <h3>📚 Tồn kho theo thể loại</h3>
+        <table id="tableTheLoai">
+            <thead>
+                <tr>
+                    <th>Thể loại</th>
+                    <th>Số lượng</th>
+                    <th>Giá trị (VNĐ)</th>
+                    <th>Tỷ lệ (%)</th>
+                </tr>
+            </thead>
+            <tbody id="thongKeTheLoai">
+                <tr>
+                    <td colspan="4" style="text-align: center;">Đang tải...</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Cảnh báo -->
+        <h3>⚠️ Cảnh báo tồn kho</h3>
+        <div class="alert-box">
+            <h4>🔴 Sách sắp hết (còn &lt; 5 cuốn):</h4>
+            <div id="sachSapHet"></div>
+            
+            <h4 style="margin-top: 20px;">🔵 Sách tồn đọng (&gt; 100 cuốn):</h4>
+            <div id="sachTonDong"></div>
+        </div>
+    </div>
+    
+    <script>
+        function kiemTraDangNhap() {
+            var admin = localStorage.getItem('currentAdmin');
+            if (!admin) {
+                alert('Bạn chưa đăng nhập!');
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('username').innerText = admin;
+            }
+        }
+        
+        // Set ngày hiện tại
+        document.getElementById('thoiDiem').valueAsDate = new Date();
+        
+        function xemThongKe() {
+            var sach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+            
+            // Tổng quan
+            var tongSoSach = 0;
+            var tongGiaTri = 0;
+            var soLoaiSach = sach.length;
+            
+            for (var i = 0; i < sach.length; i++) {
+                tongSoSach += sach[i].soLuongCon;
+                tongGiaTri += sach[i].soLuongCon * (sach[i].giaNhap || 0);
+            }
+            
+            var htmlTongQuan = '';
+            htmlTongQuan += '<div style="font-size: 18px;"><strong>📚 Tổng số sách:</strong> ' + tongSoSach + ' cuốn</div>';
+            htmlTongQuan += '<div style="font-size: 18px;"><strong>📖 Số loại sách:</strong> ' + soLoaiSach + '</div>';
+            htmlTongQuan += '<div style="font-size: 18px;"><strong>💰 Giá trị tồn kho:</strong> ' + tongGiaTri.toLocaleString('vi-VN') + 'đ</div>';
+            document.getElementById('tongQuan').innerHTML = htmlTongQuan;
+            
+            // Thống kê theo thể loại
+            var thongKeTheLoai = {};
+            for (var j = 0; j < sach.length; j++) {
+                var theLoai = sach[j].theLoai || 'Khác';
+                if (!thongKeTheLoai[theLoai]) {
+                    thongKeTheLoai[theLoai] = {
+                        soLuong: 0,
+                        giaTri: 0
+                    };
+                }
+                thongKeTheLoai[theLoai].soLuong += sach[j].soLuongCon;
+                thongKeTheLoai[theLoai].giaTri += sach[j].soLuongCon * (sach[j].giaNhap || 0);
+            }
+            
+            var htmlTheLoai = '';
+            for (var theLoai in thongKeTheLoai) {
+                var tyLe = tongSoSach > 0 ? (thongKeTheLoai[theLoai].soLuong / tongSoSach * 100).toFixed(1) : 0;
+                htmlTheLoai += '<tr>';
+                htmlTheLoai += '<td>' + theLoai + '</td>';
+                htmlTheLoai += '<td>' + thongKeTheLoai[theLoai].soLuong + '</td>';
+                htmlTheLoai += '<td>' + thongKeTheLoai[theLoai].giaTri.toLocaleString('vi-VN') + '</td>';
+                htmlTheLoai += '<td>' + tyLe + '%</td>';
+                htmlTheLoai += '</tr>';
+            }
+            
+            if (htmlTheLoai === '') {
+                htmlTheLoai = '<tr><td colspan="4" style="text-align: center;">Chưa có dữ liệu</td></tr>';
+            }
+            
+            document.getElementById('thongKeTheLoai').innerHTML = htmlTheLoai;
+            
+            // Cảnh báo sách sắp hết
+            var sachSapHet = [];
+            var sachTonDong = [];
+            for (var k = 0; k < sach.length; k++) {
+                if (sach[k].soLuongCon < 5 && sach[k].soLuongCon > 0) {
+                    sachSapHet.push(sach[k]);
+                } else if (sach[k].soLuongCon > 100) {
+                    sachTonDong.push(sach[k]);
+                }
+            }
+            
+            var htmlSapHet = '';
+            if (sachSapHet.length === 0) {
+                htmlSapHet = '<p style="color: green;">✅ Không có sách sắp hết</p>';
+            } else {
+                for (var m = 0; m < sachSapHet.length; m++) {
+                    htmlSapHet += '<div style="margin: 5px 0;">• <strong>' + sachSapHet[m].tenSach + '</strong> (Mã: ' + sachSapHet[m].maSach + ', Còn: <span style="color: red; font-weight: bold;">' + sachSapHet[m].soLuongCon + '</span> cuốn)</div>';
+                }
+            }
+            document.getElementById('sachSapHet').innerHTML = htmlSapHet;
+            
+            var htmlTonDong = '';
+            if (sachTonDong.length === 0) {
+                htmlTonDong = '<p style="color: green;">✅ Không có sách tồn đọng</p>';
+            } else {
+                for (var n = 0; n < sachTonDong.length; n++) {
+                    htmlTonDong += '<div style="margin: 5px 0;">• <strong>' + sachTonDong[n].tenSach + '</strong> (Mã: ' + sachTonDong[n].maSach + ', Tồn: <span style="color: blue; font-weight: bold;">' + sachTonDong[n].soLuongCon + '</span> cuốn)</div>';
+                }
+            }
+            document.getElementById('sachTonDong').innerHTML = htmlTonDong;
+        }
+        
+        kiemTraDangNhap();
+        xemThongKe();
+    </script>
+</body>
+</html>

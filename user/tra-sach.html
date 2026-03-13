@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trả sách - Thư viện</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* --- Giữ nguyên các style cũ của bạn --- */
+.page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.page-title h2 { font-size: 17px; color: #333; }
+.card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.card h3 { font-size: 15px; color: #2196F3; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #E3F2FD; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
+.form-group input { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 320px; }
+
+.quick-select-wrapper { margin-top: 15px; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+.scroll-area { max-height: 400px; overflow-y: auto; }
+.table-quick { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table-quick thead { background: #2196F3; color: white; position: sticky; top: 0; }
+.table-quick th { padding: 12px 10px; text-align: left; }
+.table-quick td { padding: 10px; border-bottom: 1px solid #eee; }
+.table-quick tbody tr:hover { background-color: #f1f8ff; cursor: pointer; }
+
+.btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+.btn-primary { background: #2196F3; color: white; }
+.btn-success { background: #4CAF50; color: white; }
+.btn-danger { background: #f44336; color: white; font-size: 12px; padding: 4px 10px; }
+.btn-select { background: #FF9800; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-weight: bold; }
+
+.info-box { background: #FFFDE7; border: 1px solid #F9A825; border-radius: 4px; padding: 12px 15px; margin-top: 10px; font-size: 13px; }
+.warn-box { background: #FFF3E0; border: 1px solid #FFCC80; color: #E65100; padding: 10px 14px; border-radius: 4px; margin-bottom: 12px; font-size: 13px; }
+.error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { background: #2196F3; color: white; padding: 10px 12px; text-align: left; font-size: 13px; }
+td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+.tong-tien { background: #FFEBEE; border: 2px solid #EF9A9A; border-radius: 4px; padding: 12px 20px; margin-top: 15px; font-size: 15px; font-weight: bold; color: #C62828; text-align: right; }
+.tong-tien.no-fine { background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32; }
+.qua-han { color: #D32F2F; font-weight: bold; }
+.hidden { display: none; }
+
+/* --- CSS BỔ SUNG CHO MODAL QR --- */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+.modal-content { background-color: white; margin: 5% auto; padding: 20px; border-radius: 8px; width: 400px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.qr-container { margin: 20px 0; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; }
+.qr-container img { width: 250px; height: 250px; display: block; margin: 0 auto; }
+.modal-footer { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-info">
+        Xin chào! <strong id="tenNguoiDung">Nhân viên</strong>
+        &nbsp;|&nbsp;<a href="../index.html">Đăng xuất</a>
+    </div>
+</div>
+
+<div class="sidebar">
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item active">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📄</span>Phiếu mượn
+    </a>
+    <a href="dat-cho.html" class="menu-item">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="doc-gia-them.html" class="menu-item">
+        <span class="menu-icon">➕</span>Thêm ĐG
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <a href="sach-tim-kiem.html" class="menu-item">
+        <span class="menu-icon">🔍</span>Tìm sách
+    </a>
+
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
+</div>
+
+<div class="content">
+    <div class="page-title"><h2>↩️ Trả sách</h2></div>
+
+    <div class="card" id="cardChonPhieu">
+        <h3>🔍 Danh sách phiếu đang mượn</h3>
+        <div class="form-group">
+            <label>Tìm kiếm nhanh:</label>
+            <input type="text" id="filterInput" placeholder="Nhập tên độc giả hoặc mã phiếu..." onkeyup="locPhieu()">
+        </div>
+        <div class="quick-select-wrapper">
+            <div class="scroll-area">
+                <table class="table-quick">
+                    <thead>
+                        <tr>
+                            <th>Mã Phiếu</th>
+                            <th>Độc giả</th>
+                            <th>Ngày mượn</th>
+                            <th>Hạn trả</th>
+                            <th>Số sách</th>
+                            <th style="text-align:center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsPhieuMuonActive"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card hidden" id="cardThongTinPhieu">
+        <h3>📋 Thông tin phiếu mượn đã chọn</h3>
+        <div id="chiTietPhieu"></div>
+    </div>
+
+    <div class="card hidden" id="cardTraSach">
+        <h3>📚 Chi tiết sách trả</h3>
+        <div id="bangSachTra"></div>
+        <div id="khuTongPhat"></div>
+        <div style="margin-top:20px;">
+            <button class="btn btn-success" onclick="kiemTraTruocKhiTra()">✅ Xác nhận trả sách</button>
+            <button class="btn btn-primary" onclick="resetTrang()" style="margin-left:10px;background:#757575;">🔄 Quay lại danh sách</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalThanhToan" class="modal">
+    <div class="modal-content">
+        <h3 style="color: #C62828;">💰 Thanh toán tiền phạt</h3>
+        <p id="txtSoTienModal" style="font-weight: bold; font-size: 18px; margin: 10px 0;"></p>
+        <div class="qr-container">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=THANHTOANTHUVIEN" alt="QR Code" id="imgQR">
+            <p style="font-size: 12px; color: #666; margin-top: 10px;">Quét mã để chuyển khoản hoặc thu tiền mặt</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" onclick="xacNhanTra(true)">✅ Đã thu tiền / Chuyển khoản thành công</button>
+            <button class="btn" style="background: #757575; color: white;" onclick="dongModal()">Hủy</button>
+        </div>
+    </div>
+</div>
+
+<script>
+var phieuHienTai = null;
+var tongPhatGlobal = 0;
+
+window.onload = function() {
+    var user = localStorage.getItem('currentUser') || 'Nhân viên';
+    document.getElementById('tenNguoiDung').textContent = user;
+    loadDanhSachPhieuActive();
+};
+
+function loadDanhSachPhieuActive() {
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var html = '';
+    for (var i = 0; i < dsPhieuMuon.length; i++) {
+        var p = dsPhieuMuon[i];
+        if (p.trangThai === 'Đang mượn' || p.trangThai === 'Quá hạn') {
+            var isQuaHan = tinhSoNgay(p.hanTra, layNgayHomNay()) > 0;
+            var alertClass = isQuaHan ? 'class="qua-han"' : '';
+            html += '<tr><td><strong>' + p.maPhieu + '</strong></td><td>' + p.tenDG + '</td><td>' + dinhDangNgay(p.ngayMuon) + '</td>';
+            html += '<td ' + alertClass + '>' + dinhDangNgay(p.hanTra) + '</td><td>' + p.danhSachSach.length + ' cuốn</td>';
+            html += '<td style="text-align:center"><button class="btn-select" onclick="chonPhieu(\'' + p.maPhieu + '\')">Chọn trả</button></td></tr>';
+        }
+    }
+    document.getElementById('dsPhieuMuonActive').innerHTML = html || '<tr><td colspan="6" style="text-align:center;">Trống.</td></tr>';
+}
+
+function chonPhieu(maPhieu) {
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    phieuHienTai = dsPhieuMuon.find(p => p.maPhieu === maPhieu);
+    if (phieuHienTai) {
+        document.getElementById('cardChonPhieu').className = 'card hidden';
+        hienThiChiTietPhieu(phieuHienTai);
+    }
+}
+
+function hienThiChiTietPhieu(phieu) {
+    var homNay = layNgayHomNay();
+    var soNgayQuaHan = tinhSoNgay(phieu.hanTra, homNay);
+    document.getElementById('cardThongTinPhieu').className = 'card';
+    document.getElementById('chiTietPhieu').innerHTML = '<div class="info-box"><p><strong>Độc giả:</strong> ' + phieu.tenDG + '</p></div>';
+    hienThiBangSachTra(phieu, soNgayQuaHan);
+    document.getElementById('cardTraSach').className = 'card';
+}
+
+function hienThiBangSachTra(phieu, soNgayQuaHan) {
+    var html = '<table><tr><th>Trả</th><th>Mã sách</th><th>Tên sách</th><th>Tình trạng</th><th style="text-align:right;">Phạt</th></tr>';
+    for (var i = 0; i < phieu.danhSachSach.length; i++) {
+        var s = phieu.danhSachSach[i];
+        html += '<tr><td><input type="checkbox" id="cb_' + i + '" checked onchange="capNhatTienPhat()"></td>';
+        html += '<td>' + s.maSach + '</td><td>' + s.tenSach + '</td>';
+        html += '<td><select id="tt_' + i + '" onchange="capNhatTienPhat()"><option value="Tốt">Tốt</option><option value="Rách">Rách</option><option value="Mất">Mất</option></select></td>';
+        html += '<td style="text-align:right;" id="phat_' + i + '">0 đ</td></tr>';
+    }
+    html += '</table>';
+    document.getElementById('bangSachTra').innerHTML = html;
+    capNhatTienPhat();
+}
+
+function capNhatTienPhat() {
+    var homNay = layNgayHomNay();
+    var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuHienTai.hanTra, homNay));
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    var tongPhat = 0;
+
+    for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
+        var cbEl = document.getElementById('cb_' + i);
+        var ttEl = document.getElementById('tt_' + i);
+        if (!cbEl.checked) continue;
+
+        var phatCuonNay = soNgayQuaHan * 2000;
+        if (ttEl.value === 'Mất') phatCuonNay += 50000; // Ví dụ mất phạt 50k
+        else if (ttEl.value === 'Rách') phatCuonNay += 10000;
+
+        tongPhat += phatCuonNay;
+        document.getElementById('phat_' + i).textContent = dinhDangTien(phatCuonNay);
+    }
+    tongPhatGlobal = tongPhat;
+    document.getElementById('khuTongPhat').innerHTML = tongPhat > 0 ? 
+        '<div class="tong-tien">💰 Tổng tiền phạt: ' + dinhDangTien(tongPhat) + '</div>' : 
+        '<div class="tong-tien no-fine">✅ Không có tiền phạt</div>';
+}
+
+// LOGIC MỚI: Kiểm tra tiền phạt trước
+function kiemTraTruocKhiTra() {
+    if (tongPhatGlobal > 0) {
+        document.getElementById('txtSoTienModal').innerText = "Số tiền cần thu: " + dinhDangTien(tongPhatGlobal);
+        document.getElementById('modalThanhToan').style.display = 'block';
+    } else {
+        xacNhanTra(false);
+    }
+}
+
+function dongModal() {
+    document.getElementById('modalThanhToan').style.display = 'none';
+}
+
+function xacNhanTra(daThuTien) {
+    if (!phieuHienTai) return;
+    
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+
+    var indexPhieu = dsPhieuMuon.findIndex(p => p.maPhieu === phieuHienTai.maPhieu);
+    if (indexPhieu !== -1) {
+        dsPhieuMuon[indexPhieu].trangThai = 'Đã trả';
+        dsPhieuMuon[indexPhieu].ngayTraThucTe = layNgayHomNay();
+        if(daThuTien) dsPhieuMuon[indexPhieu].ghiChuPhat = "Đã thu " + dinhDangTien(tongPhatGlobal);
+    }
+
+    // Cập nhật kho (giữ nguyên logic của bạn)
+    phieuHienTai.danhSachSach.forEach((sachTra, index) => {
+        var cbEl = document.getElementById('cb_' + index);
+        var ttEl = document.getElementById('tt_' + index);
+        if (cbEl && cbEl.checked && ttEl.value !== 'Mất') {
+            var sachTrongKho = dsSach.find(s => s.maSach === sachTra.maSach);
+            if (sachTrongKho) {
+                sachTrongKho.soLuongCon = (parseInt(sachTrongKho.soLuongCon) || 0) + 1;
+            }
+        }
+    });
+
+    localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
+    localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
+
+    dongModal();
+    alert('✅ Trả sách thành công!');
+    resetTrang(); 
+}
+
+function resetTrang() {
+    phieuHienTai = null;
+    tongPhatGlobal = 0;
+    document.getElementById('cardChonPhieu').className = 'card';
+    document.getElementById('cardThongTinPhieu').className = 'card hidden';
+    document.getElementById('cardTraSach').className = 'card hidden';
+    loadDanhSachPhieuActive();
+}
+
+// Các hàm tiện ích (giữ nguyên)
+function layNgayHomNay() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function dinhDangNgay(str) {
+    if (!str) return '---';
+    var p = str.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+}
+function dinhDangTien(so) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(so);
+}
+function tinhSoNgay(ngay1Str, ngay2Str) {
+    var d1 = new Date(ngay1Str);
+    var d2 = new Date(ngay2Str);
+    return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+}
+function locPhieu() {
+    var input = document.getElementById("filterInput").value.toUpperCase();
+    var tr = document.getElementById("dsPhieuMuonActive").getElementsByTagName("tr");
+    for (var i = 0; i < tr.length; i++) {
+        tr[i].style.display = tr[i].innerText.toUpperCase().indexOf(input) > -1 ? "" : "none";
+    }
+}
+</script>
+</body>
+</html>

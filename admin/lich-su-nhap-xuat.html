@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử nhập xuất - Quản lý kho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            float: left;
+            min-height: 500px;
+            border-right: 1px solid #ddd;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sidebar a:hover {
+            background-color: #e8f5e9;
+        }
+        
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+            background-color: white;
+            min-height: 500px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        input[type="date"],
+        select {
+            padding: 8px;
+            margin: 5px 10px 5px 0;
+            border: 1px solid #ddd;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-primary {
+            background-color: #2196F3;
+        }
+        
+        .filter-box {
+            background: #f5f5f5;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
+        <span>Xin chào: <strong id="username">Admin</strong> | <a href="login.html" style="color: white;">Đăng xuất</a></span>
+    </div>
+    
+    <div class="sidebar">
+        <a href="dashboard.html">🏠 Trang chủ</a>
+        <a href="sach-them.html">➕ Thêm sách</a>
+        <a href="sach-sua.html">✏️ Sửa sách</a>
+        <a href="bien-muc.html">📋 Biên mục</a>
+        <a href="in-barcode.html">🏷️ In tem sách</a>
+        <a href="kiem-ke.html">📊 Kiểm kê</a>
+        <a href="nhap-kho-danh-sach.html">📥 Phiếu nhập</a>
+        <a href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
+        <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
+        <a href="lich-su-nhap-xuat.html" style="background-color: #e8f5e9;">📋 Lịch sử</a>
+        <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
+    </div>
+    
+    <div class="content">
+        <h2>📋 Lịch sử nhập/xuất kho</h2>
+        
+        <!-- Form lọc -->
+        <div class="filter-box">
+            <label>Loại phiếu:</label>
+            <select id="loaiPhieu">
+                <option value="all">Tất cả</option>
+                <option value="nhap">Phiếu nhập</option>
+                <option value="xuat">Phiếu xuất</option>
+            </select>
+            
+            <label>Từ ngày:</label>
+            <input type="date" id="tuNgay">
+            
+            <label>Đến ngày:</label>
+            <input type="date" id="denNgay">
+            
+            <button onclick="loc()">🔍 Lọc</button>
+            <button onclick="xemTatCa()" class="btn-primary">📋 Xem tất cả</button>
+        </div>
+        
+        <!-- Kết quả -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Loại</th>
+                    <th>Mã phiếu</th>
+                    <th>Ngày</th>
+                    <th>NCC/Lý do</th>
+                    <th>SL sách</th>
+                    <th>Giá trị</th>
+                    <th>Người lập</th>
+                </tr>
+            </thead>
+            <tbody id="ketQua">
+                <tr>
+                    <td colspan="7" style="text-align: center;">Đang tải...</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div id="tongKet" class="summary-box">
+        </div>
+    </div>
+    
+    <script>
+        function kiemTraDangNhap() {
+            var admin = localStorage.getItem('currentAdmin');
+            if (!admin) {
+                alert('Bạn chưa đăng nhập!');
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('username').innerText = admin;
+            }
+        }
+        
+        function xemTatCa() {
+            document.getElementById('loaiPhieu').value = 'all';
+            document.getElementById('tuNgay').value = '';
+            document.getElementById('denNgay').value = '';
+            loc();
+        }
+        
+        function loc() {
+            var loai = document.getElementById('loaiPhieu').value;
+            var tuNgay = document.getElementById('tuNgay').value;
+            var denNgay = document.getElementById('denNgay').value;
+            
+            var phieuNhap = JSON.parse(localStorage.getItem('phieuNhapKho') || '[]');
+            var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
+            
+            var ketQua = [];
+            
+            // Thêm phiếu nhập
+            if (loai === 'all' || loai === 'nhap') {
+                for (var i = 0; i < phieuNhap.length; i++) {
+                    if (kiemTraNgay(phieuNhap[i].ngayNhap, tuNgay, denNgay)) {
+                        ketQua.push({
+                            loai: 'Nhập',
+                            maPhieu: phieuNhap[i].maPhieu,
+                            ngay: phieuNhap[i].ngayNhap,
+                            ghiChu: phieuNhap[i].tenNCC,
+                            soLuong: phieuNhap[i].danhSachSach.length,
+                            giaTri: phieuNhap[i].tongTien,
+                            nguoi: phieuNhap[i].nguoiNhap
+                        });
+                    }
+                }
+            }
+            
+            // Thêm phiếu xuất
+            if (loai === 'all' || loai === 'xuat') {
+                for (var j = 0; j < phieuXuat.length; j++) {
+                    if (kiemTraNgay(phieuXuat[j].ngayXuat, tuNgay, denNgay)) {
+                        ketQua.push({
+                            loai: 'Xuất',
+                            maPhieu: phieuXuat[j].maPhieu,
+                            ngay: phieuXuat[j].ngayXuat,
+                            ghiChu: phieuXuat[j].lyDo,
+                            soLuong: phieuXuat[j].danhSachSach.length,
+                            giaTri: phieuXuat[j].tongTien || 0,
+                            nguoi: phieuXuat[j].nguoiXuat
+                        });
+                    }
+                }
+            }
+            
+            // Sắp xếp theo ngày giảm dần
+            ketQua.sort(function(a, b) {
+                return new Date(b.ngay) - new Date(a.ngay);
+            });
+            
+            // Hiển thị
+            var html = '';
+            var tongNhap = 0;
+            var tongXuat = 0;
+            var slPhieuNhap = 0;
+            var slPhieuXuat = 0;
+            
+            if (ketQua.length === 0) {
+                html = '<tr><td colspan="7" style="text-align: center;">Không có dữ liệu</td></tr>';
+            } else {
+                for (var k = 0; k < ketQua.length; k++) {
+                    var item = ketQua[k];
+                    var mauLoai = item.loai === 'Nhập' ? 'green' : 'red';
+                    
+                    html += '<tr>';
+                    html += '<td style="color: ' + mauLoai + '; font-weight: bold;">' + item.loai + '</td>';
+                    html += '<td>' + item.maPhieu + '</td>';
+                    html += '<td>' + item.ngay + '</td>';
+                    html += '<td>' + item.ghiChu + '</td>';
+                    html += '<td>' + item.soLuong + '</td>';
+                    html += '<td>' + item.giaTri.toLocaleString('vi-VN') + 'đ</td>';
+                    html += '<td>' + item.nguoi + '</td>';
+                    html += '</tr>';
+                    
+                    if (item.loai === 'Nhập') {
+                        tongNhap += item.giaTri;
+                        slPhieuNhap++;
+                    } else {
+                        tongXuat += item.giaTri;
+                        slPhieuXuat++;
+                    }
+                }
+            }
+            
+            document.getElementById('ketQua').innerHTML = html;
+            
+            // Tổng kết
+            var tongKetHTML = '';
+            tongKetHTML += '<div style="font-size: 18px;">📊 Tổng kết:</div>';
+            tongKetHTML += '<div style="margin-top: 10px;">';
+            tongKetHTML += '<span style="color: green;">✅ Số phiếu nhập: ' + slPhieuNhap + ' | Tổng tiền: ' + tongNhap.toLocaleString('vi-VN') + 'đ</span>';
+            tongKetHTML += '</div>';
+            tongKetHTML += '<div style="margin-top: 5px;">';
+            tongKetHTML += '<span style="color: red;">❌ Số phiếu xuất: ' + slPhieuXuat + ' | Tổng tiền: ' + tongXuat.toLocaleString('vi-VN') + 'đ</span>';
+            tongKetHTML += '</div>';
+            tongKetHTML += '<div style="margin-top: 10px; font-size: 20px;">';
+            tongKetHTML += '💰 Biến động tồn kho: <span style="color: ' + (tongNhap >= tongXuat ? 'green' : 'red') + ';">' + (tongNhap - tongXuat).toLocaleString('vi-VN') + 'đ</span>';
+            tongKetHTML += '</div>';
+            document.getElementById('tongKet').innerHTML = tongKetHTML;
+        }
+        
+        function kiemTraNgay(ngay, tuNgay, denNgay) {
+            if (!tuNgay && !denNgay) return true;
+            
+            var d = new Date(ngay);
+            var tu = tuNgay ? new Date(tuNgay) : new Date('1900-01-01');
+            var den = denNgay ? new Date(denNgay) : new Date('2100-12-31');
+            
+            return d >= tu && d <= den;
+        }
+        
+        kiemTraDangNhap();
+        xemTatCa();
+    </script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danh Sách Sách - Thư Viện</title>
+<link rel="stylesheet" href="common.css">
+<style>
+.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
+.card { background: white; border-radius: 5px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.search-row { margin-bottom: 15px; overflow: hidden; }
+.search-row input[type="text"] { float: left; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; width: 240px; outline: none; }
+.search-row input[type="text"]:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
+.search-row select { float: left; padding: 8px 10px; margin-left: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; outline: none; background: white; max-width: 160px; }
+.search-row select:focus { border-color: #2196F3; }
+.btn { padding: 8px 15px; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; line-height: normal; vertical-align: middle; }
+.btn-blue { background: #2196F3; color: white; margin-left: 8px; float: left; }
+.btn-blue:hover { background: #1976D2; }
+.btn-teal { background: #009688; color: white; }
+.btn-teal:hover { background: #00796B; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 700px; }
+table thead tr { background: #2196F3; color: white; }
+table th { padding: 10px 8px; text-align: left; font-size: 13px; white-space: nowrap; }
+table td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
+table tbody tr:hover { background: #e3f2fd; }
+table tbody tr:nth-child(even) { background: #fafafa; }
+table tbody tr:nth-child(even):hover { background: #e3f2fd; }
+.so-luong-do { color: #D32F2F; font-weight: bold; }
+.so-luong-cam { color: #E65100; font-weight: bold; }
+.so-luong-xanh { color: #2E7D32; font-weight: bold; }
+.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; white-space: nowrap; }
+.badge-co-sach { background: #E8F5E9; color: #2E7D32; border: 1px solid #81C784; }
+.badge-het-sach { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+.no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
+.count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
+.cf::after { content: ""; display: table; clear: both; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-info">
+        <span id="lblNguoiDung">👤 Khách</span>
+        <a href="../index.html" onclick="return dangXuat()">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<div class="sidebar">
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📄</span>Phiếu mượn
+    </a>
+    <a href="dat-cho.html" class="menu-item">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="doc-gia-them.html" class="menu-item">
+        <span class="menu-icon">➕</span>Thêm ĐG
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item active">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <a href="sach-tim-kiem.html" class="menu-item">
+        <span class="menu-icon">🔍</span>Tìm sách
+    </a>
+
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
+</div>
+
+<div class="content">
+    <div class="page-title">📖 Danh Sách Sách</div>
+
+    <div class="card">
+        <div class="search-row cf">
+            <input type="text" id="tuKhoa" placeholder="Tìm theo tên sách, tác giả..." onkeypress="xuLyEnter(event)" />
+            <select id="locTheLoai" onchange="timKiemSach()">
+                <option value="">📂 Tất cả thể loại</option>
+            </select>
+            <button class="btn btn-blue" onclick="timKiemSach()">🔍 Tìm</button>
+        </div>
+
+        <div class="count-info" id="lblSoLuong">Đang tải...</div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px">STT</th>
+                        <th style="width:80px">Mã sách</th>
+                        <th>Tên sách</th>
+                        <th style="width:120px">Tác giả</th>
+                        <th style="width:100px">Thể loại</th>
+                        <th style="width:90px">Còn/Tổng</th>
+                        <th style="width:85px">Trạng thái</th>
+                        <th style="width:110px">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="bangSach">
+                    <tr><td colspan="8" class="no-data">Đang tải dữ liệu...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function kiemTraDangNhap() {
+    var nguoiDung = localStorage.getItem('currentUser');
+    if (!nguoiDung) {
+        alert('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!');
+        window.location.href = '../index.html';
+        return false;
+    }
+    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+    var tenHienThi = userInfo.hoTen || nguoiDung;
+    document.getElementById('lblNguoiDung').innerHTML = '👤 ' + tenHienThi;
+    return true;
+}
+
+
+function layDanhSachSach() {
+    var data = localStorage.getItem('danhSachSach');
+    if (!data) return [];
+    try { return JSON.parse(data); }
+    catch (e) { return []; }
+}
+
+function taiTheLoai() {
+    var danhSach = layDanhSachSach();
+    var dsTheLoai = {};
+
+    for (var i = 0; i < danhSach.length; i++) {
+        var tl = danhSach[i].theLoai;
+        if (tl) dsTheLoai[tl] = true;
+    }
+
+    var sel = document.getElementById('locTheLoai');
+    var html = '<option value="">📂 Tất cả thể loại</option>';
+    for (var ten in dsTheLoai) {
+        html += '<option value="' + ten + '">' + ten + '</option>';
+    }
+    sel.innerHTML = html;
+}
+
+function mauSoLuong(soLuongCon) {
+    if (soLuongCon === 0) return 'so-luong-do';
+    if (soLuongCon <= 2) return 'so-luong-cam';
+    return 'so-luong-xanh';
+}
+
+function taiDanhSach() {
+    var danhSach = layDanhSachSach();
+    var tuKhoa = document.getElementById('tuKhoa').value.trim().toLowerCase();
+    var theLoaiLoc = document.getElementById('locTheLoai').value;
+
+    var ketQua = [];
+    for (var i = 0; i < danhSach.length; i++) {
+        var sach = danhSach[i];
+
+        var tuKhoaKhop = true;
+        if (tuKhoa) {
+            var tenKhop = sach.tenSach && sach.tenSach.toLowerCase().indexOf(tuKhoa) !== -1;
+            var tacGiaKhop = sach.tacGia && sach.tacGia.toLowerCase().indexOf(tuKhoa) !== -1;
+            var maKhop = sach.maSach && sach.maSach.toLowerCase().indexOf(tuKhoa) !== -1;
+            tuKhoaKhop = tenKhop || tacGiaKhop || maKhop;
+        }
+
+        var theLoaiKhop = !theLoaiLoc || (sach.theLoai === theLoaiLoc);
+
+        if (tuKhoaKhop && theLoaiKhop) ketQua.push(sach);
+    }
+
+    var lblSoLuong = document.getElementById('lblSoLuong');
+    if (tuKhoa || theLoaiLoc) {
+        lblSoLuong.innerHTML = 'Tìm thấy <strong>' + ketQua.length + '</strong> / ' + danhSach.length + ' cuốn sách';
+    } else {
+        lblSoLuong.innerHTML = 'Tổng số: <strong>' + danhSach.length + '</strong> đầu sách';
+    }
+
+    var bang = document.getElementById('bangSach');
+    if (ketQua.length === 0) {
+        bang.innerHTML = '<tr><td colspan="8" class="no-data">⚠ Không tìm thấy sách nào phù hợp</td></tr>';
+        return;
+    }
+
+    var html = '';
+    for (var j = 0; j < ketQua.length; j++) {
+        var s = ketQua[j];
+        var soLuongCon = parseInt(s.soLuongCon, 10) || 0;
+        var soLuongTong = parseInt(s.soLuongTong, 10) || 0;
+        var classColor = mauSoLuong(soLuongCon);
+
+        var trangThai = soLuongCon > 0 ? 'Còn sách' : 'Hết sách';
+        var badgeClass = soLuongCon > 0 ? 'badge-co-sach' : 'badge-het-sach';
+
+        html += '<tr>';
+        html += '<td>' + (j + 1) + '</td>';
+        html += '<td><strong>' + (s.maSach || '') + '</strong></td>';
+        html += '<td>' + (s.tenSach || '') + '</td>';
+        html += '<td>' + (s.tacGia || '') + '</td>';
+        html += '<td>' + (s.theLoai || '') + '</td>';
+        html += '<td><span class="' + classColor + '">' + soLuongCon + '</span> / ' + soLuongTong + '</td>';
+        html += '<td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td>';
+        html += '<td>';
+        html += '<a href="sach-chi-tiet.html?ma=' + encodeURIComponent(s.maSach) + '" class="btn btn-sm btn-teal">🔍 Chi tiết</a>';
+        html += '</td>';
+        html += '</tr>';
+    }
+    bang.innerHTML = html;
+}
+
+function timKiemSach() {
+    taiDanhSach();
+}
+
+function xuLyEnter(event) {
+    if (event.keyCode === 13) timKiemSach();
+}
+
+function dangXuat() {
+    if (confirm('Bạn có muốn đăng xuất không?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = '../index.html';
+    }
+    return false;
+}
+
+if (kiemTraDangNhap()) {
+    taiTheLoai();
+    taiDanhSach();
+}
+</script>
+</body>
+</html>

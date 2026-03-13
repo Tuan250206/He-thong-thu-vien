@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thêm sách - Quản lý kho</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+.header { background: #4CAF50; color: white; padding: 15px 20px; overflow: hidden; }
+.header h1 { margin: 0; font-size: 22px; float: left; }
+.header span { float: right; line-height: 30px; }
+.header a { color: white; }
+.sidebar { width: 200px; background: #fff; float: left; min-height: 600px; border-right: 1px solid #ddd; }
+.sidebar a { display: block; padding: 10px 15px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; font-size: 13px; }
+.sidebar a:hover { background: #e8f5e9; }
+.content { margin-left: 210px; padding: 20px; background: white; min-height: 600px; }
+label { display: block; margin-top: 10px; font-weight: bold; font-size: 13px; }
+input[type="text"], input[type="number"], select, textarea {
+  width: 98%; padding: 7px; margin: 3px 0; border: 1px solid #ddd; font-size: 13px; }
+textarea { height: 70px; }
+button { background: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; margin-right: 10px; font-size: 14px; }
+button:hover { background: #388E3C; }
+.btn-cancel { background: #9E9E9E; }
+.btn-cancel:hover { background: #757575; }
+.form-row { overflow: hidden; margin-bottom: 5px; }
+.col2 { width: 48%; float: left; margin-right: 2%; }
+.clearfix { clear: both; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>📚 Quản lý kho thư viện - ADMIN</h1>
+  <span>Xin chào: <strong id="adminName">Admin</strong> | <a href="login.html">Đăng xuất</a></span>
+</div>
+<div class="sidebar">
+  <a href="dashboard.html">🏠 Trang chủ</a>
+  <a href="sach-them.html">➕ Thêm sách</a>
+  <a href="sach-sua.html">✏️ Sửa sách</a>
+  <a href="bien-muc.html">📚 Biên mục</a>
+  <a href="in-barcode.html">🏷️ In tem sách</a>
+  <a href="kiem-ke.html">📋 Kiểm kê</a>
+  <a href="nhap-kho-danh-sach.html">📥 DS Phiếu nhập</a>
+  <a href="nhap-kho-tao.html">📦 Tạo phiếu nhập</a>
+  <a href="xuat-kho-danh-sach.html">📤 DS Phiếu xuất</a>
+  <a href="xuat-kho-tao.html">🚚 Tạo phiếu xuất</a>
+  <a href="ncc-danh-sach.html">🏢 DS Nhà CC</a>
+  <a href="ncc-them.html">➕ Thêm NCC</a>
+  <a href="lich-su-nhap-xuat.html">📊 Lịch sử N/X</a>
+  <a href="thong-ke-ton-kho.html">📈 Thống kê tồn kho</a>
+</div>
+<div class="content">
+  <h2>➕ Thêm sách mới</h2>
+  <div class="form-row">
+    <div class="col2">
+      <label>Mã sách (tự động)</label>
+      <input type="text" id="maSach" readonly style="background:#f0f0f0;">
+    </div>
+    <div class="col2">
+      <label>Thể loại *</label>
+      <select id="theLoai">
+        <option value="CNTT">Công nghệ thông tin</option>
+        <option value="Toán">Toán học</option>
+        <option value="Vật lý">Vật lý</option>
+        <option value="Hóa học">Hóa học</option>
+        <option value="Sinh học">Sinh học</option>
+        <option value="Ngôn ngữ">Ngôn ngữ</option>
+        <option value="Văn học">Văn học</option>
+        <option value="Lịch sử">Lịch sử</option>
+        <option value="Địa lý">Địa lý</option>
+        <option value="Kinh tế">Kinh tế</option>
+        <option value="Khác">Khác</option>
+      </select>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <label>Tên sách *</label>
+  <input type="text" id="tenSach" placeholder="Nhập tên sách">
+  <div class="form-row">
+    <div class="col2">
+      <label>Tác giả *</label>
+      <input type="text" id="tacGia" placeholder="Tên tác giả">
+    </div>
+    <div class="col2">
+      <label>Nhà xuất bản *</label>
+      <input type="text" id="nxb" placeholder="Tên NXB">
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="form-row">
+    <div class="col2">
+      <label>Năm xuất bản</label>
+      <input type="number" id="namXB" placeholder="2023" min="1900" max="2099">
+    </div>
+    <div class="col2">
+      <label>ISBN</label>
+      <input type="text" id="isbn" placeholder="978-xxx-xxx-xxx-x">
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="form-row">
+    <div class="col2">
+      <label>Số trang</label>
+      <input type="number" id="soTrang" placeholder="300" min="1">
+    </div>
+    <div class="col2">
+      <label>Ngôn ngữ</label>
+      <select id="ngonNgu">
+        <option value="Tiếng Việt">Tiếng Việt</option>
+        <option value="Tiếng Anh">Tiếng Anh</option>
+        <option value="Khác">Khác</option>
+      </select>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="form-row">
+    <div class="col2">
+      <label>Số lượng nhập *</label>
+      <input type="number" id="soLuong" placeholder="10" min="1">
+    </div>
+    <div class="col2">
+      <label>Vị trí kệ</label>
+      <input type="text" id="viTri" placeholder="A-2-15">
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="form-row">
+    <div class="col2">
+      <label>Giá nhập (đồng) *</label>
+      <input type="number" id="giaNhap" placeholder="80000" min="0">
+    </div>
+    <div class="col2">
+      <label>Giá bồi thường (đồng) *</label>
+      <input type="number" id="giaBT" placeholder="120000" min="0">
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <label>Mô tả</label>
+  <textarea id="moTa" placeholder="Mô tả ngắn về sách..."></textarea>
+  <br><br>
+  <button onclick="luuSach()">💾 Lưu sách</button>
+  <button class="btn-cancel" onclick="window.location.href='dashboard.html'">❌ Hủy</button>
+</div>
+<script>
+// Kiểm tra đăng nhập admin
+function kiemTraAdmin() {
+  var admin = localStorage.getItem('currentAdmin');
+  if (!admin) { window.location.href = 'login.html'; return; }
+  document.getElementById('adminName').innerText = admin;
+}
+
+// Sinh mã sách tự động
+function sinhMaSach() {
+  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+  var maxSo = 0;
+  for (var i = 0; i < ds.length; i++) {
+    var ma = ds[i].maSach || '';
+    if (ma.startsWith('S')) {
+      var so = parseInt(ma.substring(1)) || 0;
+      if (so > maxSo) maxSo = so;
+    }
+  }
+  var so = maxSo + 1;
+  return 'S' + (so < 10 ? '00' + so : so < 100 ? '0' + so : '' + so);
+}
+
+// Lưu sách vào localStorage
+function luuSach() {
+  var tenSach = document.getElementById('tenSach').value.trim();
+  var tacGia = document.getElementById('tacGia').value.trim();
+  var nxb = document.getElementById('nxb').value.trim();
+  var soLuong = parseInt(document.getElementById('soLuong').value) || 0;
+  var giaNhap = parseInt(document.getElementById('giaNhap').value) || 0;
+  var giaBT = parseInt(document.getElementById('giaBT').value) || 0;
+
+  if (!tenSach || !tacGia || !nxb || soLuong <= 0 || giaNhap <= 0 || giaBT <= 0) {
+    alert('Vui lòng điền đầy đủ các trường bắt buộc (*)!');
+    return;
+  }
+
+  var sach = {
+    maSach: document.getElementById('maSach').value,
+    tenSach: tenSach,
+    tacGia: tacGia,
+    nxb: nxb,
+    namXB: parseInt(document.getElementById('namXB').value) || new Date().getFullYear(),
+    theLoai: document.getElementById('theLoai').value,
+    isbn: document.getElementById('isbn').value.trim(),
+    soTrang: parseInt(document.getElementById('soTrang').value) || 0,
+    ngonNgu: document.getElementById('ngonNgu').value,
+    soLuongTong: soLuong,
+    soLuongCon: soLuong,
+    giaNhap: giaNhap,
+    giaBT: giaBT,
+    viTri: document.getElementById('viTri').value.trim(),
+    moTa: document.getElementById('moTa').value.trim()
+  };
+
+  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+  ds.push(sach);
+  localStorage.setItem('danhSachSach', JSON.stringify(ds));
+
+  alert('Đã thêm sách thành công!\nMã sách: ' + sach.maSach);
+  // Reset form
+  document.getElementById('tenSach').value = '';
+  document.getElementById('tacGia').value = '';
+  document.getElementById('nxb').value = '';
+  document.getElementById('namXB').value = '';
+  document.getElementById('isbn').value = '';
+  document.getElementById('soTrang').value = '';
+  document.getElementById('soLuong').value = '';
+  document.getElementById('giaNhap').value = '';
+  document.getElementById('giaBT').value = '';
+  document.getElementById('viTri').value = '';
+  document.getElementById('moTa').value = '';
+  document.getElementById('maSach').value = sinhMaSach();
+}
+
+// Khởi động
+kiemTraAdmin();
+document.getElementById('maSach').value = sinhMaSach();
+</script>
+</body>
+</html>

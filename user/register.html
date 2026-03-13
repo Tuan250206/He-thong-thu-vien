@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký - Thủ Thư</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #e3f2fd;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* Thanh tiêu đề trên cùng */
+        .tieu-de-trang {
+            background: #2196F3;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Khung đăng ký */
+        .hop-dang-ky {
+            background: white;
+            border-radius: 10px;
+            padding: 40px 40px 35px;
+            width: 480px;
+            margin: 50px auto 0;
+            box-shadow: 0 6px 20px rgba(33,150,243,0.18);
+        }
+
+        .bieu-tuong-form {
+            text-align: center;
+            font-size: 44px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1565C0;
+            margin-bottom: 25px;
+            font-size: 22px;
+        }
+
+        /* Nhóm trường nhập liệu */
+        .nhom-nhap {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            color: #444;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Dấu sao đỏ cho trường bắt buộc */
+        .bat-buoc {
+            color: #e53935;
+            margin-left: 2px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px 13px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            color: #333;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33,150,243,0.12);
+        }
+
+        /* Sắp xếp hai cột cho một số trường */
+        .hai-cot {
+            width: 48%;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .hai-cot-phai {
+            margin-left: 4%;
+        }
+
+        /* Nút đăng ký */
+        .nut-dang-ky {
+            width: 100%;
+            padding: 13px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .nut-dang-ky:hover {
+            background: #1976D2;
+        }
+
+        .nut-dang-ky:active {
+            background: #1565C0;
+        }
+
+        /* Khu vực liên kết */
+        .lien-ket {
+            text-align: center;
+            margin-top: 22px;
+        }
+
+        .lien-ket a {
+            color: #2196F3;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .lien-ket a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hộp thông báo lỗi */
+        .thong-bao-loi {
+            background: #ffebee;
+            color: #b71c1c;
+            border: 1px solid #ef9a9a;
+            padding: 11px 14px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Gợi ý nhỏ bên dưới ô nhập */
+        .goi-y {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Đường kẻ phân cách */
+        .duong-phan-cach {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 18px 0 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tieu-de-trang">📚 HỆ THỐNG QUẢN LÝ THƯ VIỆN</div>
+
+    <div class="hop-dang-ky">
+        <div class="bieu-tuong-form">📝</div>
+        <h2>Đăng Ký Tài Khoản</h2>
+
+        <!-- Hộp hiển thị lỗi xác thực -->
+        <div id="thongBaoLoi" class="thong-bao-loi"></div>
+
+        <!-- Form đăng ký -->
+        <form onsubmit="dangKy(); return false;">
+
+            <!-- Họ và tên -->
+            <div class="nhom-nhap">
+                <label for="hoTen">Họ và tên <span class="bat-buoc">*</span></label>
+                <input type="text" id="hoTen" placeholder="Nhập họ và tên đầy đủ" autocomplete="name" />
+            </div>
+
+            <!-- Tên đăng nhập -->
+            <div class="nhom-nhap">
+                <label for="tenDangNhap">Tên đăng nhập <span class="bat-buoc">*</span></label>
+                <input type="text" id="tenDangNhap" placeholder="Không dấu, không khoảng trắng" autocomplete="username" />
+                <div class="goi-y">Chỉ dùng chữ cái, chữ số và dấu gạch dưới (_)</div>
+            </div>
+
+            <!-- Mật khẩu và xác nhận - đặt song song -->
+            <div class="nhom-nhap">
+                <div class="hai-cot">
+                    <label for="matKhau">Mật khẩu <span class="bat-buoc">*</span></label>
+                    <input type="password" id="matKhau" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" />
+                </div>
+                <div class="hai-cot">
+                    <label for="xacNhanMatKhau">Xác nhận mật khẩu <span class="bat-buoc">*</span></label>
+                    <input type="password" id="xacNhanMatKhau" placeholder="Nhập lại mật khẩu" autocomplete="new-password" />
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="nhom-nhap">
+                <label for="email">Email <span class="bat-buoc">*</span></label>
+                <input type="email" id="email" placeholder="example@email.com" autocomplete="email" />
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="nhom-nhap">
+                <label for="sdt">Số điện thoại <span class="bat-buoc">*</span></label>
+                <input type="tel" id="sdt" placeholder="09xxxxxxxx" autocomplete="tel" />
+            </div>
+
+            <button type="submit" class="nut-dang-ky">✅ Đăng ký tài khoản</button>
+        </form>
+
+        <hr class="duong-phan-cach" />
+
+        <div class="lien-ket">
+            <a href="login.html">← Quay lại đăng nhập</a>
+        </div>
+    </div>
+
+    <script>
+        // Hàm kiểm tra định dạng email hợp lệ
+        function kiemTraEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Hàm kiểm tra tên đăng nhập chỉ gồm ký tự hợp lệ
+        function kiemTraTenDangNhap(ten) {
+            var re = /^[a-zA-Z0-9_]+$/;
+            return re.test(ten);
+        }
+
+        // Hàm xử lý đăng ký tài khoản mới
+        function dangKy() {
+            var hoTen          = document.getElementById('hoTen').value.trim();
+            var tenDangNhap    = document.getElementById('tenDangNhap').value.trim();
+            var matKhau        = document.getElementById('matKhau').value;
+            var xacNhanMK      = document.getElementById('xacNhanMatKhau').value;
+            var email          = document.getElementById('email').value.trim();
+            var sdt            = document.getElementById('sdt').value.trim();
+            var hienThiLoi     = document.getElementById('thongBaoLoi');
+
+            // Ẩn lỗi cũ trước khi kiểm tra lại
+            hienThiLoi.style.display = 'none';
+
+            // Kiểm tra các trường bắt buộc không được để trống
+            if (!hoTen || !tenDangNhap || !matKhau || !xacNhanMK || !email || !sdt) {
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '⚠ Vui lòng điền đầy đủ tất cả các trường bắt buộc (*)!';
+                return;
+            }
+
+            // Kiểm tra định dạng tên đăng nhập
+            if (!kiemTraTenDangNhap(tenDangNhap)) {
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '⚠ Tên đăng nhập chỉ được dùng chữ cái, chữ số và dấu gạch dưới (_), không dấu và không khoảng trắng!';
+                return;
+            }
+
+            // Kiểm tra độ dài tên đăng nhập
+            if (tenDangNhap.length < 4) {
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '⚠ Tên đăng nhập phải có ít nhất 4 ký tự!';
+                return;
+            }
+
+            // Kiểm tra độ dài mật khẩu
+            if (matKhau.length < 6) {
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '⚠ Mật khẩu phải có ít nhất 6 ký tự!';
+                return;
+            }
+
+            // Kiểm tra hai mật khẩu có khớp nhau không
+            if (matKhau !== xacNhanMK) {
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '⚠ Mật khẩu xác nhận không khớp với mật khẩu đã nhập!';
+                document.getElementById('xacNhanMatKhau').value = '';
+                return;
+            }
+
+            // Kiểm tra định dạng email
+            if (!kiemTraEmail(email)) {
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '⚠ Địa chỉ email không hợp lệ!';
+                return;
+            }
+
+            // Kiểm tra số điện thoại chỉ gồm số
+            if (!/^[0-9]{9,11}$/.test(sdt)) {
+                hienThiLoi.style.display = 'block';
+                hienThiLoi.textContent = '⚠ Số điện thoại không hợp lệ! (9-11 chữ số)';
+                return;
+            }
+
+            // Lấy danh sách người dùng hiện có từ localStorage
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+
+            // Kiểm tra tên đăng nhập đã được sử dụng chưa
+            var i;
+            for (i = 0; i < users.length; i++) {
+                if (users[i].username === tenDangNhap) {
+                    hienThiLoi.style.display = 'block';
+                    hienThiLoi.textContent = '⚠ Tên đăng nhập "' + tenDangNhap + '" đã tồn tại. Vui lòng chọn tên khác!';
+                    return;
+                }
+            }
+
+            // Tạo đối tượng tài khoản mới
+            var taiKhoanMoi = {
+                username : tenDangNhap,
+                password : matKhau,
+                role     : 'user',
+                hoTen    : hoTen,
+                email    : email,
+                sdt      : sdt
+            };
+
+            // Thêm tài khoản mới vào danh sách và lưu lại
+            users.push(taiKhoanMoi);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Thông báo thành công và chuyển về trang đăng nhập
+            alert('Đăng ký thành công!\nTên đăng nhập: ' + tenDangNhap + '\nVui lòng đăng nhập để tiếp tục.');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

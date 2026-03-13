@@ -1,0 +1,138 @@
+/* ========================================
+   CSS CHUNG CHO TẤT CẢ FILE USER
+   ======================================== */
+
+/* === RESET === */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    font-family: Arial, sans-serif; 
+    background: #f0f2f5; 
+    color: #333; 
+    font-size: 14px; 
+}
+
+/* === HEADER === */
+.header {
+    background: #2196F3;
+    color: white;
+    padding: 0 20px;
+    height: 55px;
+    line-height: 55px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.header h1 { 
+    float: left; 
+    font-size: 20px; 
+    font-weight: bold;
+}
+
+.header .user-info { 
+    float: right; 
+    font-size: 13px; 
+}
+
+.header .user-info a { 
+    color: #fff; 
+    text-decoration: none; 
+    margin-left: 10px;
+}
+
+.header .user-info a:hover { 
+    text-decoration: underline; 
+}
+
+/* === SIDEBAR === */
+.sidebar {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    width: 250px;
+    bottom: 0;
+    background: #1565C0;
+    overflow-y: auto;
+    z-index: 90;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.menu-nhom {
+    padding: 14px 16px 5px;
+    color: rgba(255,255,255,0.45);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.menu-nhom:first-child {
+    margin-top: 0;
+}
+
+.menu-item {
+    display: block;
+    padding: 11px 16px;
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    font-size: 13px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-left-color: #64b5f6;
+}
+
+.menu-item.active {
+    background: #2196F3;
+    color: white;
+    border-left-color: white;
+    font-weight: bold;
+}
+
+.menu-icon {
+    margin-right: 8px;
+}
+
+/* === CONTENT === */
+.content {
+    margin-top: 55px;
+    margin-left: 250px;
+    padding: 20px;
+    min-height: calc(100vh - 55px);
+}
+
+/* === CLEARFIX === */
+.clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+}

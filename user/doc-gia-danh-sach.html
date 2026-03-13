@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danh Sách Độc Giả - Thư Viện</title>
+<link rel="stylesheet" href="common.css">
+<style>
+.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
+.card { background: white; border-radius: 5px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.search-row { margin-bottom: 15px; overflow: hidden; }
+.search-row input[type="text"] { float: left; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; width: 300px; outline: none; }
+.search-row input[type="text"]:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
+.btn { padding: 8px 15px; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; line-height: normal; vertical-align: middle; }
+.btn-blue { background: #2196F3; color: white; margin-left: 8px; float: left; }
+.btn-blue:hover { background: #1976D2; }
+.btn-green { background: #4CAF50; color: white; float: right; }
+.btn-green:hover { background: #388E3C; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-cyan { background: #00BCD4; color: white; }
+.btn-cyan:hover { background: #0097A7; }
+.btn-red { background: #F44336; color: white; }
+.btn-red:hover { background: #D32F2F; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 650px; }
+table thead tr { background: #2196F3; color: white; }
+table th { padding: 10px 8px; text-align: left; font-size: 13px; white-space: nowrap; }
+table td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
+table tbody tr:hover { background: #e3f2fd; }
+table tbody tr:nth-child(even) { background: #fafafa; }
+table tbody tr:nth-child(even):hover { background: #e3f2fd; }
+.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; white-space: nowrap; }
+.badge-active { background: #E8F5E9; color: #2E7D32; border: 1px solid #81C784; }
+.badge-locked { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+.no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
+.count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
+.cf::after { content: ""; display: table; clear: both; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-info">
+        <span id="lblNguoiDung">👤 Khách</span>
+        <a href="../index.html" onclick="return dangXuat()">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<div class="sidebar">
+    <div class="menu-nhom">Nghiệp vụ</div>
+    <a href="dashboard.html" class="menu-item">
+        <span class="menu-icon">🏠</span>Trang chủ
+    </a>
+    <a href="cho-muon.html" class="menu-item">
+        <span class="menu-icon">📋</span>Cho mượn
+    </a>
+    <a href="tra-sach.html" class="menu-item">
+        <span class="menu-icon">↩️</span>Trả sách
+    </a>
+    <a href="gia-han.html" class="menu-item">
+        <span class="menu-icon">⏰</span>Gia hạn
+    </a>
+    <a href="xu-ly-phat.html" class="menu-item">
+        <span class="menu-icon">💰</span>Xử lý phạt
+    </a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📄</span>Phiếu mượn
+    </a>
+    <a href="dat-cho.html" class="menu-item">
+        <span class="menu-icon">🔖</span>Đặt chỗ
+    </a>
+    <a href="danh-sach-dat-cho.html" class="menu-item">
+        <span class="menu-icon">📋</span>DS đặt chỗ
+    </a>
+
+    <div class="menu-nhom">Quản lý</div>
+    <a href="doc-gia-danh-sach.html" class="menu-item active">
+        <span class="menu-icon">👥</span>Độc giả
+    </a>
+    <a href="doc-gia-them.html" class="menu-item">
+        <span class="menu-icon">➕</span>Thêm ĐG
+    </a>
+    <a href="sach-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📚</span>Sách
+    </a>
+    <a href="sach-tim-kiem.html" class="menu-item">
+        <span class="menu-icon">🔍</span>Tìm sách
+    </a>
+
+    <div class="menu-nhom">Báo cáo</div>
+    <a href="lich-su.html" class="menu-item">
+        <span class="menu-icon">📋</span>Lịch sử
+    </a>
+    <a href="thong-ke.html" class="menu-item">
+        <span class="menu-icon">📊</span>Thống kê
+    </a>
+</div>
+
+<div class="content">
+    <div class="page-title">👥 Danh Sách Độc Giả</div>
+
+    <div class="card">
+        <div class="search-row cf">
+            <input type="text" id="tuKhoa" placeholder="Tìm theo tên hoặc mã độc giả..." onkeypress="xuLyEnter(event)" />
+            <button class="btn btn-blue" onclick="timKiemDocGia()">🔍 Tìm kiếm</button>
+            <a href="doc-gia-them.html" class="btn btn-green">➕ Thêm độc giả</a>
+        </div>
+
+        <div class="count-info" id="lblSoLuong">Đang tải...</div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:45px">STT</th>
+                        <th style="width:80px">Mã ĐG</th>
+                        <th>Họ và tên</th>
+                        <th style="width:80px">Lớp</th>
+                        <th>Email</th>
+                        <th style="width:105px">SĐT</th>
+                        <th style="width:95px">Trạng thái</th>
+                        <th style="width:140px">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="bangDocGia">
+                    <tr><td colspan="8" class="no-data">Đang tải dữ liệu...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function kiemTraDangNhap() {
+    var nguoiDung = localStorage.getItem('currentUser');
+    if (!nguoiDung) {
+        alert('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!');
+        window.location.href = '../index.html';
+        return false;
+    }
+    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+    var tenHienThi = userInfo.hoTen || nguoiDung;
+    document.getElementById('lblNguoiDung').innerHTML = '👤 ' + tenHienThi;
+    return true;
+}
+
+function layDanhSachDocGia() {
+    var data = localStorage.getItem('danhSachDocGia');
+    if (!data) return [];
+    try { return JSON.parse(data); }
+    catch (e) { return []; }
+}
+
+function taiDanhSach() {
+    var danhSach = layDanhSachDocGia();
+    var tuKhoa = document.getElementById('tuKhoa').value.trim().toLowerCase();
+
+    var ketQua = [];
+    if (tuKhoa) {
+        for (var i = 0; i < danhSach.length; i++) {
+            var dg = danhSach[i];
+            var tenKhop = dg.hoTen && dg.hoTen.toLowerCase().indexOf(tuKhoa) !== -1;
+            var maKhop = dg.maDG && dg.maDG.toLowerCase().indexOf(tuKhoa) !== -1;
+            if (tenKhop || maKhop) ketQua.push(dg);
+        }
+    } else {
+        ketQua = danhSach;
+    }
+
+    var lblSoLuong = document.getElementById('lblSoLuong');
+    if (tuKhoa) {
+        lblSoLuong.innerHTML = 'Tìm thấy <strong>' + ketQua.length + '</strong> / ' + danhSach.length + ' độc giả';
+    } else {
+        lblSoLuong.innerHTML = 'Tổng số: <strong>' + danhSach.length + '</strong> độc giả';
+    }
+
+    var bang = document.getElementById('bangDocGia');
+    if (ketQua.length === 0) {
+        bang.innerHTML = '<tr><td colspan="8" class="no-data">⚠ Không tìm thấy độc giả nào</td></tr>';
+        return;
+    }
+
+    var html = '';
+    for (var j = 0; j < ketQua.length; j++) {
+        var dg = ketQua[j];
+        var trangThai = dg.trangThai || 'Hoạt động';
+        var badgeClass = (trangThai === 'Khóa') ? 'badge-locked' : 'badge-active';
+
+        html += '<tr>';
+        html += '<td>' + (j + 1) + '</td>';
+        html += '<td><strong>' + (dg.maDG || '') + '</strong></td>';
+        html += '<td>' + (dg.hoTen || '') + '</td>';
+        html += '<td>' + (dg.lop || '') + '</td>';
+        html += '<td>' + (dg.email || '') + '</td>';
+        html += '<td>' + (dg.sdt || '') + '</td>';
+        html += '<td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td>';
+        html += '<td>';
+        html += '<a href="doc-gia-chi-tiet.html?ma=' + encodeURIComponent(dg.maDG) + '" class="btn btn-sm btn-cyan">👁 Xem</a> ';
+        html += '<button class="btn btn-sm btn-red" onclick="xoaDocGia(\'' + escapeQuote(dg.maDG) + '\')">🗑 Xóa</button>';
+        html += '</td>';
+        html += '</tr>';
+    }
+    bang.innerHTML = html;
+}
+
+function timKiemDocGia() {
+    taiDanhSach();
+}
+
+function xuLyEnter(event) {
+    if (event.keyCode === 13) timKiemDocGia();
+}
+
+function escapeQuote(str) {
+    return (str || '').replace(/'/g, "\\'");
+}
+
+function xoaDocGia(ma) {
+    if (!confirm('Bạn có chắc chắn muốn xóa độc giả [' + ma + ']?\n\nThao tác này không thể hoàn tác!')) {
+        return;
+    }
+
+    var dsPhieuMuon = [];
+    try { dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]'); }
+    catch (e) { dsPhieuMuon = []; }
+
+    var soPhieuDangMuon = 0;
+    for (var i = 0; i < dsPhieuMuon.length; i++) {
+        if (dsPhieuMuon[i].maDG === ma && dsPhieuMuon[i].trangThai === 'Đang mượn') {
+            soPhieuDangMuon++;
+        }
+    }
+
+    if (soPhieuDangMuon > 0) {
+        alert('⚠ Không thể xóa!\nĐộc giả [' + ma + '] đang có ' + soPhieuDangMuon + ' phiếu mượn chưa trả.\nVui lòng xử lý trả sách trước khi xóa.');
+        return;
+    }
+
+    var danhSach = layDanhSachDocGia();
+    var danhSachMoi = [];
+    for (var j = 0; j < danhSach.length; j++) {
+        if (danhSach[j].maDG !== ma) {
+            danhSachMoi.push(danhSach[j]);
+        }
+    }
+
+    localStorage.setItem('danhSachDocGia', JSON.stringify(danhSachMoi));
+    alert('✅ Đã xóa độc giả [' + ma + '] thành công!');
+    taiDanhSach();
+}
+
+function dangXuat() {
+    if (confirm('Bạn có muốn đăng xuất không?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = '../index.html';
+    }
+    return false;
+}
+
+if (kiemTraDangNhap()) {
+    taiDanhSach();
+}
+</script>
+</body>
+</html>
