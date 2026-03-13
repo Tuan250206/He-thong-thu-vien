@@ -235,7 +235,6 @@ function taiDanhSach() {
         html += '<td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td>';
         html += '<td>';
         html += '<a href="doc-gia-chi-tiet.html?ma=' + encodeURIComponent(dg.maDG) + '" class="btn btn-sm btn-cyan">👁 Xem</a> ';
-        html += '<button class="btn btn-sm btn-red" onclick="xoaDocGia(\'' + escapeQuote(dg.maDG) + '\')">🗑 Xóa</button>';
         html += '</td>';
         html += '</tr>';
     }
@@ -268,41 +267,6 @@ function xuLyEnter(event) {
 function escapeQuote(str) {
     return (str || '').replace(/'/g, "\\'");
 }
-
-function xoaDocGia(ma) {
-    if (!confirm('Bạn có chắc chắn muốn xóa độc giả [' + ma + ']?\n\nThao tác này không thể hoàn tác!')) {
-        return;
-    }
-
-    var dsPhieuMuon = [];
-    try { dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]'); }
-    catch (e) { dsPhieuMuon = []; }
-
-    var soPhieuDangMuon = 0;
-    for (var i = 0; i < dsPhieuMuon.length; i++) {
-        if (dsPhieuMuon[i].maDG === ma && dsPhieuMuon[i].trangThai === 'Đang mượn') {
-            soPhieuDangMuon++;
-        }
-    }
-
-    if (soPhieuDangMuon > 0) {
-        alert('⚠ Không thể xóa!\nĐộc giả [' + ma + '] đang có ' + soPhieuDangMuon + ' phiếu mượn chưa trả.\nVui lòng xử lý trả sách trước khi xóa.');
-        return;
-    }
-
-    var danhSach = layDanhSachDocGia();
-    var danhSachMoi = [];
-    for (var j = 0; j < danhSach.length; j++) {
-        if (danhSach[j].maDG !== ma) {
-            danhSachMoi.push(danhSach[j]);
-        }
-    }
-
-    localStorage.setItem('danhSachDocGia', JSON.stringify(danhSachMoi));
-    alert('✅ Đã xóa độc giả [' + ma + '] thành công!');
-    taiDanhSach();
-}
-
 function dangXuat() {
     if (confirm('Bạn có muốn đăng xuất không?')) {
         localStorage.removeItem('currentUser');
