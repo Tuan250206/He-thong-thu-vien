@@ -4,99 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách phiếu xuất - Quản lý kho</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        
-        .header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        
-        .sidebar {
-            width: 200px;
-            background-color: #fff;
-            float: left;
-            min-height: 500px;
-            border-right: 1px solid #ddd;
-        }
-        
-        .sidebar a {
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .sidebar a:hover {
-            background-color: #e8f5e9;
-        }
-        
-        .content {
-            margin-left: 220px;
-            padding: 20px;
-            background-color: white;
-            min-height: 500px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        table th {
-            background-color: #f44336;
-            color: white;
-            padding: 10px;
-            text-align: left;
-        }
-        
-        table td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        
-        button:hover {
-            background-color: #45a049;
-        }
-        
-        .btn-primary {
-            background-color: #2196F3;
-        }
-        
-        .btn-danger {
-            background-color: #f44336;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="header">
+    <div id="header">
         <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
-        <span>Xin chào: <strong id="username">Admin</strong> | <a href="login.html" style="color: white;">Đăng xuất</a></span>
+        <div class="userInfo">
+            Xin chào: <strong id="tenAdmin">Admin</strong>
+            <a href="login.html" onclick="dangXuat()">Đăng xuất</a>
+        </div>
     </div>
     
-    <div class="sidebar">
+    <div id="sidebar">
         <a href="dashboard.html">🏠 Trang chủ</a>
         <a href="sach-them.html">➕ Thêm sách</a>
         <a href="sach-sua.html">✏️ Sửa sách</a>
@@ -104,16 +23,17 @@
         <a href="in-barcode.html">🏷️ In tem sách</a>
         <a href="kiem-ke.html">📊 Kiểm kê</a>
         <a href="nhap-kho-danh-sach.html">📥 Phiếu nhập</a>
-        <a href="xuat-kho-danh-sach.html" style="background-color: #e8f5e9;">📤 Phiếu xuất</a>
+        <a class="active" href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
         <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
         <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
         <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
+         <hr style="border-top: 1px solid #ccc; margin: 10px 0;"> <a class="active" href="tai-khoan.html">👥 Quản lý tài khoản</a> </div>
     </div>
     
-    <div class="content">
+    <div id="content">
         <h2>📤 Danh sách phiếu xuất kho</h2>
         
-        <button onclick="window.location.href='xuat-kho-tao.html'" class="btn-danger">➕ Tạo phiếu xuất mới</button>
+        <button class="btn-danger" onclick="window.location.href='xuat-kho-tao.html'">➕ Tạo phiếu xuất mới</button>
         
         <table style="margin-top: 20px;">
             <thead>
@@ -134,75 +54,8 @@
             </tbody>
         </table>
     </div>
+
+    <script src="script.js"></script>
     
-    <script>
-        function kiemTraDangNhap() {
-            var admin = localStorage.getItem('currentAdmin');
-            if (!admin) {
-                alert('Bạn chưa đăng nhập!');
-                window.location.href = 'login.html';
-            } else {
-                document.getElementById('username').innerText = admin;
-            }
-        }
-        
-        function loadDanhSach() {
-            var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
-            var html = '';
-            
-            if (phieuXuat.length === 0) {
-                html = '<tr><td colspan="7" style="text-align: center;">Chưa có phiếu xuất nào</td></tr>';
-            } else {
-                for (var i = 0; i < phieuXuat.length; i++) {
-                    var p = phieuXuat[i];
-                    html += '<tr>';
-                    html += '<td>' + p.maPhieu + '</td>';
-                    html += '<td>' + p.ngayXuat + '</td>';
-                    html += '<td>' + p.lyDo + '</td>';
-                    html += '<td>' + p.danhSachSach.length + '</td>';
-                    html += '<td>' + formatTien(p.tongTien || 0) + '</td>';
-                    html += '<td>' + p.nguoiXuat + '</td>';
-                    html += '<td>';
-                    html += '<button onclick="xemChiTiet(' + i + ')" class="btn-primary">👁️ Xem</button> ';
-                    html += '<button onclick="inPhieu(' + i + ')">🖨️ In</button>';
-                    html += '</td>';
-                    html += '</tr>';
-                }
-            }
-            
-            document.getElementById('danhSachPhieuXuat').innerHTML = html;
-        }
-        
-        function formatTien(tien) {
-            return tien.toLocaleString('vi-VN') + 'đ';
-        }
-        
-        function xemChiTiet(index) {
-            var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
-            var p = phieuXuat[index];
-            
-            var thongTin = 'CHI TIẾT PHIẾU XUẤT\n\n';
-            thongTin += 'Mã phiếu: ' + p.maPhieu + '\n';
-            thongTin += 'Ngày: ' + p.ngayXuat + '\n';
-            thongTin += 'Lý do: ' + p.lyDo + '\n';
-            thongTin += 'Người xuất: ' + p.nguoiXuat + '\n\n';
-            thongTin += 'DANH SÁCH SÁCH:\n';
-            
-            for (var i = 0; i < p.danhSachSach.length; i++) {
-                var s = p.danhSachSach[i];
-                thongTin += (i + 1) + '. ' + s.tenSach + ' - SL: ' + s.soLuong + '\n';
-            }
-            
-            alert(thongTin);
-        }
-        
-        function inPhieu(index) {
-            localStorage.setItem('phieuXuatHienTai', index);
-            window.open('xuat-kho-in.html', '_blank');
-        }
-        
-        kiemTraDangNhap();
-        loadDanhSach();
-    </script>
 </body>
 </html>

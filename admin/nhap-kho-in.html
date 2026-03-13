@@ -117,42 +117,6 @@
         </div>
     </div>
     
-    <script>
-        var phieuIndex = localStorage.getItem('phieuNhapHienTai');
-        var phieuNhap = JSON.parse(localStorage.getItem('phieuNhapKho') || '[]');
-        
-        if (phieuIndex && phieuNhap[phieuIndex]) {
-            var phieu = phieuNhap[phieuIndex];
-            
-            var htmlInfo = '';
-            htmlInfo += '<div><strong>Mã phiếu:</strong> ' + phieu.maPhieu + '</div>';
-            htmlInfo += '<div><strong>Ngày nhập:</strong> ' + phieu.ngayNhap + '</div>';
-            htmlInfo += '<div><strong>Nhà cung cấp:</strong> ' + phieu.tenNCC + '</div>';
-            htmlInfo += '<div><strong>Người nhập:</strong> ' + phieu.nguoiNhap + '</div>';
-            document.getElementById('thongTinPhieu').innerHTML = htmlInfo;
-            
-            var htmlSach = '';
-            var tongTien = 0;
-            for (var i = 0; i < phieu.danhSachSach.length; i++) {
-                var s = phieu.danhSachSach[i];
-                var thanhTien = s.soLuong * s.giaNhap;
-                tongTien += thanhTien;
-                
-                htmlSach += '<tr>';
-                htmlSach += '<td>' + (i + 1) + '</td>';
-                htmlSach += '<td>' + s.maSach + '</td>';
-                htmlSach += '<td>' + s.tenSach + '</td>';
-                htmlSach += '<td>' + s.soLuong + '</td>';
-                htmlSach += '<td>' + s.giaNhap.toLocaleString('vi-VN') + 'đ</td>';
-                htmlSach += '<td>' + thanhTien.toLocaleString('vi-VN') + 'đ</td>';
-                htmlSach += '</tr>';
-            }
-            document.getElementById('danhSachSach').innerHTML = htmlSach;
-            
-            document.getElementById('tongTien').innerHTML = '<strong>TỔNG CỘNG: ' + phieu.tongTien.toLocaleString('vi-VN') + 'đ</strong>';
-        } else {
-            document.body.innerHTML = '<p style="text-align: center; color: red;">Không tìm thấy phiếu nhập!</p>';
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
