@@ -296,8 +296,8 @@ function loadDanhSachSachNhanh() {
         if (daDatCho) {
             actionHtml = '<span class="badge-dat-cho" data-info="Bạn đã đặt chỗ sách này rồi!">Đã đặt ✓</span>';
         } else if (sl > 0) {
-            // Sách còn sẵn - hiển thị cảnh báo
-            actionHtml = '<button class="btn-select-sach" onclick="chonSach(\'' + s.maSach + '\')">🔖 Đặt chỗ</button>';
+            // ✅ FIX: CHẶN ĐẶT CHỖ KHI SÁCH CÒN SẴN
+            actionHtml = '<span class="badge-dat-cho" data-info="Sách còn sẵn, vui lòng mượn trực tiếp tại trang Cho mượn" style="background:#9E9E9E;">Còn sẵn 🛒</span>';
         } else {
             // Sách hết - tìm người đang mượn
             var nguoiMuon = [];
@@ -313,7 +313,7 @@ function loadDanhSachSachNhanh() {
             });
             
             var textTooltip = nguoiMuon.length > 0 
-                ? "Đang được mượn bởi:\n" + nguoiMuon.join("\n") 
+                ? "Đang được mượn bởi:\\n" + nguoiMuon.join("\\n") 
                 : "Hết sách (Chưa rõ người mượn)";
 
             actionHtml = '<button class="btn-select-sach" onclick="chonSach(\'' + s.maSach + '\')">🔖 Đặt chỗ</button>';

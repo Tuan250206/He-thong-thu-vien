@@ -155,14 +155,14 @@ td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
 
 <div id="modalThanhToan" class="modal">
     <div class="modal-content">
-        <h3 style="color: #C62828;">💰 Thanh toán tiền phạt</h3>
+        <h3 style="color: #C62828;">💰 Thanh toán bồi thường</h3>
         <p id="txtSoTienModal" style="font-weight: bold; font-size: 18px; margin: 10px 0;"></p>
         <div class="qr-container">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=THANHTOANTHUVIEN" alt="QR Code" id="imgQR">
-            <p style="font-size: 12px; color: #666; margin-top: 10px;">Quét mã để chuyển khoản hoặc thu tiền mặt</p>
+            <img src="../img/QR.jpg" alt="QR Ngân Hàng" id="imgQR">
+            <p style="font-size: 12px; color: #666; margin-top: 10px;">Vui lòng quét mã để chuyển khoản bồi thường rách/mất sách</p>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-success" onclick="xacNhanTra(true)">✅ Đã thu tiền / Chuyển khoản thành công</button>
+            <button class="btn btn-success" onclick="xacNhanTra(true)">✅ Đã nhận được tiền</button>
             <button class="btn" style="background: #757575; color: white;" onclick="dongModal()">Hủy</button>
         </div>
     </div>
@@ -174,8 +174,17 @@ var tongPhatGlobal = 0;
 
 window.onload = function() {
     var user = localStorage.getItem('currentUser') || 'Nhân viên';
-    document.getElementById('tenNguoiDung').textContent = user;
+    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+    var tenHienThi = userInfo.hoTen || user;
+    document.getElementById('tenNguoiDung').textContent = tenHienThi;
     loadDanhSachPhieuActive();
+    
+    // Kiểm tra nếu có parameter từ URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var maPhieuURL = urlParams.get('ma');
+    if (maPhieuURL) {
+        chonPhieu(maPhieuURL);
+    }
 };
 
 function loadDanhSachPhieuActive() {
@@ -229,34 +238,110 @@ function hienThiBangSachTra(phieu, soNgayQuaHan) {
 function capNhatTienPhat() {
     var homNay = layNgayHomNay();
     var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuHienTai.hanTra, homNay));
-    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-    var tongPhat = 0;
+    // Lấy danh sách sách gốc từ kho để truy xuất giá bồi thường (giaBT)
+    var dsSachGoc = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    
+    // ✅ FIX LỖI 6: Phạt quá hạn chỉ tính 1 lần cho cả phiếu, không nhân với số sách
+    var phatQuaHan = soNgayQuaHan * 2000;
+    var phatRachMat = 0;
+    var soSachDuocChonTra = 0;
 
     for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
         var cbEl = document.getElementById('cb_' + i);
         var ttEl = document.getElementById('tt_' + i);
-        if (!cbEl.checked) continue;
+        
+        // ✅ FIX LỖI 7: Kiểm tra số sách được chọn trả
+        if (cbEl.checked) {
+            soSachDuocChonTra++;
+        }
+        
+        // Nếu không tích chọn trả cuốn này thì bỏ qua không tính phạt
+        if (!cbEl.checked) {
+            document.getElementById('phat_' + i).textContent = '---';
+            continue;
+        }
 
-        var phatCuonNay = soNgayQuaHan * 2000;
-        if (ttEl.value === 'Mất') phatCuonNay += 50000; // Ví dụ mất phạt 50k
-        else if (ttEl.value === 'Rách') phatCuonNay += 10000;
+        var phatCuonNay = 0; // Mỗi cuốn chỉ tính phạt rách/mất
 
-        tongPhat += phatCuonNay;
-        document.getElementById('phat_' + i).textContent = dinhDangTien(phatCuonNay);
+        if (ttEl.value === 'Rách') {
+            phatCuonNay = 15000; // Phạt rách đồng giá 15k
+            phatRachMat += phatCuonNay;
+        } 
+        else if (ttEl.value === 'Mất') {
+            // Tìm thông tin sách trong kho dựa trên mã sách của cuốn đang trả
+            var maSachHienTai = phieuHienTai.danhSachSach[i].maSach;
+            var thongTinSach = dsSachGoc.find(s => s.maSach === maSachHienTai);
+            
+            // Lấy giaBT từ dữ liệu, nếu không có thì mặc định là 0
+            var tienBoiThuong = thongTinSach && thongTinSach.giaBT ? parseFloat(thongTinSach.giaBT) : 0;
+            phatCuonNay = tienBoiThuong;
+            phatRachMat += phatCuonNay;
+        }
+
+        document.getElementById('phat_' + i).textContent = phatCuonNay > 0 ? dinhDangTien(phatCuonNay) : '0 đ';
     }
+
+    var tongPhat = phatQuaHan + phatRachMat;
     tongPhatGlobal = tongPhat;
-    document.getElementById('khuTongPhat').innerHTML = tongPhat > 0 ? 
-        '<div class="tong-tien">💰 Tổng tiền phạt: ' + dinhDangTien(tongPhat) + '</div>' : 
-        '<div class="tong-tien no-fine">✅ Không có tiền phạt</div>';
+    
+    var noiDung = '';
+    if (phatQuaHan > 0) {
+        noiDung += '<div>💰 Phạt quá hạn (' + soNgayQuaHan + ' ngày): <strong>' + dinhDangTien(phatQuaHan) + '</strong></div>';
+    }
+    if (phatRachMat > 0) {
+        noiDung += '<div>💰 Phạt rách/mất sách: <strong>' + dinhDangTien(phatRachMat) + '</strong></div>';
+    }
+    
+    if (tongPhat > 0) {
+        noiDung += '<hr style="margin: 10px 0; border: none; border-top: 2px solid #C62828;">';
+        noiDung += '<div style="font-size: 16px;">💰 <strong>TỔNG TIỀN PHẠT: ' + dinhDangTien(tongPhat) + '</strong></div>';
+        document.getElementById('khuTongPhat').innerHTML = '<div class="tong-tien">' + noiDung + '</div>';
+    } else {
+        document.getElementById('khuTongPhat').innerHTML = '<div class="tong-tien no-fine">✅ Không có tiền phạt</div>';
+    }
+    
+    // ✅ FIX LỖI 7: Cảnh báo nếu chưa chọn trả hết sách
+    if (soSachDuocChonTra < phieuHienTai.danhSachSach.length) {
+        var canhBao = '<div class="warn-box">⚠️ Bạn chưa chọn trả hết ' + phieuHienTai.danhSachSach.length + ' cuốn sách! (Đã chọn: ' + soSachDuocChonTra + ')</div>';
+        document.getElementById('khuTongPhat').innerHTML = canhBao + document.getElementById('khuTongPhat').innerHTML;
+    }
 }
 
-// LOGIC MỚI: Kiểm tra tiền phạt trước
+// LOGIC MỚI: Kiểm tra tiền phạt rách/mất trước khi hiện QR
 function kiemTraTruocKhiTra() {
+    // ✅ FIX LỖI 7: Bắt buộc phải trả hết sách
+    var soSachDuocChonTra = 0;
+    for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
+        var cbEl = document.getElementById('cb_' + i);
+        if (cbEl && cbEl.checked) {
+            soSachDuocChonTra++;
+        }
+    }
+    
+    if (soSachDuocChonTra < phieuHienTai.danhSachSach.length) {
+        alert('❌ Bạn phải trả hết ' + phieuHienTai.danhSachSach.length + ' cuốn sách!\n\nHiện tại chỉ chọn trả: ' + soSachDuocChonTra + ' cuốn.\n\nVui lòng tích chọn tất cả các sách cần trả.');
+        return;
+    }
+    
+    var coSanhRachMat = false;
+    for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
+        var ttEl = document.getElementById('tt_' + i);
+        var cbEl = document.getElementById('cb_' + i);
+        if (cbEl.checked && (ttEl.value === 'Rách' || ttEl.value === 'Mất')) {
+            coSanhRachMat = true;
+            break;
+        }
+    }
+
+    // Nếu có tiền phạt (do quá hạn hoặc rách/mất) thì hiện Modal QR ngân hàng
     if (tongPhatGlobal > 0) {
-        document.getElementById('txtSoTienModal').innerText = "Số tiền cần thu: " + dinhDangTien(tongPhatGlobal);
+        document.getElementById('txtSoTienModal').innerText = "Số tiền cần thanh toán: " + dinhDangTien(tongPhatGlobal);
         document.getElementById('modalThanhToan').style.display = 'block';
     } else {
-        xacNhanTra(false);
+        // Không phạt thì xác nhận trả bình thường
+        if(confirm("Xác nhận trả sách?")) {
+            xacNhanTra(false);
+        }
     }
 }
 
@@ -274,13 +359,14 @@ function xacNhanTra(daThuTien) {
     if (indexPhieu !== -1) {
         dsPhieuMuon[indexPhieu].trangThai = 'Đã trả';
         dsPhieuMuon[indexPhieu].ngayTraThucTe = layNgayHomNay();
-        if(daThuTien) dsPhieuMuon[indexPhieu].ghiChuPhat = "Đã thu " + dinhDangTien(tongPhatGlobal);
+        if(daThuTien) dsPhieuMuon[indexPhieu].ghiChuPhat = "Đã thu bồi thường qua Ngân hàng: " + dinhDangTien(tongPhatGlobal);
     }
 
-    // Cập nhật kho (giữ nguyên logic của bạn)
+    // Cập nhật kho
     phieuHienTai.danhSachSach.forEach((sachTra, index) => {
         var cbEl = document.getElementById('cb_' + index);
         var ttEl = document.getElementById('tt_' + index);
+        // Chỉ cộng lại kho nếu sách không bị "Mất"
         if (cbEl && cbEl.checked && ttEl.value !== 'Mất') {
             var sachTrongKho = dsSach.find(s => s.maSach === sachTra.maSach);
             if (sachTrongKho) {

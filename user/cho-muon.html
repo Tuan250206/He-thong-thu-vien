@@ -286,7 +286,7 @@ function loadDanhSachSachNhanh() {
             });
             
             var textTooltip = nguoiMuon.length > 0 
-                ? "Đang được mượn bởi:\n" + nguoiMuon.join("\n") 
+                ? "Đang được mượn bởi:\\n" + nguoiMuon.join("\\n") 
                 : "Hết sách (Chưa rõ người mượn)";
 
             actionHtml = '<span class="badge-het" data-borrowers="' + textTooltip + '">Hết sách ℹ️</span>';
@@ -335,6 +335,32 @@ function chonSach(maSach) {
 
     if (daMuonChuaTra) {
         hienThiLoi('loiSach', 'Độc giả đang mượn cuốn này và chưa trả. Không thể mượn nữa!');
+        return;
+    }
+
+    // ✅ FIX LỖI 4: Kiểm tra xem có ai đang đặt chỗ sách này không
+    var dsDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
+    var nguoiDatCho = null;
+    
+    for (var i = 0; i < dsDatCho.length; i++) {
+        var dc = dsDatCho[i];
+        if (dc.maSach === maSach && dc.trangThai === 'Chờ lấy') {
+            // Nếu chính độc giả hiện tại đang đặt chỗ thì cho phép
+            if (dc.maDG === docGiaHienTai.maDG) {
+                nguoiDatCho = null; // Cho phép mượn
+                break;
+            } else {
+                nguoiDatCho = dc; // Người khác đang đặt
+                break;
+            }
+        }
+    }
+    
+    var sl = parseInt(sach.soLuongCon || 0);
+    
+    // Nếu chỉ còn 1 cuốn và có người khác đang đặt chỗ → không cho mượn
+    if (nguoiDatCho && sl === 1) {
+        hienThiLoi('loiSach', 'Cuốn sách cuối cùng đã được đặt chỗ bởi: ' + nguoiDatCho.tenDG + ' (' + nguoiDatCho.maDG + ')');
         return;
     }
 
