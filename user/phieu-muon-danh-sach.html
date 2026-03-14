@@ -6,39 +6,238 @@
 <title>Danh Sách Phiếu Mượn - Thư Viện</title>
 <link rel="stylesheet" href="common.css">
 <style>
-.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
-.card { background: white; border-radius: 5px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-.filter-bar { overflow: hidden; margin-bottom: 15px; }
-.filter-bar input[type="text"] { float: left; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; width: 260px; outline: none; }
-.filter-bar input[type="text"]:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
-.filter-bar select { float: left; padding: 8px 10px; margin-left: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; outline: none; background: white; width: 180px; }
-.filter-bar select:focus { border-color: #2196F3; }
-.btn { padding: 8px 15px; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; line-height: normal; vertical-align: middle; }
-.btn-blue { background: #2196F3; color: white; margin-left: 8px; float: left; }
-.btn-blue:hover { background: #1976D2; }
-.btn-sm { padding: 4px 10px; font-size: 12px; }
-.btn-teal { background: #009688; color: white; margin-right: 4px; }
-.btn-teal:hover { background: #00796B; }
-.btn-orange { background: #FF9800; color: white; }
-.btn-orange:hover { background: #F57C00; }
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 800px; }
-table thead tr { background: #2196F3; color: white; }
-table th { padding: 10px 8px; text-align: left; font-size: 13px; white-space: nowrap; }
-table td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
-table tbody tr:hover { background: #e3f2fd; }
-table tbody tr:nth-child(even) { background: #fafafa; }
-table tbody tr:nth-child(even):hover { background: #e3f2fd; }
-.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; white-space: nowrap; }
-.badge-pending { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
-.badge-overdue { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
-.badge-returned { background: #E8F5E9; color: #2E7D32; border: 1px solid #81C784; }
-.qua-han { color: #D32F2F; font-weight: bold; }
-.con-han { color: #388E3C; }
-.sap-den { color: #F57C00; font-weight: bold; }
-.no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
-.count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
-.cf::after { content: ""; display: table; clear: both; }
+    /* Style giống cho-muon.html */
+    .page-title { 
+        background: white; 
+        padding: 14px 20px; 
+        margin-bottom: 18px; 
+        border-radius: 4px; 
+        border-left: 4px solid #2196F3; 
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1); 
+    }
+    .page-title h2 { 
+        font-size: 17px; 
+        color: #333; 
+        margin: 0;
+    }
+    .card { 
+        background: white; 
+        padding: 20px; 
+        margin-bottom: 18px; 
+        border-radius: 4px; 
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1); 
+    }
+    .card h3 { 
+        font-size: 15px; 
+        color: #2196F3; 
+        margin-bottom: 15px; 
+        padding-bottom: 8px; 
+        border-bottom: 2px solid #E3F2FD; 
+    }
+    
+    .filter-bar { 
+        margin-bottom: 15px; 
+        overflow: hidden;
+    }
+    .form-group { 
+        margin-bottom: 14px; 
+        overflow: hidden; 
+    }
+    .form-group label { 
+        display: block; 
+        font-size: 13px; 
+        font-weight: bold; 
+        color: #555; 
+        margin-bottom: 5px; 
+    }
+    .filter-bar input[type="text"], .form-group input, .form-group select { 
+        padding: 8px 11px; 
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        font-size: 14px; 
+        width: 280px;
+        outline: none;
+    }
+    .filter-bar input[type="text"]:focus, .form-group input:focus { 
+        border-color: #2196F3; 
+        box-shadow: 0 0 3px rgba(33,150,243,0.3);
+    }
+    .filter-bar select, .form-group select { 
+        padding: 8px 10px; 
+        margin-left: 8px; 
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        font-size: 14px; 
+        outline: none; 
+        background: white; 
+        width: 200px; 
+    }
+    .filter-bar select:focus { 
+        border-color: #2196F3; 
+    }
+    
+    .btn { 
+        padding: 8px 18px; 
+        border: none; 
+        border-radius: 4px; 
+        cursor: pointer; 
+        font-size: 14px; 
+        display: inline-block; 
+        text-decoration: none;
+        line-height: normal;
+        vertical-align: middle;
+    }
+    .btn-primary { 
+        background: #2196F3; 
+        color: white; 
+        margin-left: 8px;
+    }
+    .btn-primary:hover { 
+        background: #1976D2; 
+    }
+    .btn-success { 
+        background: #4CAF50; 
+        color: white; 
+    }
+    .btn-success:hover { 
+        background: #388E3C; 
+    }
+    .btn-danger { 
+        background: #f44336; 
+        color: white; 
+        font-size: 12px; 
+        padding: 4px 10px; 
+    }
+    .btn-danger:hover { 
+        background: #D32F2F; 
+    }
+    .btn-sm { 
+        padding: 4px 10px; 
+        font-size: 12px; 
+    }
+    .btn-teal { 
+        background: #009688; 
+        color: white; 
+        margin-right: 4px; 
+    }
+    .btn-teal:hover { 
+        background: #00796B; 
+    }
+    .btn-orange { 
+        background: #FF9800; 
+        color: white; 
+    }
+    .btn-orange:hover { 
+        background: #F57C00; 
+    }
+    
+    .info-box { 
+        background: #FFFDE7; 
+        border: 1px solid #F9A825; 
+        border-radius: 4px; 
+        padding: 12px 15px; 
+        margin-top: 10px; 
+        font-size: 13px; 
+    }
+    .info-box p { 
+        margin-bottom: 4px; 
+    }
+    .info-box p:last-child { 
+        margin-bottom: 0; 
+    }
+    
+    .count-info { 
+        font-size: 13px; 
+        color: #666; 
+        margin-bottom: 10px; 
+    }
+    .count-info strong {
+        color: #2196F3;
+        font-size: 14px;
+    }
+    
+    .table-wrap { 
+        overflow-x: auto; 
+        margin-top: 10px;
+    }
+    .scroll-area { 
+        max-height: 600px; 
+        overflow-y: auto; 
+    }
+    
+    table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        min-width: 800px; 
+    }
+    table thead tr { 
+        background: #2196F3; 
+        color: white; 
+    }
+    th { 
+        background: #2196F3; 
+        color: white; 
+        padding: 10px 12px; 
+        text-align: left; 
+        font-size: 13px; 
+        white-space: nowrap; 
+    }
+    td { 
+        padding: 9px 12px; 
+        border-bottom: 1px solid #eee; 
+        font-size: 13px; 
+        vertical-align: middle; 
+    }
+    tr:hover td { 
+        background: #F5F5F5; 
+    }
+    table tbody tr:nth-child(even) { 
+        background: #fafafa; 
+    }
+    table tbody tr:nth-child(even):hover { 
+        background: #F5F5F5; 
+    }
+    
+    .badge { 
+        padding: 4px 10px; 
+        border-radius: 12px; 
+        font-size: 11px; 
+        font-weight: bold; 
+        display: inline-block; 
+        white-space: nowrap; 
+    }
+    .badge-pending { 
+        background: #E3F2FD; 
+        color: #1565C0; 
+        border: 1px solid #90CAF9; 
+    }
+    .badge-overdue { 
+        background: #FFEBEE; 
+        color: #C62828; 
+        border: 1px solid #EF9A9A; 
+    }
+    .badge-returned { 
+        background: #E8F5E9; 
+        color: #2E7D32; 
+        border: 1px solid #81C784; 
+    }
+    
+    .no-data { 
+        text-align: center; 
+        color: #aaa; 
+        padding: 30px; 
+        font-style: italic; 
+    }
+    .note { 
+        font-size: 12px; 
+        color: #888; 
+        margin-top: 6px; 
+    }
+    .cf::after { 
+        content: ""; 
+        display: table; 
+        clear: both; 
+    }
 </style>
 </head>
 <body>
@@ -46,8 +245,8 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
 <div class="header">
     <h1>📚 Hệ Thống Thư Viện</h1>
     <div class="user-info">
-        <span id="lblNguoiDung">👤 Khách</span>
-        <a href="../index.html" onclick="return dangXuat()">🚪 Đăng xuất</a>
+        Xin chào! <strong id="tenNguoiDung">Nhân viên</strong>
+        &nbsp;|&nbsp;<a href="../index.html">Đăng xuất</a>
     </div>
 </div>
 
@@ -85,6 +284,7 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
+
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -95,35 +295,36 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
 </div>
 
 <div class="content">
-    <div class="page-title">📄 Danh Sách Phiếu Mượn</div>
+    <div class="page-title"><h2>📄 Danh Sách Phiếu Mượn</h2></div>
 
     <div class="card">
+        <h3>🔍 Tìm kiếm và lọc phiếu</h3>
         <div class="filter-bar cf">
-            <input type="text" id="tuKhoa" placeholder="Tìm theo mã phiếu hoặc mã độc giả..." onkeypress="xuLyEnter(event)" />
+            <input type="text" id="tuKhoa" placeholder="Tìm theo mã phiếu, mã ĐG hoặc tên độc giả..." onkeydown="if(event.keyCode===13) timKiemPhieu()" />
             <select id="locTrangThai" onchange="timKiemPhieu()">
                 <option value="">📂 Tất cả trạng thái</option>
-                <option value="Đang mượn">Đang mượn</option>
-                <option value="Quá hạn">Quá hạn</option>
-                <option value="Đã trả">Đã trả</option>
+                <option value="Đang mượn">📖 Đang mượn</option>
+                <option value="Quá hạn">⚠️ Quá hạn</option>
+                <option value="Đã trả">✅ Đã trả</option>
             </select>
-            <button class="btn btn-blue" onclick="timKiemPhieu()">🔍 Tìm</button>
+            <button class="btn btn-primary" onclick="timKiemPhieu()">🔍 Tìm kiếm</button>
         </div>
 
         <div class="count-info" id="lblSoLuong">Đang tải...</div>
 
-        <div class="table-wrap">
+        <div class="scroll-area">
             <table>
                 <thead>
                     <tr>
                         <th style="width:45px">STT</th>
-                        <th style="width:90px">Mã phiếu</th>
+                        <th style="width:100px">Mã phiếu</th>
                         <th style="width:90px">Mã ĐG</th>
                         <th>Tên độc giả</th>
                         <th style="width:100px">Ngày mượn</th>
                         <th style="width:100px">Hạn trả</th>
-                        <th style="width:70px">Số sách</th>
-                        <th style="width:120px">Trạng thái</th>
-                        <th style="width:160px">Hành động</th>
+                        <th style="width:70px; text-align:center">Số sách</th>
+                        <th style="width:140px">Trạng thái</th>
+                        <th style="width:160px; text-align:center">Hành động</th>
                     </tr>
                 </thead>
                 <tbody id="bangPhieuMuon">
@@ -135,24 +336,23 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
 </div>
 
 <script>
-function kiemTraDangNhap() {
-    var nguoiDung = localStorage.getItem('currentUser');
-    if (!nguoiDung) {
-        alert('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!');
-        window.location.href = '../index.html';
-        return false;
-    }
+window.onload = function() {
+    var user = localStorage.getItem('currentUser') || 'Nhân viên';
     var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
-    var tenHienThi = userInfo.hoTen || nguoiDung;
-    document.getElementById('lblNguoiDung').innerHTML = '👤 ' + tenHienThi;
-    return true;
-}
+    var tenHienThi = userInfo.hoTen || user;
+    document.getElementById('tenNguoiDung').textContent = tenHienThi;
+    
+    taiDanhSach();
+};
 
 function layDanhSachPhieuMuon() {
     var data = localStorage.getItem('danhSachPhieuMuon');
     if (!data) return [];
-    try { return JSON.parse(data); }
-    catch (e) { return []; }
+    try { 
+        return JSON.parse(data); 
+    } catch (e) { 
+        return []; 
+    }
 }
 
 function layNgayHomNay() {
@@ -216,6 +416,7 @@ function taiDanhSach() {
         if (tuKhoaKhop && trangThaiKhop) ketQua.push(pm);
     }
 
+    // Sắp xếp: Quá hạn lên đầu, sau đó Đang mượn, cuối cùng Đã trả
     ketQua.sort(function(a, b) {
         if (a.trangThai === 'Quá hạn' && b.trangThai !== 'Quá hạn') return -1;
         if (a.trangThai !== 'Quá hạn' && b.trangThai === 'Quá hạn') return 1;
@@ -226,14 +427,14 @@ function taiDanhSach() {
 
     var lblSoLuong = document.getElementById('lblSoLuong');
     if (tuKhoa || trangThaiLoc) {
-        lblSoLuong.innerHTML = 'Tìm thấy <strong>' + ketQua.length + '</strong> / ' + danhSach.length + ' phiếu mượn';
+        lblSoLuong.innerHTML = '📊 Tìm thấy <strong>' + ketQua.length + '</strong> phiếu / Tổng <strong>' + danhSach.length + '</strong> phiếu';
     } else {
-        lblSoLuong.innerHTML = 'Tổng số: <strong>' + danhSach.length + '</strong> phiếu mượn';
+        lblSoLuong.innerHTML = '📊 Tổng số: <strong>' + danhSach.length + '</strong> phiếu mượn';
     }
 
     var bang = document.getElementById('bangPhieuMuon');
     if (ketQua.length === 0) {
-        bang.innerHTML = '<tr><td colspan="9" class="no-data">⚠ Không tìm thấy phiếu mượn nào</td></tr>';
+        bang.innerHTML = '<tr><td colspan="9" class="no-data">⚠️ Không tìm thấy phiếu mượn nào</td></tr>';
         return;
     }
 
@@ -248,13 +449,22 @@ function taiDanhSach() {
 
         var soNgayQuaHan = tinhSoNgay(pm.hanTra, homNay);
         var trangThaiText = trangThai;
+        var iconTrangThai = '📖';
+        
         if (trangThai === 'Quá hạn') {
-            trangThaiText = 'Quá hạn ' + soNgayQuaHan + ' ngày';
+            trangThaiText = '⚠️ Quá hạn ' + soNgayQuaHan + ' ngày';
+            iconTrangThai = '⚠️';
+        } else if (trangThai === 'Đã trả') {
+            trangThaiText = '✅ Đã trả';
+            iconTrangThai = '✅';
         } else if (trangThai === 'Đang mượn') {
             var soNgayConLai = tinhSoNgay(homNay, pm.hanTra);
-            if (soNgayConLai <= 2) {
-                trangThaiText = 'Sắp đến hạn (' + soNgayConLai + ' ngày)';
+            if (soNgayConLai <= 2 && soNgayConLai >= 0) {
+                trangThaiText = '🔔 Sắp đến hạn (' + soNgayConLai + ' ngày)';
                 badgeClass = 'badge-overdue';
+                iconTrangThai = '🔔';
+            } else {
+                trangThaiText = '📖 Đang mượn';
             }
         }
 
@@ -265,41 +475,25 @@ function taiDanhSach() {
                 hanhDong += '<a href="gia-han.html?ma=' + encodeURIComponent(pm.maPhieu) + '" class="btn btn-sm btn-orange">⏰ Gia hạn</a>';
             }
         } else {
-            hanhDong = '<span style="color:#888;font-size:12px;">✓ Đã hoàn tất</span>';
+            hanhDong = '<span style="color:#2E7D32;font-size:12px;font-weight:bold;">✓ Đã hoàn tất</span>';
         }
 
         html += '<tr>';
         html += '<td>' + (j + 1) + '</td>';
         html += '<td><strong>' + (pm.maPhieu || '') + '</strong></td>';
-        html += '<td>' + (pm.maDG || '') + '</td>';
+        html += '<td><strong>' + (pm.maDG || '') + '</strong></td>';
         html += '<td>' + (pm.tenDG || '') + '</td>';
         html += '<td>' + dinhDangNgay(pm.ngayMuon) + '</td>';
         html += '<td>' + dinhDangNgay(pm.hanTra) + '</td>';
-        html += '<td style="text-align:center;">' + (pm.danhSachSach ? pm.danhSachSach.length : 0) + '</td>';
+        html += '<td style="text-align:center;"><strong>' + (pm.danhSachSach ? pm.danhSachSach.length : 0) + '</strong></td>';
         html += '<td><span class="badge ' + badgeClass + '">' + trangThaiText + '</span></td>';
-        html += '<td>' + hanhDong + '</td>';
+        html += '<td style="text-align:center;">' + hanhDong + '</td>';
         html += '</tr>';
     }
     bang.innerHTML = html;
 }
 
 function timKiemPhieu() {
-    taiDanhSach();
-}
-
-function xuLyEnter(event) {
-    if (event.keyCode === 13) timKiemPhieu();
-}
-
-function dangXuat() {
-    if (confirm('Bạn có muốn đăng xuất không?')) {
-        localStorage.removeItem('currentUser');
-        window.location.href = '../index.html';
-    }
-    return false;
-}
-
-if (kiemTraDangNhap()) {
     taiDanhSach();
 }
 </script>

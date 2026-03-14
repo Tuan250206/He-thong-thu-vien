@@ -6,36 +6,112 @@
 <title>Đặt chỗ sách - Hệ thống thư viện</title>
 <link rel="stylesheet" href="common.css">
 <style>
-.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
-.step-box { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 20px; margin-bottom: 20px; }
-.step-box h3 { font-size: 16px; color: #1565C0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #e3f2fd; }
-.input-row { margin-bottom: 12px; overflow: hidden; }
-.input-row label { display: block; float: left; width: 130px; padding-top: 7px; font-weight: bold; color: #555; }
-.input-row input, .input-row select { float: left; width: 220px; padding: 7px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-.input-row .btn-tim { float: left; margin-left: 8px; padding: 7px 16px; background: #2196F3; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
-.input-row .btn-tim:hover { background: #1976D2; }
-.info-box { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 4px; padding: 12px 15px; margin-top: 10px; display: none; }
-.info-box table { width: 100%; border-collapse: collapse; }
-.info-box td { padding: 4px 8px; font-size: 13px; }
-.info-box td:first-child { font-weight: bold; color: #555; width: 140px; }
-.warning-box { background: #fff3e0; border: 1px solid #ffcc02; border-radius: 4px; padding: 10px 14px; margin-top: 8px; color: #e65100; font-size: 13px; display: none; }
-.warning-box::before { content: "⚠️ "; }
-.confirm-row { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 20px; margin-bottom: 20px; display: none; }
-.confirm-row h3 { font-size: 16px; color: #1565C0; margin-bottom: 15px; }
-.btn-xacnhan { padding: 10px 28px; background: #4CAF50; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 10px; }
-.btn-xacnhan:hover { background: #388E3C; }
-.btn-reset { padding: 10px 20px; background: #9E9E9E; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-left: 10px; margin-top: 10px; }
-.btn-reset:hover { background: #757575; }
-.tag-available { color: #388E3C; font-weight: bold; }
-.tag-unavailable { color: #d32f2f; font-weight: bold; }
-.clearfix::after { content: ""; display: table; clear: both; }
+    .page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .page-title h2 { font-size: 17px; color: #333; }
+    .card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .card h3 { font-size: 15px; color: #2196F3; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #E3F2FD; }
+    .card-step-num { display: inline-block; background: #2196F3; color: white; border-radius: 50%; width: 22px; height: 22px; line-height: 22px; text-align: center; font-size: 12px; margin-right: 6px; }
+    .form-group { margin-bottom: 14px; overflow: hidden; }
+    .form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
+    .form-group input, .form-group select { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 280px; }
+    .form-group input:focus { outline: none; border-color: #2196F3; }
+    .btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; display: inline-block; }
+    .btn-primary { background: #2196F3; color: white; }
+    .btn-primary:hover { background: #1976D2; }
+    .btn-success { background: #4CAF50; color: white; }
+    .btn-success:hover { background: #388E3C; }
+    .btn-danger { background: #f44336; color: white; font-size: 12px; padding: 4px 10px; }
+    .btn-danger:hover { background: #D32F2F; }
+    .info-box { background: #FFFDE7; border: 1px solid #F9A825; border-radius: 4px; padding: 12px 15px; margin-top: 10px; font-size: 13px; }
+    .info-box p { margin-bottom: 4px; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
+    .date-box { background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 4px; padding: 12px 15px; margin-bottom: 15px; font-size: 13px; }
+    .date-box p { margin-bottom: 4px; }
+    .warning-box { background: #fff3e0; border: 1px solid #ffcc02; border-radius: 4px; padding: 10px 14px; margin-top: 8px; color: #e65100; font-size: 13px; }
+    .warning-box::before { content: "⚠️ "; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { background: #2196F3; color: white; padding: 10px 12px; text-align: left; font-size: 13px; white-space: nowrap; }
+    td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
+    tr:hover td { background: #F5F5F5; }
+    .note { font-size: 12px; color: #888; margin-top: 6px; }
+    .hidden { display: none; }
+    .quick-select-wrapper { margin-top: 15px; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+    .table-quick { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table-quick thead { background: #f8f9fa; }
+    .table-quick th { padding: 8px; border-bottom: 2px solid #dee2e6; text-align: left; color: #555; }
+    .table-quick td { padding: 8px; border-bottom: 1px solid #eee; }
+    .table-quick tbody tr:hover { background-color: #f1f8ff; cursor: pointer; }
+    .table-sach-chon thead th { background: #FF9800; }
+    .btn-select-sach { background: #FF9800; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+    .btn-select-sach:hover { background: #F57C00; }
+    .btn-select-dg { background: #2196F3; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+    .btn-select-dg:hover { background: #1976D2; }
+    .scroll-area { max-height: 450px; overflow-y: auto; }
+
+    /* Badge và Tooltip cho sách hết/đang được đặt */
+    .badge-het { 
+        background: #f44336; 
+        color: white; 
+        padding: 4px 8px; 
+        border-radius: 10px; 
+        font-size: 10px; 
+        cursor: help;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .badge-dat-cho {
+        background: #FF9800;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 10px;
+        font-size: 10px;
+        cursor: help;
+        position: relative;
+        display: inline-block;
+    }
+
+    .badge-het:hover::after,
+    .badge-dat-cho:hover::after {
+        content: attr(data-info);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: #fff;
+        padding: 8px;
+        border-radius: 4px;
+        white-space: pre-wrap;
+        width: 200px;
+        z-index: 100;
+        font-size: 11px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        line-height: 1.4;
+    }
+
+    .badge-het:hover::before,
+    .badge-dat-cho:hover::before {
+        content: "";
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+    }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>📚 Hệ thống Thư viện</h1>
-  <div class="user-info">Xin chào! <strong id="tenNguoiDung">--</strong><a onclick="dangXuat()">Đăng xuất</a></div>
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-info">
+        Xin chào! <strong id="tenNguoiDung">--</strong>
+        &nbsp;|&nbsp;<a onclick="dangXuat()">Đăng xuất</a>
+    </div>
 </div>
 
 <div class="sidebar">
@@ -72,6 +148,7 @@
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
+
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -82,274 +159,341 @@
 </div>
 
 <div class="content">
-  <div class="page-title">📌 Đặt chỗ sách</div>
+    <div class="page-title"><h2>🔖 Đặt chỗ sách</h2></div>
 
-  <div class="step-box">
-    <h3>Bước 1: Tìm độc giả</h3>
-    <div class="input-row clearfix">
-      <label>Mã độc giả:</label>
-      <input type="text" id="inputMaDG" placeholder="Nhập mã độc giả..." onkeypress="enterDocGia(event)" />
-      <button class="btn-tim" onclick="timDocGia()">🔍 Tìm</button>
-    </div>
-    <div class="info-box" id="infoDG">
-      <table>
-        <tr><td>Mã độc giả:</td><td id="dg-ma">--</td></tr>
-        <tr><td>Họ tên:</td><td id="dg-ten">--</td></tr>
-        <tr><td>Nghề nghiệp:</td><td id="dg-ngheNghiep">--</td></tr>
-        <tr><td>Nơi làm việc:</td><td id="dg-noiLamViec">--</td></tr>
-        <tr><td>Email:</td><td id="dg-email">--</td></tr>
-        <tr><td>Trạng thái:</td><td id="dg-trangThai">--</td></tr>
-      </table>
-    </div>
-  </div>
+    <div class="card" id="buoc1">
+        <h3><span class="card-step-num">1</span>Chọn độc giả</h3>
+        <div class="form-group">
+            <label for="maDGInput">Nhập mã hoặc chọn trực tiếp từ danh sách:</label>
+            <input type="text" id="maDGInput" placeholder="Gõ mã ĐG..." onkeydown="if(event.keyCode===13) timDocGia()">
+            <button class="btn btn-primary" onclick="timDocGia()" style="margin-left:8px;">🔍 Tìm</button>
+        </div>
 
-  <div class="step-box">
-    <h3>Bước 2: Tìm sách cần đặt</h3>
-    <div class="input-row clearfix">
-      <label>Mã sách:</label>
-      <input type="text" id="inputMaSach" placeholder="Nhập mã sách..." onkeypress="enterSach(event)" />
-      <button class="btn-tim" onclick="timSach()">🔍 Tìm</button>
+        <div class="quick-select-wrapper">
+            <div class="scroll-area">
+                <table class="table-quick">
+                    <thead>
+                        <tr>
+                            <th>Mã ĐG</th>
+                            <th>Họ và tên</th>
+                            <th>Lớp</th>
+                            <th style="text-align:center">Chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsDocGiaNhanh"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="ketQuaDocGia"></div>
     </div>
-    <div class="info-box" id="infoSach">
-      <table>
-        <tr><td>Mã sách:</td><td id="sach-ma">--</td></tr>
-        <tr><td>Tên sách:</td><td id="sach-ten">--</td></tr>
-        <tr><td>Tác giả:</td><td id="sach-tacGia">--</td></tr>
-        <tr><td>Thể loại:</td><td id="sach-theLoai">--</td></tr>
-        <tr><td>NXB:</td><td id="sach-nxb">--</td></tr>
-        <tr><td>SL tổng:</td><td id="sach-slTong">--</td></tr>
-        <tr><td>SL còn:</td><td id="sach-slCon">--</td></tr>
-      </table>
-    </div>
-    <div class="warning-box" id="warnSach">Sách này hiện còn sẵn trên kệ. Bạn có thể mượn trực tiếp thay vì đặt chỗ.</div>
-  </div>
 
-  <div class="confirm-row" id="confirmBox">
-    <h3>Bước 3: Xác nhận thông tin đặt chỗ</h3>
-    <div class="input-row clearfix">
-      <label>Độc giả:</label>
-      <span id="confirm-docGia" style="line-height:32px; color:#1565C0; font-weight:bold;"></span>
+    <div class="card hidden" id="buoc2">
+        <h3><span class="card-step-num">2</span>Chọn sách cần đặt chỗ</h3>
+        
+        <p class="note">Nhấn nút "Đặt chỗ" để chọn sách muốn đặt.</p>
+        
+        <div class="quick-select-wrapper" style="border-color: #FF9800;">
+            <div class="scroll-area">
+                <table class="table-quick table-sach-chon">
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tác giả</th>
+                            <th>Kho</th>
+                            <th style="text-align:center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsSachNhanh"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="loiSach" style="margin-top: 15px;"></div>
     </div>
-    <div class="input-row clearfix">
-      <label>Sách đặt:</label>
-      <span id="confirm-sach" style="line-height:32px; color:#1565C0; font-weight:bold;"></span>
+
+    <div class="card hidden" id="buoc3">
+        <h3><span class="card-step-num">3</span>Xác nhận đặt chỗ</h3>
+        
+        <div class="info-box">
+            <p><strong>Độc giả:</strong> <span id="confirm-docGia">--</span></p>
+            <p><strong>Sách đặt:</strong> <span id="confirm-sach">--</span></p>
+        </div>
+
+        <div class="date-box" style="margin-top: 15px;">
+            <p><strong>Ngày đặt:</strong> <span id="hienThiNgayDat">---</span></p>
+            <p style="font-size:12px;color:#1565C0;">Hạn lấy sách mặc định: 7 ngày kể từ hôm nay</p>
+        </div>
+
+        <div class="form-group">
+            <label for="hanLayInput">Hạn lấy sách:</label>
+            <input type="date" id="hanLayInput">
+        </div>
+
+        <button class="btn btn-success" onclick="xacNhanDatCho()">✅ Xác nhận đặt chỗ</button>
+        <button class="btn btn-primary" onclick="resetTrang()" style="margin-left:10px;background:#757575;">🔄 Nhập mới</button>
     </div>
-    <div class="input-row clearfix">
-      <label>Hạn lấy sách:</label>
-      <input type="date" id="inputHanLay" />
-    </div>
-    <div>
-      <button class="btn-xacnhan" onclick="datChoSach()">✅ Xác nhận đặt chỗ</button>
-      <button class="btn-reset" onclick="datLai()">🔄 Làm lại</button>
-    </div>
-  </div>
 </div>
 
 <script>
-var docGiaDaChon = null;
+var docGiaHienTai = null;
 var sachDaChon = null;
 
 window.onload = function() {
-  var user = localStorage.getItem('currentUser') || 'Admin';
-  var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
-  var tenHienThi = userInfo.hoTen || user;
-  document.getElementById('tenNguoiDung').textContent = tenHienThi;
-  var ngayMacDinh = layNgayMacDinh(7);
-  document.getElementById('inputHanLay').value = ngayMacDinh;
+    var user = localStorage.getItem('currentUser') || 'Admin';
+    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
+    var tenHienThi = userInfo.hoTen || user;
+    document.getElementById('tenNguoiDung').textContent = tenHienThi;
+    
+    var homNay = layNgayHomNay();
+    document.getElementById('hienThiNgayDat').textContent = homNay;
+    document.getElementById('hanLayInput').value = tinhNgaySau(new Date(), 7);
+    document.getElementById('hanLayInput').min = homNay;
+
+    loadDanhSachDocGiaNhanh();
 };
 
-function layNgayMacDinh(soNgay) {
-  var d = new Date();
-  d.setDate(d.getDate() + soNgay);
-  var thang = d.getMonth() + 1;
-  var ngay = d.getDate();
-  return d.getFullYear() + '-' + (thang < 10 ? '0' + thang : thang) + '-' + (ngay < 10 ? '0' + ngay : ngay);
+function loadDanhSachDocGiaNhanh() {
+    var dsDocGia = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
+    var html = '';
+    for (var i = 0; i < dsDocGia.length; i++) {
+        var dg = dsDocGia[i];
+        if(dg.trangThai === 'Khóa' || dg.trangThai === 'Ngừng hoạt động') continue;
+        html += '<tr>';
+        html += '<td><strong>' + dg.maDG + '</strong></td>';
+        html += '<td>' + dg.hoTen + '</td>';
+        html += '<td>' + (dg.lop || '-') + '</td>';
+        html += '<td style="text-align:center"><button class="btn-select-dg" onclick="chonDocGia(\'' + dg.maDG + '\')">Chọn</button></td>';
+        html += '</tr>';
+    }
+    document.getElementById('dsDocGiaNhanh').innerHTML = html || '<tr><td colspan="4" style="text-align:center">Chưa có dữ liệu độc giả</td></tr>';
 }
 
-function enterDocGia(e) {
-  if (e.keyCode === 13) timDocGia();
+function loadDanhSachSachNhanh() {
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var dsDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
+    var html = '';
+
+    for (var i = 0; i < dsSach.length; i++) {
+        var s = dsSach[i];
+        var sl = parseInt(s.soLuongCon || 0);
+        var actionHtml = '';
+
+        // Kiểm tra xem độc giả đã đặt chỗ sách này chưa
+        var daDatCho = dsDatCho.some(function(dc) {
+            return dc.maDG === docGiaHienTai.maDG && 
+                   dc.maSach === s.maSach && 
+                   dc.trangThai === 'Chờ lấy';
+        });
+
+        if (daDatCho) {
+            actionHtml = '<span class="badge-dat-cho" data-info="Bạn đã đặt chỗ sách này rồi!">Đã đặt ✓</span>';
+        } else if (sl > 0) {
+            // Sách còn sẵn - hiển thị cảnh báo
+            actionHtml = '<button class="btn-select-sach" onclick="chonSach(\'' + s.maSach + '\')">🔖 Đặt chỗ</button>';
+        } else {
+            // Sách hết - tìm người đang mượn
+            var nguoiMuon = [];
+            dsPhieuMuon.forEach(function(p) {
+                if (p.trangThai === 'Đang mượn') {
+                    var coSach = p.danhSachSach.some(function(item) { 
+                        return item.maSach === s.maSach; 
+                    });
+                    if (coSach) {
+                        nguoiMuon.push("- " + p.tenDG + " (" + p.maDG + ")");
+                    }
+                }
+            });
+            
+            var textTooltip = nguoiMuon.length > 0 
+                ? "Đang được mượn bởi:\n" + nguoiMuon.join("\n") 
+                : "Hết sách (Chưa rõ người mượn)";
+
+            actionHtml = '<button class="btn-select-sach" onclick="chonSach(\'' + s.maSach + '\')">🔖 Đặt chỗ</button>';
+            actionHtml += ' <span class="badge-het" data-info="' + textTooltip + '">Hết sách ℹ️</span>';
+        }
+
+        html += '<tr>';
+        html += '<td><strong>' + s.maSach + '</strong></td>';
+        html += '<td>' + s.tenSach + '</td>';
+        html += '<td>' + (s.tacGia || '-') + '</td>';
+        html += '<td>' + sl + '</td>';
+        html += '<td style="text-align:center">' + actionHtml + '</td>';
+        html += '</tr>';
+    }
+    document.getElementById('dsSachNhanh').innerHTML = html || '<tr><td colspan="5" style="text-align:center">Chưa có dữ liệu sách</td></tr>';
 }
 
-function enterSach(e) {
-  if (e.keyCode === 13) timSach();
+function chonDocGia(ma) {
+    document.getElementById('maDGInput').value = ma;
+    timDocGia();
+}
+
+function chonSach(maSach) {
+    document.getElementById('loiSach').innerHTML = '';
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    var sach = dsSach.find(function(s) { return s.maSach === maSach; });
+    if (!sach) return;
+
+    // Kiểm tra xem đã đặt chỗ sách này chưa
+    var dsDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
+    var daDatCho = dsDatCho.some(function(dc) {
+        return dc.maDG === docGiaHienTai.maDG && 
+               dc.maSach === maSach && 
+               dc.trangThai === 'Chờ lấy';
+    });
+
+    if (daDatCho) {
+        hienThiLoi('loiSach', 'Bạn đã đặt chỗ sách này rồi!');
+        return;
+    }
+
+    var sl = parseInt(sach.soLuongCon || 0);
+    
+    if (sl > 0 && sl < 15) {
+        if (!confirm('⚠️ Sách này hiện còn ' + sl + ' cuốn trên kệ.\n\nBạn có thể mượn trực tiếp thay vì đặt chỗ.\n\nBạn có chắc muốn đặt chỗ không?')) {
+            return;
+        }
+    }
+
+    sachDaChon = {
+        maSach: sach.maSach,
+        tenSach: sach.tenSach,
+        tacGia: sach.tacGia || '---'
+    };
+    capNhatThongTinXacNhan();
+    document.getElementById('buoc3').className = 'card';
 }
 
 function timDocGia() {
-  var maDG = document.getElementById('inputMaDG').value.trim();
-  if (!maDG) {
-    alert('Vui lòng nhập mã độc giả!');
-    return;
-  }
+    var maDG = document.getElementById('maDGInput').value.trim();
+    var elKetQua = document.getElementById('ketQuaDocGia');
+    elKetQua.innerHTML = '';
+    anCacBuocTiep();
 
-  var danhSach = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
-  var docGia = null;
-  for (var i = 0; i < danhSach.length; i++) {
-    if (danhSach[i].maDG === maDG) {
-      docGia = danhSach[i];
-      break;
+    if (!maDG) {
+        hienThiLoi('ketQuaDocGia', 'Vui lòng nhập mã độc giả!');
+        return;
     }
-  }
 
-  if (!docGia) {
-    alert('Không tìm thấy độc giả với mã: ' + maDG);
-    document.getElementById('infoDG').style.display = 'none';
-    docGiaDaChon = null;
-    capNhatConfirmBox();
-    return;
-  }
+    var dsDocGia = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
+    var docGia = dsDocGia.find(function(dg) { return dg.maDG === maDG; });
 
-  if (docGia.trangThaiThe === 'Khóa' || docGia.trangThaiThe === 'Ngừng hoạt động') {
-    alert('Độc giả này đang bị khóa, không thể đặt chỗ!');
-    document.getElementById('infoDG').style.display = 'none';
-    docGiaDaChon = null;
-    capNhatConfirmBox();
-    return;
-  }
+    if (!docGia) {
+        hienThiLoi('ketQuaDocGia', 'Không tìm thấy độc giả!');
+        return;
+    }
 
-  document.getElementById('dg-ma').innerText = docGia.maDG;
-  document.getElementById('dg-ten').innerText = docGia.hoTen;
-  document.getElementById('dg-ngheNghiep').innerText = docGia.ngheNghiep || '--';
-  document.getElementById('dg-noiLamViec').innerText = docGia.noiLamViec || '--';
-  document.getElementById('dg-email').innerText = docGia.email || '--';
-  document.getElementById('dg-trangThai').innerText = docGia.trangThaiThe || 'Hoạt động';
-  document.getElementById('infoDG').style.display = 'block';
+    if (docGia.trangThai === 'Khóa' || docGia.trangThai === 'Ngừng hoạt động') {
+        hienThiLoi('ketQuaDocGia', 'Tài khoản độc giả đã bị khóa!');
+        return;
+    }
 
-  docGiaDaChon = docGia;
-  capNhatConfirmBox();
+    // Đếm số sách đang đặt chỗ
+    var dsDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
+    var sachDangDatCho = [];
+    
+    dsDatCho.forEach(function(dc) {
+        if (dc.maDG === maDG && dc.trangThai === 'Chờ lấy') {
+            sachDangDatCho.push(dc.tenSach);
+        }
+    });
+
+    var soSachDangDatCho = sachDangDatCho.length;
+
+    docGiaHienTai = docGia;
+
+    var chuoiSachDangDatCho = soSachDangDatCho > 0 
+        ? '<div style="margin-top:5px; padding-top:5px; border-top:1px dashed #F9A825; color:#555;">' +
+          '<strong>Sách đang đặt chỗ:</strong> ' + sachDangDatCho.join(', ') + '</div>'
+        : '';
+
+    elKetQua.innerHTML = '<div class="info-box">'
+        + '<p>✅ <strong>' + docGia.hoTen + '</strong> (' + docGia.maDG + ')</p>'
+        + '<p>Số sách đang đặt chỗ: <strong>' + soSachDangDatCho + '</strong></p>'
+        + chuoiSachDangDatCho 
+        + '</div>';
+
+    document.getElementById('buoc2').className = 'card';
+    loadDanhSachSachNhanh();
 }
 
-function timSach() {
-  var maSach = document.getElementById('inputMaSach').value.trim();
-  if (!maSach) {
-    alert('Vui lòng nhập mã sách!');
-    return;
-  }
-
-  var danhSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  var sach = null;
-  for (var i = 0; i < danhSach.length; i++) {
-    if (danhSach[i].maSach === maSach) {
-      sach = danhSach[i];
-      break;
+function capNhatThongTinXacNhan() {
+    if (docGiaHienTai && sachDaChon) {
+        document.getElementById('confirm-docGia').innerText = docGiaHienTai.maDG + ' - ' + docGiaHienTai.hoTen;
+        document.getElementById('confirm-sach').innerText = sachDaChon.maSach + ' - ' + sachDaChon.tenSach;
     }
-  }
+}
 
-  if (!sach) {
-    alert('Không tìm thấy sách với mã: ' + maSach);
-    document.getElementById('infoSach').style.display = 'none';
-    document.getElementById('warnSach').style.display = 'none';
+function hienThiLoi(idEl, msg) {
+    document.getElementById(idEl).innerHTML = '<div class="error-box">⚠️ ' + msg + '</div>';
+}
+
+function layNgayHomNay() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function tinhNgaySau(ngayGoc, soNgay) {
+    var d = new Date(ngayGoc);
+    d.setDate(d.getDate() + soNgay);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function anCacBuocTiep() {
+    docGiaHienTai = null;
     sachDaChon = null;
-    capNhatConfirmBox();
-    return;
-  }
-
-  var slCon = sach.soLuongCon !== undefined ? sach.soLuongCon : 0;
-  document.getElementById('sach-ma').innerText = sach.maSach;
-  document.getElementById('sach-ten').innerText = sach.tenSach;
-  document.getElementById('sach-tacGia').innerText = sach.tacGia || '--';
-  document.getElementById('sach-theLoai').innerText = sach.theLoai || '--';
-  document.getElementById('sach-nxb').innerText = sach.nxb || '--';
-  document.getElementById('sach-slTong').innerText = sach.soLuongTong || 0;
-
-  var slConEl = document.getElementById('sach-slCon');
-  if (slCon > 0) {
-    slConEl.innerHTML = '<span class="tag-available">' + slCon + ' (còn sẵn)</span>';
-  } else {
-    slConEl.innerHTML = '<span class="tag-unavailable">' + slCon + ' (hết sách)</span>';
-  }
-
-  document.getElementById('infoSach').style.display = 'block';
-
-  if (slCon > 0) {
-    document.getElementById('warnSach').style.display = 'block';
-  } else {
-    document.getElementById('warnSach').style.display = 'none';
-  }
-
-  sachDaChon = sach;
-  capNhatConfirmBox();
+    document.getElementById('buoc2').className = 'card hidden';
+    document.getElementById('buoc3').className = 'card hidden';
 }
 
-function capNhatConfirmBox() {
-  var confirmBox = document.getElementById('confirmBox');
-  if (docGiaDaChon && sachDaChon) {
-    document.getElementById('confirm-docGia').innerText = docGiaDaChon.maDG + ' - ' + docGiaDaChon.hoTen;
-    document.getElementById('confirm-sach').innerText = sachDaChon.maSach + ' - ' + sachDaChon.tenSach;
-    confirmBox.style.display = 'block';
-  } else {
-    confirmBox.style.display = 'none';
-  }
+function xacNhanDatCho() {
+    if (!docGiaHienTai || !sachDaChon) return;
+    
+    var ngayDat = layNgayHomNay();
+    var hanLay = document.getElementById('hanLayInput').value;
+    if (!hanLay || hanLay <= ngayDat) {
+        alert('Hạn lấy sách không hợp lệ!');
+        return;
+    }
+
+    var maDatCho = 'DC' + Date.now();
+    var dsDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
+    
+    dsDatCho.push({
+        maDatCho: maDatCho,
+        maDG: docGiaHienTai.maDG,
+        tenDG: docGiaHienTai.hoTen,
+        maSach: sachDaChon.maSach,
+        tenSach: sachDaChon.tenSach,
+        ngayDat: ngayDat,
+        hanLaySach: hanLay,
+        trangThai: 'Chờ lấy'
+    });
+
+    localStorage.setItem('danhSachDatCho', JSON.stringify(dsDatCho));
+
+    alert('✅ Đặt chỗ thành công!\n\nMã đặt chỗ: ' + maDatCho + '\nĐộc giả: ' + docGiaHienTai.hoTen + '\nSách: ' + sachDaChon.tenSach + '\nHạn lấy: ' + hanLay);
+    resetTrang();
 }
 
-function datChoSach() {
-  if (!docGiaDaChon) {
-    alert('Vui lòng tìm độc giả trước!');
-    return;
-  }
-  if (!sachDaChon) {
-    alert('Vui lòng tìm sách cần đặt trước!');
-    return;
-  }
-
-  var hanLay = document.getElementById('inputHanLay').value;
-  if (!hanLay) {
-    alert('Vui lòng nhập hạn lấy sách!');
-    return;
-  }
-
-  var hom_nay = new Date();
-  hom_nay.setHours(0, 0, 0, 0);
-  var ngayHanLay = new Date(hanLay);
-  if (ngayHanLay < hom_nay) {
-    alert('Hạn lấy sách không được là ngày trong quá khứ!');
-    return;
-  }
-
-  var maDatCho = 'DC' + Date.now();
-
-  var banGhiMoi = {
-    maDatCho: maDatCho,
-    maDG: docGiaDaChon.maDG,
-    tenDG: docGiaDaChon.hoTen,
-    maSach: sachDaChon.maSach,
-    tenSach: sachDaChon.tenSach,
-    ngayDat: layNgayHienTai(),
-    hanLaySach: hanLay,
-    trangThai: 'Chờ lấy'
-  };
-
-  var danhSachDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
-  danhSachDatCho.push(banGhiMoi);
-  localStorage.setItem('danhSachDatCho', JSON.stringify(danhSachDatCho));
-
-  alert('✅ Đặt chỗ thành công!\n\nMã đặt chỗ: ' + maDatCho + '\nĐộc giả: ' + docGiaDaChon.hoTen + '\nSách: ' + sachDaChon.tenSach + '\nHạn lấy: ' + hanLay);
-  datLai();
-}
-
-function layNgayHienTai() {
-  var d = new Date();
-  var thang = d.getMonth() + 1;
-  var ngay = d.getDate();
-  return d.getFullYear() + '-' + (thang < 10 ? '0' + thang : thang) + '-' + (ngay < 10 ? '0' + ngay : ngay);
-}
-
-function datLai() {
-  docGiaDaChon = null;
-  sachDaChon = null;
-  document.getElementById('inputMaDG').value = '';
-  document.getElementById('inputMaSach').value = '';
-  document.getElementById('infoDG').style.display = 'none';
-  document.getElementById('infoSach').style.display = 'none';
-  document.getElementById('warnSach').style.display = 'none';
-  document.getElementById('confirmBox').style.display = 'none';
-  document.getElementById('inputHanLay').value = layNgayMacDinh(7);
+function resetTrang() {
+    docGiaHienTai = null;
+    sachDaChon = null;
+    document.getElementById('maDGInput').value = '';
+    document.getElementById('ketQuaDocGia').innerHTML = '';
+    document.getElementById('buoc2').className = 'card hidden';
+    document.getElementById('buoc3').className = 'card hidden';
+    document.getElementById('hanLayInput').value = tinhNgaySau(new Date(), 7);
+    loadDanhSachDocGiaNhanh();
 }
 
 function dangXuat() {
-  if (confirm('Bạn có muốn đăng xuất không?')) {
-    localStorage.removeItem('currentUser');
-    window.location.href = '../index.html';
-  }
+    if (confirm('Bạn có muốn đăng xuất không?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = '../index.html';
+    }
 }
 </script>
 </body>
