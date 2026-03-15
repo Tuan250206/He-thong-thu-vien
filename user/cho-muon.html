@@ -6,34 +6,89 @@
 <title>Cho mượn sách - Thư viện</title>
 <link rel="stylesheet" href="common.css">
 <style>
-.page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-.page-title h2 { font-size: 17px; color: #333; }
-.card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-.card h3 { font-size: 15px; color: #2196F3; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #E3F2FD; }
-.card-step-num { display: inline-block; background: #2196F3; color: white; border-radius: 50%; width: 22px; height: 22px; line-height: 22px; text-align: center; font-size: 12px; margin-right: 6px; }
-.form-group { margin-bottom: 14px; overflow: hidden; }
-.form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
-.form-group input, .form-group select { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 280px; }
-.form-group input:focus { outline: none; border-color: #2196F3; }
-.btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; display: inline-block; }
-.btn-primary { background: #2196F3; color: white; }
-.btn-primary:hover { background: #1976D2; }
-.btn-success { background: #4CAF50; color: white; }
-.btn-success:hover { background: #388E3C; }
-.btn-danger { background: #f44336; color: white; font-size: 12px; padding: 4px 10px; }
-.btn-danger:hover { background: #D32F2F; }
-.info-box { background: #FFFDE7; border: 1px solid #F9A825; border-radius: 4px; padding: 12px 15px; margin-top: 10px; font-size: 13px; }
-.info-box p { margin-bottom: 4px; }
-.info-box p:last-child { margin-bottom: 0; }
-.error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
-.date-box { background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 4px; padding: 12px 15px; margin-bottom: 15px; font-size: 13px; }
-.date-box p { margin-bottom: 4px; }
-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th { background: #2196F3; color: white; padding: 10px 12px; text-align: left; font-size: 13px; white-space: nowrap; }
-td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
-tr:hover td { background: #F5F5F5; }
-.note { font-size: 12px; color: #888; margin-top: 6px; }
-.hidden { display: none; }
+    /* ... (Giữ nguyên các style cũ của bạn) ... */
+    .page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .page-title h2 { font-size: 17px; color: #333; }
+    .card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .card h3 { font-size: 15px; color: #2196F3; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #E3F2FD; }
+    .card-step-num { display: inline-block; background: #2196F3; color: white; border-radius: 50%; width: 22px; height: 22px; line-height: 22px; text-align: center; font-size: 12px; margin-right: 6px; }
+    .form-group { margin-bottom: 14px; overflow: hidden; }
+    .form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
+    .form-group input, .form-group select { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 280px; }
+    .form-group input:focus { outline: none; border-color: #2196F3; }
+    .btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; display: inline-block; }
+    .btn-primary { background: #2196F3; color: white; }
+    .btn-primary:hover { background: #1976D2; }
+    .btn-success { background: #4CAF50; color: white; }
+    .btn-success:hover { background: #388E3C; }
+    .btn-danger { background: #f44336; color: white; font-size: 12px; padding: 4px 10px; }
+    .btn-danger:hover { background: #D32F2F; }
+    .info-box { background: #FFFDE7; border: 1px solid #F9A825; border-radius: 4px; padding: 12px 15px; margin-top: 10px; font-size: 13px; }
+    .info-box p { margin-bottom: 4px; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
+    .date-box { background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 4px; padding: 12px 15px; margin-bottom: 15px; font-size: 13px; }
+    .date-box p { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { background: #2196F3; color: white; padding: 10px 12px; text-align: left; font-size: 13px; white-space: nowrap; }
+    td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
+    tr:hover td { background: #F5F5F5; }
+    .note { font-size: 12px; color: #888; margin-top: 6px; }
+    .hidden { display: none; }
+    .quick-select-wrapper { margin-top: 15px; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+    .table-quick { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table-quick thead { background: #f8f9fa; }
+    .table-quick th { padding: 8px; border-bottom: 2px solid #dee2e6; text-align: left; color: #555; }
+    .table-quick td { padding: 8px; border-bottom: 1px solid #eee; }
+    .table-quick tbody tr:hover { background-color: #f1f8ff; cursor: pointer; }
+    .table-sach-chon thead th { background: #4CAF50; }
+    .btn-select-sach { background: #4CAF50; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+    .btn-select-sach:hover { background: #388E3C; }
+    .btn-select-dg { background: #2196F3; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+    .btn-select-dg:hover { background: #1976D2; }
+    .scroll-area { max-height: 450px; overflow-y: auto; }
+
+    /* --- PHẦN MỚI CẬP NHẬT --- */
+    .badge-het { 
+        background: #f44336; 
+        color: white; 
+        padding: 4px 8px; 
+        border-radius: 10px; 
+        font-size: 10px; 
+        cursor: help;
+        position: relative;
+        display: inline-block;
+    }
+    
+    /* Hiệu ứng Tooltip khi hover vào nút Hết sách */
+    .badge-het:hover::after {
+        content: attr(data-borrowers);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: #fff;
+        padding: 8px;
+        border-radius: 4px;
+        white-space: pre-wrap;
+        width: 200px;
+        z-index: 100;
+        font-size: 11px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        line-height: 1.4;
+    }
+
+    .badge-het:hover::before {
+        content: "";
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+    }
 </style>
 </head>
 <body>
@@ -80,6 +135,7 @@ tr:hover td { background: #F5F5F5; }
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
+
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -89,28 +145,63 @@ tr:hover td { background: #F5F5F5; }
     </a>
 </div>
 
+
 <div class="content">
     <div class="page-title"><h2>🤝 Cho mượn sách</h2></div>
 
     <div class="card" id="buoc1">
-        <h3><span class="card-step-num">1</span>Tìm độc giả</h3>
+        <h3><span class="card-step-num">1</span>Chọn độc giả</h3>
         <div class="form-group">
-            <label for="maDGInput">Mã độc giả:</label>
-            <input type="text" id="maDGInput" placeholder="Nhập mã độc giả..." onkeydown="if(event.keyCode===13) timDocGia()">
+            <label for="maDGInput">Nhập mã hoặc chọn trực tiếp từ danh sách:</label>
+            <input type="text" id="maDGInput" placeholder="Gõ mã ĐG..." onkeydown="if(event.keyCode===13) timDocGia()">
             <button class="btn btn-primary" onclick="timDocGia()" style="margin-left:8px;">🔍 Tìm</button>
+        </div>
+
+        <div class="quick-select-wrapper">
+            <div class="scroll-area">
+                <table class="table-quick">
+                    <thead>
+                        <tr>
+                            <th>Mã ĐG</th>
+                            <th>Họ và tên</th>
+                            <th style="text-align:center">Chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsDocGiaNhanh"></tbody>
+                </table>
+            </div>
         </div>
         <div id="ketQuaDocGia"></div>
     </div>
 
     <div class="card hidden" id="buoc2">
-        <h3><span class="card-step-num">2</span>Thêm sách cần mượn</h3>
-        <div class="form-group">
-            <label for="maSachInput">Mã sách:</label>
-            <input type="text" id="maSachInput" placeholder="Nhập mã sách..." onkeydown="if(event.keyCode===13) themSach()">
-            <button class="btn btn-primary" onclick="themSach()" style="margin-left:8px;">➕ Thêm sách</button>
+        <h3><span class="card-step-num">2</span>Chọn sách cần mượn</h3>
+        
+        <p class="note">Nhấn nút "Chọn mượn" để thêm sách vào danh sách (Tối đa 5 cuốn).</p>
+        
+        <div class="quick-select-wrapper" style="border-color: #4CAF50;">
+            <div class="scroll-area">
+                <table class="table-quick table-sach-chon">
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tác giả</th>
+                            <th>Kho</th>
+                            <th style="text-align:center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsSachNhanh"></tbody>
+                </table>
+            </div>
         </div>
-        <div id="loiSach"></div>
-        <div id="bangSachChon"></div>
+
+        <div id="loiSach" style="margin-top: 15px;"></div>
+        
+        <div style="margin-top: 20px;">
+            <label style="font-weight: bold; color: #333;">Sách đã chọn để mượn:</label>
+            <div id="bangSachChon"></div>
+        </div>
     </div>
 
     <div class="card hidden" id="buoc3">
@@ -142,34 +233,151 @@ window.onload = function() {
     document.getElementById('hienThiNgayMuon').textContent = homNay;
     document.getElementById('hanTraInput').value = tinhNgaySau(new Date(), 14);
     document.getElementById('hanTraInput').min = homNay;
+
+    loadDanhSachDocGiaNhanh();
 };
 
-function layNgayHomNay() {
-    var d = new Date();
-    var thang = String(d.getMonth() + 1).padStart(2, '0');
-    var ngay = String(d.getDate()).padStart(2, '0');
-    return d.getFullYear() + '-' + thang + '-' + ngay;
+function loadDanhSachDocGiaNhanh() {
+    var dsDocGia = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
+    var html = '';
+    for (var i = 0; i < dsDocGia.length; i++) {
+        var dg = dsDocGia[i];
+        if(dg.trangThai === 'Khóa') continue;
+        html += '<tr>';
+        html += '<td><strong>' + dg.maDG + '</strong></td>';
+        html += '<td>' + dg.hoTen + '</td>';
+        html += '<td style="text-align:center"><button class="btn-select-dg" onclick="chonDocGia(\'' + dg.maDG + '\')">Chọn</button></td>';
+        html += '</tr>';
+    }
+    document.getElementById('dsDocGiaNhanh').innerHTML = html || '<tr><td colspan="4" style="text-align:center">Chưa có dữ liệu độc giả</td></tr>';
 }
 
-function tinhNgaySau(ngayGoc, soNgay) {
-    var d = new Date(ngayGoc);
-    d.setDate(d.getDate() + soNgay);
-    var thang = String(d.getMonth() + 1).padStart(2, '0');
-    var ngay = String(d.getDate()).padStart(2, '0');
-    return d.getFullYear() + '-' + thang + '-' + ngay;
+// CẬP NHẬT HÀM LOAD SÁCH ĐỂ HIỆN NGƯỜI MƯỢN
+function loadDanhSachSachNhanh() {
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var html = '';
+
+    for (var i = 0; i < dsSach.length; i++) {
+        var s = dsSach[i];
+        var sl = parseInt(s.soLuongCon || 0);
+        var actionHtml = '';
+
+        if (sl > 0) {
+            actionHtml = '<button class="btn-select-sach" onclick="chonSach(\'' + s.maSach + '\')">➕ Chọn mượn</button>';
+        } else {
+            // Tìm danh sách người đang mượn cuốn sách này
+            var nguoiMuon = [];
+            dsPhieuMuon.forEach(p => {
+                if (p.trangThai === 'Đang mượn') {
+                    var coSach = p.danhSachSach.some(item => item.maSach === s.maSach);
+                    if (coSach) {
+                        nguoiMuon.push("- " + p.tenDG + " (" + p.maDG + ")");
+                    }
+                }
+            });
+            
+            var textTooltip = nguoiMuon.length > 0 
+                ? "Đang được mượn bởi:\\n" + nguoiMuon.join("\\n") 
+                : "Hết sách (Chưa rõ người mượn)";
+
+            actionHtml = '<span class="badge-het" data-borrowers="' + textTooltip + '">Hết sách ℹ️</span>';
+        }
+
+        html += '<tr>';
+        html += '<td><strong>' + s.maSach + '</strong></td>';
+        html += '<td>' + s.tenSach + '</td>';
+        html += '<td>' + (s.tacGia || '-') + '</td>';
+        html += '<td>' + sl + '</td>';
+        html += '<td style="text-align:center">' + actionHtml + '</td>';
+        html += '</tr>';
+    }
+    document.getElementById('dsSachNhanh').innerHTML = html || '<tr><td colspan="5" style="text-align:center">Chưa có dữ liệu sách</td></tr>';
 }
 
-function dinhDangNgay(str) {
-    if (!str) return '---';
-    var p = str.split('-');
-    if (p.length !== 3) return str;
-    return p[2] + '/' + p[1] + '/' + p[0];
+function chonDocGia(ma) {
+    document.getElementById('maDGInput').value = ma;
+    timDocGia();
 }
 
-function hienThiLoi(idEl, msg) {
-    document.getElementById(idEl).innerHTML = '<div class="error-box">⚠️ ' + msg + '</div>';
-}
+function chonSach(maSach) {
+    document.getElementById('loiSach').innerHTML = '';
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    var sach = dsSach.find(s => s.maSach === maSach);
+    if (!sach) return;
 
+    // 1. Kiểm tra nếu sách đã có trong danh sách vừa chọn (ở Bước 2)
+    if (sachDaChon.some(s => s.maSach === maSach)) {
+        hienThiLoi('loiSach', 'Sách này đã có trong danh sách chuẩn bị mượn!');
+        return;
+    }
+
+    // 2. KIỂM TRA ĐIỀU KIỆN MỚI: Đã mượn trước đó và chưa trả
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var daMuonChuaTra = false;
+
+    dsPhieuMuon.forEach(p => {
+        // Chỉ kiểm tra các phiếu "Đang mượn" của đúng độc giả hiện tại
+        if (p.maDG === docGiaHienTai.maDG && p.trangThai === 'Đang mượn') {
+            if (p.danhSachSach.some(item => item.maSach === maSach)) {
+                daMuonChuaTra = true;
+            }
+        }
+    });
+
+    if (daMuonChuaTra) {
+        hienThiLoi('loiSach', 'Độc giả đang mượn cuốn này và chưa trả. Không thể mượn nữa!');
+        return;
+    }
+
+    // ✅ FIX LỖI 4: Kiểm tra xem có ai đang đặt chỗ sách này không
+    var dsDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
+    var nguoiDatCho = null;
+    
+    for (var i = 0; i < dsDatCho.length; i++) {
+        var dc = dsDatCho[i];
+        if (dc.maSach === maSach && dc.trangThai === 'Chờ lấy') {
+            // Nếu chính độc giả hiện tại đang đặt chỗ thì cho phép
+            if (dc.maDG === docGiaHienTai.maDG) {
+                nguoiDatCho = null; // Cho phép mượn
+                break;
+            } else {
+                nguoiDatCho = dc; // Người khác đang đặt
+                break;
+            }
+        }
+    }
+    
+    var sl = parseInt(sach.soLuongCon || 0);
+    
+    // Nếu chỉ còn 1 cuốn và có người khác đang đặt chỗ → không cho mượn
+    if (nguoiDatCho && sl === 1) {
+        hienThiLoi('loiSach', 'Cuốn sách cuối cùng đã được đặt chỗ bởi: ' + nguoiDatCho.tenDG + ' (' + nguoiDatCho.maDG + ')');
+        return;
+    }
+
+    // 3. Kiểm tra giới hạn số lượng (Tối đa 5 cuốn)
+    var soSachDangGiu = 0;
+    dsPhieuMuon.forEach(p => {
+        if (p.maDG === docGiaHienTai.maDG && p.trangThai === 'Đang mượn') {
+            soSachDangGiu += p.danhSachSach.length;
+        }
+    });
+
+    if (soSachDangGiu + sachDaChon.length >= 5) {
+        hienThiLoi('loiSach', 'Vượt quá giới hạn mượn (Tối đa 5 cuốn)!');
+        return;
+    }
+
+    // Nếu vượt qua hết các điều kiện thì thêm vào danh sách
+    sachDaChon.push({ 
+        maSach: sach.maSach, 
+        tenSach: sach.tenSach, 
+        tacGia: sach.tacGia || '---' 
+    });
+    capNhatBangSachChon();
+    document.getElementById('buoc3').className = 'card';
+}
 function timDocGia() {
     var maDG = document.getElementById('maDGInput').value.trim();
     var elKetQua = document.getElementById('ketQuaDocGia');
@@ -182,130 +390,66 @@ function timDocGia() {
     }
 
     var dsDocGia = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
-    var docGia = null;
-    for (var i = 0; i < dsDocGia.length; i++) {
-        if (dsDocGia[i].maDG === maDG) {
-            docGia = dsDocGia[i];
-            break;
-        }
-    }
+    var docGia = dsDocGia.find(dg => dg.maDG === maDG);
 
     if (!docGia) {
-        hienThiLoi('ketQuaDocGia', 'Không tìm thấy độc giả với mã: <strong>' + maDG + '</strong>');
+        hienThiLoi('ketQuaDocGia', 'Không tìm thấy độc giả!');
         return;
     }
 
-    // Kiểm tra thẻ bị khóa
-    if (docGia.trangThaiThe === 'Khóa') {
-        hienThiLoi('ketQuaDocGia', 'Thẻ thư viện của <strong>' + docGia.hoTen + '</strong> đã bị khóa, không thể cho mượn!');
-        return;
-    }
-
-    // Kiểm tra thẻ hết hạn
-    var ngayHienTai = new Date();
-    var ngayHetHan = new Date(docGia.ngayHetHan);
-    if (ngayHetHan < ngayHienTai) {
-        hienThiLoi('ketQuaDocGia', 'Thẻ thư viện của <strong>' + docGia.hoTen + '</strong> đã hết hạn (' + dinhDangNgay(docGia.ngayHetHan) + '), vui lòng gia hạn thẻ trước khi mượn sách!');
+    if (docGia.trangThai === 'Khóa') {
+        hienThiLoi('ketQuaDocGia', 'Tài khoản độc giả đã bị khóa!');
         return;
     }
 
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    var soSachDangMuon = 0;
-    for (var j = 0; j < dsPhieuMuon.length; j++) {
-        var phieu = dsPhieuMuon[j];
-        if (phieu.maDG === maDG && phieu.trangThai === 'Đang mượn') {
-            soSachDangMuon += (phieu.danhSachSach ? phieu.danhSachSach.length : 0);
+    var danhSachTenSachDangMuon = [];
+    
+    dsPhieuMuon.forEach(p => {
+        if (p.maDG === maDG && p.trangThai === 'Đang mượn') {
+            p.danhSachSach.forEach(s => {
+                danhSachTenSachDangMuon.push(s.tenSach);
+            });
         }
-    }
+    });
+
+    var soSachDangMuon = danhSachTenSachDangMuon.length;
 
     if (soSachDangMuon >= 5) {
-        hienThiLoi('ketQuaDocGia', 'Độc giả <strong>' + docGia.hoTen + '</strong> đang mượn ' + soSachDangMuon + '/5 sách — đã đạt giới hạn tối đa, không thể mượn thêm!');
+        hienThiLoi('ketQuaDocGia', 'Độc giả đã mượn tối đa 5 cuốn!');
         return;
     }
 
     docGiaHienTai = docGia;
-    sachDaChon = [];
 
-elKetQua.innerHTML = '<div class="info-box">'
-    + '<p>✅ <strong>Đã tìm thấy độc giả!</strong></p>'
-    + '<p><strong>Mã DG:</strong> ' + docGia.maDG + ' &nbsp;|&nbsp; <strong>Mã thẻ:</strong> ' + (docGia.maThe || '---') + '</p>'
-    + '<p><strong>Họ tên:</strong> ' + docGia.hoTen + '</p>'
-    + '<p><strong>Nghề nghiệp:</strong> ' + (docGia.ngheNghiep || '---') + ' &nbsp;|&nbsp; <strong>Nơi làm việc:</strong> ' + (docGia.noiLamViec || '---') + '</p>'
-    + '<p><strong>Hạn thẻ:</strong> ' + dinhDangNgay(docGia.ngayHetHan) + ' &nbsp;|&nbsp; <strong>Trạng thái thẻ:</strong> ' + (docGia.trangThaiThe || 'Hoạt động') + '</p>'
-    + '<p><strong>Đang mượn:</strong> ' + soSachDangMuon + '/5 sách</p></div>';
+    var chuoiSachDangMuon = soSachDangMuon > 0 
+        ? '<div style="margin-top:5px; padding-top:5px; border-top:1px dashed #F9A825; color:#555;">' +
+          '<strong>Các sách đang giữ:</strong> ' + danhSachTenSachDangMuon.join(', ') + '</div>'
+        : '';
+
+    elKetQua.innerHTML = '<div class="info-box">'
+        + '<p>✅ <strong>' + docGia.hoTen + '</strong> (' + docGia.maDG + ')</p>'
+        + '<p>Đang mượn: <strong>' + soSachDangMuon + '/5</strong> sách</p>'
+        + chuoiSachDangMuon 
+        + '</div>';
 
     document.getElementById('buoc2').className = 'card';
-    document.getElementById('buoc3').className = 'card hidden';
-    document.getElementById('bangSachChon').innerHTML = '';
-    document.getElementById('loiSach').innerHTML = '';
-    document.getElementById('maSachInput').focus();
+    loadDanhSachSachNhanh();
 }
 
-function anCacBuocTiep() {
-    docGiaHienTai = null;
-    sachDaChon = [];
-    document.getElementById('buoc2').className = 'card hidden';
-    document.getElementById('buoc3').className = 'card hidden';
+function hienThiLoi(idEl, msg) {
+    document.getElementById(idEl).innerHTML = '<div class="error-box">⚠️ ' + msg + '</div>';
 }
 
-function themSach() {
-    var maSach = document.getElementById('maSachInput').value.trim();
-    document.getElementById('loiSach').innerHTML = '';
+function layNgayHomNay() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
 
-    if (!docGiaHienTai) {
-        hienThiLoi('loiSach', 'Vui lòng tìm độc giả trước!');
-        return;
-    }
-
-    if (!maSach) {
-        hienThiLoi('loiSach', 'Vui lòng nhập mã sách!');
-        return;
-    }
-
-    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-    var sach = null;
-    for (var i = 0; i < dsSach.length; i++) {
-        if (dsSach[i].maSach === maSach) {
-            sach = dsSach[i];
-            break;
-        }
-    }
-
-    if (!sach) {
-        hienThiLoi('loiSach', 'Không tìm thấy sách với mã: <strong>' + maSach + '</strong>');
-        return;
-    }
-
-    if (parseInt(sach.soLuongCon) <= 0) {
-        hienThiLoi('loiSach', 'Sách <strong>' + sach.tenSach + '</strong> hiện đã hết (số lượng còn = 0)!');
-        return;
-    }
-
-    for (var j = 0; j < sachDaChon.length; j++) {
-        if (sachDaChon[j].maSach === maSach) {
-            hienThiLoi('loiSach', 'Sách <strong>' + sach.tenSach + '</strong> đã có trong danh sách mượn!');
-            return;
-        }
-    }
-
-    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    var soSachDangMuon = 0;
-    for (var k = 0; k < dsPhieuMuon.length; k++) {
-        var phieu = dsPhieuMuon[k];
-        if (phieu.maDG === docGiaHienTai.maDG && phieu.trangThai === 'Đang mượn') {
-            soSachDangMuon += (phieu.danhSachSach ? phieu.danhSachSach.length : 0);
-        }
-    }
-    if (soSachDangMuon + sachDaChon.length >= 5) {
-        hienThiLoi('loiSach', 'Vượt quá giới hạn mượn sách! Độc giả chỉ được mượn tối đa 5 cuốn.');
-        return;
-    }
-
-    sachDaChon.push({ maSach: sach.maSach, tenSach: sach.tenSach, tacGia: sach.tacGia || '---', soLuong: 1, tinhTrang: 'Tốt' });
-    document.getElementById('maSachInput').value = '';
-    capNhatBangSachChon();
-    document.getElementById('buoc3').className = 'card';
-    document.getElementById('maSachInput').focus();
+function tinhNgaySau(ngayGoc, soNgay) {
+    var d = new Date(ngayGoc);
+    d.setDate(d.getDate() + soNgay);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
 function capNhatBangSachChon() {
@@ -316,68 +460,40 @@ function capNhatBangSachChon() {
         return;
     }
 
-    var html = '<table><tr><th>STT</th><th>Mã sách</th><th>Tên sách</th><th>Tác giả</th><th style="text-align:center;">Xóa</th></tr>';
+    var html = '<table><tr><th>STT</th><th>Mã sách</th><th>Tên sách</th><th style="text-align:center;">Xóa</th></tr>';
     for (var i = 0; i < sachDaChon.length; i++) {
-        var s = sachDaChon[i];
-        html += '<tr><td>' + (i + 1) + '</td><td>' + s.maSach + '</td><td>' + s.tenSach + '</td><td>' + s.tacGia + '</td>';
+        html += '<tr><td>' + (i + 1) + '</td><td>' + sachDaChon[i].maSach + '</td><td>' + sachDaChon[i].tenSach + '</td>';
         html += '<td style="text-align:center;"><button class="btn btn-danger" onclick="xoaSach(' + i + ')">✕ Xóa</button></td></tr>';
     }
-    html += '</table><p class="note">Tổng: <strong>' + sachDaChon.length + '</strong> cuốn</p>';
     container.innerHTML = html;
 }
 
 function xoaSach(viTri) {
     sachDaChon.splice(viTri, 1);
     capNhatBangSachChon();
-    if (sachDaChon.length === 0) {
-        document.getElementById('buoc3').className = 'card hidden';
-    }
+}
+
+function anCacBuocTiep() {
+    docGiaHienTai = null;
+    sachDaChon = [];
+    document.getElementById('buoc2').className = 'card hidden';
+    document.getElementById('buoc3').className = 'card hidden';
 }
 
 function xacNhanChoMuon() {
-    if (!docGiaHienTai) {
-        alert('Lỗi: Chưa chọn độc giả!');
-        return;
-    }
-    if (sachDaChon.length === 0) {
-        alert('Vui lòng thêm ít nhất một cuốn sách trước khi xác nhận!');
-        return;
-    }
-
+    if (!docGiaHienTai || sachDaChon.length === 0) return;
+    
     var ngayMuon = layNgayHomNay();
     var hanTra = document.getElementById('hanTraInput').value;
-
-    if (!hanTra) {
-        alert('Vui lòng nhập hạn trả!');
+    if (!hanTra || hanTra <= ngayMuon) {
+        alert('Hạn trả không hợp lệ!');
         return;
     }
-    if (hanTra <= ngayMuon) {
-        alert('Hạn trả phải sau ngày mượn!');
-        return;
-    }
-
-    var tenSachList = '';
-    for (var t = 0; t < sachDaChon.length; t++) {
-        tenSachList += '\n  - ' + sachDaChon[t].tenSach;
-    }
-
-    var xacNhan = confirm('XÁC NHẬN CHO MƯỢN\n\nĐộc giả: ' + docGiaHienTai.hoTen + ' (' + docGiaHienTai.maDG + ')\nSố sách: ' + sachDaChon.length + ' cuốn' + tenSachList + '\n\nNgày mượn: ' + dinhDangNgay(ngayMuon) + '\nHạn trả: ' + dinhDangNgay(hanTra));
-    if (!xacNhan) return;
 
     var maPhieu = 'PM' + Date.now();
-
-    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-    for (var i = 0; i < sachDaChon.length; i++) {
-        for (var j = 0; j < dsSach.length; j++) {
-            if (dsSach[j].maSach === sachDaChon[i].maSach) {
-                dsSach[j].soLuongCon = Math.max(0, parseInt(dsSach[j].soLuongCon) - 1);
-                break;
-            }
-        }
-    }
-    localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
-
-    var phieuMuon = {
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    
+    dsPhieuMuon.push({
         maPhieu: maPhieu,
         maDG: docGiaHienTai.maDG,
         tenDG: docGiaHienTai.hoTen,
@@ -386,13 +502,18 @@ function xacNhanChoMuon() {
         danhSachSach: JSON.parse(JSON.stringify(sachDaChon)),
         trangThai: 'Đang mượn',
         soLanGiaHan: 0
-    };
+    });
 
-    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    dsPhieuMuon.push(phieuMuon);
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    sachDaChon.forEach(sdc => {
+        var sInKho = dsSach.find(s => s.maSach === sdc.maSach);
+        if(sInKho) sInKho.soLuongCon = Math.max(0, parseInt(sInKho.soLuongCon || 0) - 1);
+    });
+
     localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
+    localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
 
-    alert('✅ TẠO PHIẾU MƯỢN THÀNH CÔNG!\n\nMã phiếu: ' + maPhieu + '\nĐộc giả: ' + docGiaHienTai.hoTen + '\nSố sách: ' + sachDaChon.length + ' cuốn\nHạn trả: ' + dinhDangNgay(hanTra));
+    alert('✅ Cho mượn thành công! Mã phiếu: ' + maPhieu);
     resetTrang();
 }
 
@@ -400,14 +521,11 @@ function resetTrang() {
     docGiaHienTai = null;
     sachDaChon = [];
     document.getElementById('maDGInput').value = '';
-    document.getElementById('maSachInput').value = '';
     document.getElementById('ketQuaDocGia').innerHTML = '';
     document.getElementById('bangSachChon').innerHTML = '';
-    document.getElementById('loiSach').innerHTML = '';
     document.getElementById('buoc2').className = 'card hidden';
     document.getElementById('buoc3').className = 'card hidden';
-    document.getElementById('hanTraInput').value = tinhNgaySau(new Date(), 14);
-    document.getElementById('maDGInput').focus();
+    loadDanhSachDocGiaNhanh();
 }
 </script>
 </body>

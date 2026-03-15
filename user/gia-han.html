@@ -6,6 +6,7 @@
 <title>Gia hạn mượn sách - Thư viện</title>
 <link rel="stylesheet" href="common.css">
 <style>
+/* --- Giữ nguyên các style cũ của bạn --- */
 .page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 .page-title h2 { font-size: 17px; color: #333; }
 .card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
@@ -36,6 +37,23 @@
 .ngay-moi { color: #1565C0; font-weight: bold; font-size: 15px; }
 .note { font-size: 12px; color: #888; margin-top: 5px; }
 .hidden { display: none; }
+
+/* --- CSS BỔ SUNG CHO BẢNG DANH SÁCH & MODAL QR --- */
+.quick-select-wrapper { margin-top: 15px; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+.scroll-area { max-height: 300px; overflow-y: auto; }
+.table-quick { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table-quick thead { background: #2196F3; color: white; position: sticky; top: 0; }
+.table-quick th { padding: 12px 10px; text-align: left; }
+.table-quick td { padding: 10px; border-bottom: 1px solid #eee; }
+.table-quick tbody tr:hover { background-color: #f1f8ff; cursor: pointer; }
+.btn-select { background: #FF9800; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-weight: bold; }
+
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+.modal-content { background-color: white; margin: 5% auto; padding: 20px; border-radius: 8px; width: 400px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.qr-container { margin: 20px 0; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; }
+.qr-container img { width: 250px; height: 250px; display: block; margin: 0 auto; }
+.modal-footer { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
+.qua-han-text { color: #D32F2F; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -50,52 +68,53 @@
 
 <div class="sidebar">
     <div class="menu-nhom">Nghiệp vụ</div>
-    <a href="dashboard.html" class="menu-item">
-        <span class="menu-icon">🏠</span>Trang chủ
-    </a>
-    <a href="cho-muon.html" class="menu-item">
-        <span class="menu-icon">📋</span>Cho mượn
-    </a>
-    <a href="tra-sach.html" class="menu-item">
-        <span class="menu-icon">↩️</span>Trả sách
-    </a>
-    <a href="gia-han.html" class="menu-item active">
-        <span class="menu-icon">⏰</span>Gia hạn
-    </a>
-    <a href="xu-ly-phat.html" class="menu-item">
-        <span class="menu-icon">💰</span>Xử lý phạt
-    </a>
-    <a href="phieu-muon-danh-sach.html" class="menu-item">
-        <span class="menu-icon">📄</span>Phiếu mượn
-    </a>
-    <a href="dat-cho.html" class="menu-item">
-        <span class="menu-icon">🔖</span>Đặt chỗ
-    </a>
-    <a href="danh-sach-dat-cho.html" class="menu-item">
-        <span class="menu-icon">📋</span>DS đặt chỗ
-    </a>
+    <a href="dashboard.html" class="menu-item"><span class="menu-icon">🏠</span>Trang chủ</a>
+    <a href="cho-muon.html" class="menu-item"><span class="menu-icon">📋</span>Cho mượn</a>
+    <a href="tra-sach.html" class="menu-item"><span class="menu-icon">↩️</span>Trả sách</a>
+    <a href="gia-han.html" class="menu-item active"><span class="menu-icon">⏰</span>Gia hạn</a>
+    <a href="xu-ly-phat.html" class="menu-item"><span class="menu-icon">💰</span>Xử lý phạt</a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item"><span class="menu-icon">📄</span>Phiếu mượn</a>
+    <a href="dat-cho.html" class="menu-item"><span class="menu-icon">🔖</span>Đặt chỗ</a>
+    <a href="danh-sach-dat-cho.html" class="menu-item"><span class="menu-icon">📋</span>DS đặt chỗ</a>
 
     <div class="menu-nhom">Quản lý</div>
-    <a href="doc-gia-danh-sach.html" class="menu-item">
-        <span class="menu-icon">👥</span>Độc giả
-    </a>
-    <a href="sach-danh-sach.html" class="menu-item">
-        <span class="menu-icon">📚</span>Sách
-    </a>
+    <a href="doc-gia-danh-sach.html" class="menu-item"><span class="menu-icon">👥</span>Độc giả</a>
+    <a href="sach-danh-sach.html" class="menu-item"><span class="menu-icon">📚</span>Sách</a>
+
     <div class="menu-nhom">Báo cáo</div>
-    <a href="lich-su.html" class="menu-item">
-        <span class="menu-icon">📋</span>Lịch sử
-    </a>
-    <a href="thong-ke.html" class="menu-item">
-        <span class="menu-icon">📊</span>Thống kê
-    </a>
+    <a href="lich-su.html" class="menu-item"><span class="menu-icon">📋</span>Lịch sử</a>
+    <a href="thong-ke.html" class="menu-item"><span class="menu-icon">📊</span>Thống kê</a>
 </div>
 
 <div class="content">
     <div class="page-title"><h2>⏰ Gia hạn mượn sách</h2></div>
 
+    <div class="card" id="cardDanhSachPhieu">
+        <h3>📋 Danh sách phiếu mượn hiện hành</h3>
+        <div class="form-group">
+            <label>Tìm kiếm nhanh:</label>
+            <input type="text" id="filterInput" placeholder="Nhập tên độc giả hoặc mã phiếu..." onkeyup="locPhieu()">
+        </div>
+        <div class="quick-select-wrapper">
+            <div class="scroll-area">
+                <table class="table-quick">
+                    <thead>
+                        <tr>
+                            <th>Mã Phiếu</th>
+                            <th>Độc giả</th>
+                            <th>Hạn trả</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align:center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsPhieuHienHanh"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
-        <h3>🔍 Tìm phiếu mượn</h3>
+        <h3>🔍 Tìm phiếu mượn thủ công</h3>
         <div class="form-group">
             <label for="maPhieuInput">Mã phiếu mượn:</label>
             <input type="text" id="maPhieuInput" placeholder="Nhập mã phiếu (VD: PM17...)..." onkeydown="if(event.keyCode===13) timPhieuGiaHan()">
@@ -112,36 +131,98 @@
     </div>
 </div>
 
+<div id="modalThanhToanPhat" class="modal">
+    <div class="modal-content">
+        <h3 style="color: #C62828;">💰 Thanh toán phạt quá hạn</h3>
+        <p id="txtSoTienModal" style="font-weight: bold; font-size: 18px; margin: 10px 0; color: #D32F2F;"></p>
+        <div class="qr-container">
+            <img src="../img/QR.jpg" alt="QR Ngân Hàng">
+            <p style="font-size: 12px; color: #666; margin-top: 10px;">Vui lòng quét mã để nộp phạt quá hạn trước khi trả sách</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" onclick="xacNhanNopPhat()">✅ Đã thu tiền</button>
+            <button class="btn btn-gray" onclick="dongModal()">Hủy</button>
+        </div>
+    </div>
+</div>
+
 <script>
 var phieuHienTai = null;
+var tienPhatHienTai = 0;
 
 window.onload = function() {
     var user = localStorage.getItem('currentUser') || 'Nhân viên';
     var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
     var tenHienThi = userInfo.hoTen || user;
     document.getElementById('tenNguoiDung').textContent = tenHienThi;
+    loadDanhSachPhieuHienHanh();
+    
+    // Kiểm tra nếu có parameter từ URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var maPhieuURL = urlParams.get('ma');
+    if (maPhieuURL) {
+        document.getElementById('maPhieuInput').value = maPhieuURL;
+        timPhieuGiaHan();
+    }
 };
 
+function loadDanhSachPhieuHienHanh() {
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var html = '';
+    var homNay = layNgayHomNay();
+
+    for (var i = 0; i < dsPhieuMuon.length; i++) {
+        var p = dsPhieuMuon[i];
+        if (p.trangThai === 'Đang mượn' || p.trangThai === 'Quá hạn') {
+            var soNgayQuaHan = tinhSoNgay(p.hanTra, homNay);
+            var isQuaHan = soNgayQuaHan > 0;
+            var statusText = isQuaHan ? '<span class="qua-han-text">Quá hạn (' + soNgayQuaHan + ' ngày)</span>' : '<span style="color:#4CAF50;">Còn hạn</span>';
+            
+            html += '<tr>';
+            html += '<td><strong>' + p.maPhieu + '</strong></td>';
+            html += '<td>' + p.tenDG + '</td>';
+            html += '<td>' + dinhDangNgay(p.hanTra) + '</td>';
+            html += '<td>' + statusText + '</td>';
+            html += '<td style="text-align:center"><button class="btn-select" onclick="chonPhieuTuBang(\'' + p.maPhieu + '\')">Chọn</button></td>';
+            html += '</tr>';
+        }
+    }
+    document.getElementById('dsPhieuHienHanh').innerHTML = html || '<tr><td colspan="5" style="text-align:center;">Trống.</td></tr>';
+}
+
+function chonPhieuTuBang(maPhieu) {
+    document.getElementById('maPhieuInput').value = maPhieu;
+    timPhieuGiaHan();
+}
+
+function locPhieu() {
+    var input = document.getElementById("filterInput").value.toUpperCase();
+    var tr = document.getElementById("dsPhieuHienHanh").getElementsByTagName("tr");
+    for (var i = 0; i < tr.length; i++) {
+        tr[i].style.display = tr[i].innerText.toUpperCase().indexOf(input) > -1 ? "" : "none";
+    }
+}
+
+// Các hàm tiện ích giữ nguyên
 function layNgayHomNay() {
     var d = new Date();
-    var thang = String(d.getMonth() + 1).padStart(2, '0');
-    var ngay = String(d.getDate()).padStart(2, '0');
-    return d.getFullYear() + '-' + thang + '-' + ngay;
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
 function tinhNgaySau(ngayStr, soNgay) {
     var d = new Date(ngayStr + 'T00:00:00');
     d.setDate(d.getDate() + soNgay);
-    var thang = String(d.getMonth() + 1).padStart(2, '0');
-    var ngay = String(d.getDate()).padStart(2, '0');
-    return d.getFullYear() + '-' + thang + '-' + ngay;
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
 function dinhDangNgay(str) {
     if (!str) return '---';
     var p = str.split('-');
-    if (p.length !== 3) return str;
     return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+function dinhDangTien(so) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(so);
 }
 
 function tinhSoNgay(ngay1Str, ngay2Str) {
@@ -167,13 +248,7 @@ function timPhieuGiaHan() {
     }
 
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    var phieu = null;
-    for (var i = 0; i < dsPhieuMuon.length; i++) {
-        if (dsPhieuMuon[i].maPhieu === maPhieu) {
-            phieu = dsPhieuMuon[i];
-            break;
-        }
-    }
+    var phieu = dsPhieuMuon.find(p => p.maPhieu === maPhieu);
 
     if (!phieu) {
         hienThiLoi('ketQuaTim', 'Không tìm thấy phiếu mượn với mã: <strong>' + maPhieu + '</strong>');
@@ -199,7 +274,7 @@ function hienThiCardGiaHan(phieu) {
     var badgeClass = soLanGiaHan === 0 ? 'badge-ok' : (soLanGiaHan === 1 ? 'badge-warn' : 'badge-danger');
     var soLanHtml = '<span class="badge ' + badgeClass + '">' + soLanGiaHan + '/2 lần gia hạn</span>';
 
-    var hanTraHtml = quaHan ? dinhDangNgay(phieu.hanTra) + ' <span style="color:#D32F2F;">(Quá hạn ' + soNgayQuaHan + ' ngày)</span>' : dinhDangNgay(phieu.hanTra) + ' <span style="color:#388E3C;">(Còn hạn)</span>';
+    var hanTraHtml = quaHan ? dinhDangNgay(phieu.hanTra) + ' <span class="qua-han-text">(Quá hạn ' + soNgayQuaHan + ' ngày)</span>' : dinhDangNgay(phieu.hanTra) + ' <span style="color:#388E3C;">(Còn hạn)</span>';
 
     document.getElementById('thongTinPhieu').innerHTML = '<div class="info-box">'
         + '<p><strong>Mã phiếu:</strong> ' + phieu.maPhieu + '</p>'
@@ -212,14 +287,15 @@ function hienThiCardGiaHan(phieu) {
     var khuNut = document.getElementById('khuNutGiaHan');
 
     if (soLanGiaHan >= 2) {
-        khuGiaHan.innerHTML = '<div class="error-box">🚫 Phiếu này đã được gia hạn <strong>' + soLanGiaHan + ' lần</strong> (tối đa 2 lần). Không thể gia hạn thêm!</div>';
+        khuGiaHan.innerHTML = '<div class="error-box">🚫 Phiếu này đã được gia hạn <strong>' + soLanGiaHan + ' lần</strong>. Không thể gia hạn thêm!</div>';
         khuNut.innerHTML = '<button class="btn btn-gray" onclick="resetTrang()">🔄 Tìm phiếu khác</button>';
         return;
     }
 
     if (quaHan) {
-        khuGiaHan.innerHTML = '<div class="error-box">⚠️ Phiếu mượn đã <strong>quá hạn ' + soNgayQuaHan + ' ngày</strong>. Không thể gia hạn khi đã quá hạn! Vui lòng thực hiện trả sách và đóng phạt.</div>';
-        khuNut.innerHTML = '<button class="btn btn-gray" onclick="resetTrang()">🔄 Tìm phiếu khác</button> <a href="tra-sach.html" class="btn btn-primary" style="text-decoration:none;margin-left:10px;">↩️ Đến trang Trả sách</a>';
+        tienPhatHienTai = soNgayQuaHan * 2000;
+        khuGiaHan.innerHTML = '<div class="error-box">⚠️ Phiếu mượn đã <strong>quá hạn ' + soNgayQuaHan + ' ngày</strong>. Cần nộp phạt <strong>' + dinhDangTien(tienPhatHienTai) + '</strong> và trả sách cũ trước khi mượn mới.</div>';
+        khuNut.innerHTML = '<button class="btn btn-primary" onclick="moModalThanhToan()">💰 Nộp phạt & Trả sách</button> <button class="btn btn-gray" onclick="resetTrang()" style="margin-left:10px;">🔄 Hủy</button>';
         return;
     }
 
@@ -228,10 +304,7 @@ function hienThiCardGiaHan(phieu) {
         + '<div class="row-info"><div class="label-col">Số ngày gia hạn thêm:</div><div class="value-col">'
         + '<select id="soNgayGiaHan" onchange="capNhatNgayMoi()" style="width:180px;padding:6px;border:1px solid #90CAF9;border-radius:4px;">'
         + '<option value="7">7 ngày</option><option value="14" selected>14 ngày</option></select></div></div>'
-        + '<div class="row-info"><div class="label-col">Hạn trả mới:</div><div class="value-col ngay-moi" id="hienThiNgayMoi">---</div></div>'
-        + '<div class="row-info"><div class="label-col">Lần gia hạn này là:</div><div class="value-col"><strong>Lần ' + (soLanGiaHan + 1) + '/2</strong>'
-        + (soLanGiaHan + 1 === 2 ? ' <span style="color:#E65100;">(Lần cuối được gia hạn)</span>' : '') + '</div></div></div>'
-        + '<p class="note">* Sau khi gia hạn, hạn trả sẽ được tính từ hạn trả cũ cộng thêm số ngày chọn.</p>';
+        + '<div class="row-info"><div class="label-col">Hạn trả mới:</div><div class="value-col ngay-moi" id="hienThiNgayMoi">---</div></div></div>';
 
     khuNut.innerHTML = '<button class="btn btn-success" onclick="xacNhanGiaHan()">✅ Xác nhận gia hạn</button> <button class="btn btn-gray" onclick="resetTrang()" style="margin-left:10px;">🔄 Hủy</button>';
     capNhatNgayMoi();
@@ -239,53 +312,78 @@ function hienThiCardGiaHan(phieu) {
 
 function capNhatNgayMoi() {
     if (!phieuHienTai) return;
-    var selectEl = document.getElementById('soNgayGiaHan');
-    var hienThiEl = document.getElementById('hienThiNgayMoi');
-    if (!selectEl || !hienThiEl) return;
-    var soNgay = parseInt(selectEl.value) || 14;
+    var soNgay = parseInt(document.getElementById('soNgayGiaHan').value) || 14;
     var ngayMoi = tinhNgaySau(phieuHienTai.hanTra, soNgay);
-    hienThiEl.textContent = dinhDangNgay(ngayMoi) + ' (+' + soNgay + ' ngày)';
+    document.getElementById('hienThiNgayMoi').textContent = dinhDangNgay(ngayMoi) + ' (+' + soNgay + ' ngày)';
+}
+
+// Logic nộp phạt QR
+function moModalThanhToan() {
+    document.getElementById('txtSoTienModal').innerText = "Số tiền phạt: " + dinhDangTien(tienPhatHienTai);
+    document.getElementById('modalThanhToanPhat').style.display = 'block';
+}
+
+function dongModal() {
+    document.getElementById('modalThanhToanPhat').style.display = 'none';
+}
+
+function xacNhanNopPhat() {
+    if (!phieuHienTai || tienPhatHienTai <= 0) return;
+    
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var index = dsPhieuMuon.findIndex(p => p.maPhieu === phieuHienTai.maPhieu);
+    
+    if (index !== -1) {
+        // Đánh dấu đã thanh toán phạt quá hạn
+        dsPhieuMuon[index].daNopPhatQuaHan = true;
+        dsPhieuMuon[index].ngayNopPhatQuaHan = layNgayHomNay();
+        dsPhieuMuon[index].soTienPhatQuaHan = tienPhatHienTai;
+        localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
+    }
+    
+    // ✅ FIX LỖI 8: Tạo phiếu phạt tự động
+    var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
+    var maPhat = 'PT' + Date.now();
+    var homNay = layNgayHomNay();
+    var soNgayQuaHan = tinhSoNgay(phieuHienTai.hanTra, homNay);
+    
+    dsPhat.push({
+        maPhat: maPhat,
+        maDG: phieuHienTai.maDG,
+        tenDG: phieuHienTai.tenDG,
+        loaiVP: 'Quá hạn',
+        soTien: tienPhatHienTai,
+        ngayPhat: homNay,
+        trangThai: 'Đã thanh toán',
+        ngayThanhToan: homNay,
+        ghiChu: 'Phiếu ' + phieuHienTai.maPhieu + ' quá hạn ' + soNgayQuaHan + ' ngày'
+    });
+    
+    localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
+    
+    alert('✅ Đã xác nhận thu tiền phạt ' + dinhDangTien(tienPhatHienTai) + '.\n\nMã phiếu phạt: ' + maPhat + '\n\nĐang chuyển đến trang Trả sách để hoàn tất thủ tục.');
+    dongModal();
+    window.location.href = 'tra-sach.html';
 }
 
 function xacNhanGiaHan() {
-    if (!phieuHienTai) {
-        alert('Lỗi: Chưa chọn phiếu mượn!');
-        return;
-    }
-    var selectEl = document.getElementById('soNgayGiaHan');
-    if (!selectEl) {
-        alert('Lỗi: Không tìm thấy lựa chọn số ngày!');
-        return;
-    }
-
-    var soNgay = parseInt(selectEl.value) || 14;
+    if (!phieuHienTai) return;
+    var soNgay = parseInt(document.getElementById('soNgayGiaHan').value);
     var hanTraMoi = tinhNgaySau(phieuHienTai.hanTra, soNgay);
-    var soLanGiaHan = parseInt(phieuHienTai.soLanGiaHan) || 0;
+    var soLanGiaHan = (parseInt(phieuHienTai.soLanGiaHan) || 0) + 1;
 
-    var xacNhan = confirm('XÁC NHẬN GIA HẠN\n\nPhiếu: ' + phieuHienTai.maPhieu + '\nĐộc giả: ' + phieuHienTai.tenDG + '\nHạn trả cũ: ' + dinhDangNgay(phieuHienTai.hanTra) + '\nGia hạn thêm: ' + soNgay + ' ngày\nHạn trả mới: ' + dinhDangNgay(hanTraMoi) + '\nĐây là lần gia hạn thứ: ' + (soLanGiaHan + 1) + '/2');
-    if (!xacNhan) return;
+    if (!confirm('Xác nhận gia hạn phiếu ' + phieuHienTai.maPhieu + ' đến ngày ' + dinhDangNgay(hanTraMoi) + '?')) return;
 
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    var capNhatOK = false;
-
-    for (var i = 0; i < dsPhieuMuon.length; i++) {
-        if (dsPhieuMuon[i].maPhieu === phieuHienTai.maPhieu) {
-            dsPhieuMuon[i].hanTraCu = dsPhieuMuon[i].hanTra;
-            dsPhieuMuon[i].hanTra = hanTraMoi;
-            dsPhieuMuon[i].soLanGiaHan = soLanGiaHan + 1;
-            capNhatOK = true;
-            break;
-        }
+    var index = dsPhieuMuon.findIndex(p => p.maPhieu === phieuHienTai.maPhieu);
+    
+    if (index !== -1) {
+        dsPhieuMuon[index].hanTra = hanTraMoi;
+        dsPhieuMuon[index].soLanGiaHan = soLanGiaHan;
+        localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
+        alert('✅ Gia hạn thành công!');
+        resetTrang();
     }
-
-    if (!capNhatOK) {
-        alert('Lỗi: Không thể cập nhật phiếu mượn!');
-        return;
-    }
-
-    localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
-    alert('✅ GIA HẠN THÀNH CÔNG!\n\nPhiếu: ' + phieuHienTai.maPhieu + '\nĐộc giả: ' + phieuHienTai.tenDG + '\nHạn trả mới: ' + dinhDangNgay(hanTraMoi) + '\nSố lần gia hạn: ' + (soLanGiaHan + 1) + '/2\n' + (soLanGiaHan + 1 >= 2 ? '\n⚠️ Đây là lần gia hạn cuối cùng!' : ''));
-    resetTrang();
 }
 
 function resetTrang() {
@@ -293,7 +391,7 @@ function resetTrang() {
     document.getElementById('maPhieuInput').value = '';
     document.getElementById('ketQuaTim').innerHTML = '';
     document.getElementById('cardGiaHan').className = 'card hidden';
-    document.getElementById('maPhieuInput').focus();
+    loadDanhSachPhieuHienHanh();
 }
 </script>
 </body>
