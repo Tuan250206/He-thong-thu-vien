@@ -2,6 +2,7 @@
 
 **Hệ Thống Quản Lý Thư Viện** là một hệ thống thông tin được thiết kế nhằm tự động hóa và tối ưu hóa các quy trình nghiệp vụ quản lý thư viện. Hệ thống phục vụ các nhân viên thư viện (bao gồm thủ thư, quản lý kho, quản trị viên), giúp quản lý tập trung các đối tượng như tài liệu, độc giả và nhân sự. Nhân viên có thể thực hiện nhanh chóng các nghiệp vụ như mượn – trả – gia hạn tài liệu, kiểm soát trạng thái thẻ độc giả, xử lý vi phạm cũng như tổng hợp, thống kê báo cáo số liệu công việc.
 Nhờ đó, hệ thống nâng cao hiệu quả quản lý, giảm thiểu sai sót thủ công, hỗ trợ minh bạch hóa quy trình làm việc và giúp cán bộ thư viện dễ dàng tra cứu, kiểm tra, kiểm soát và hỗ trợ ra quyết định trong vận hành thư viện hiện đại.
+
 ---
 
 ## 📘 Thông tin dự án
