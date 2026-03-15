@@ -176,7 +176,6 @@
                         <tr>
                             <th>Mã ĐG</th>
                             <th>Họ và tên</th>
-                            <th>Lớp</th>
                             <th style="text-align:center">Chọn</th>
                         </tr>
                     </thead>
@@ -262,11 +261,10 @@ function loadDanhSachDocGiaNhanh() {
         html += '<tr>';
         html += '<td><strong>' + dg.maDG + '</strong></td>';
         html += '<td>' + dg.hoTen + '</td>';
-        html += '<td>' + (dg.lop || '-') + '</td>';
         html += '<td style="text-align:center"><button class="btn-select-dg" onclick="chonDocGia(\'' + dg.maDG + '\')">Chọn</button></td>';
         html += '</tr>';
     }
-    document.getElementById('dsDocGiaNhanh').innerHTML = html || '<tr><td colspan="4" style="text-align:center">Chưa có dữ liệu độc giả</td></tr>';
+    document.getElementById('dsDocGiaNhanh').innerHTML = html || '<tr><td colspan="3" style="text-align:center">Chưa có dữ liệu độc giả</td></tr>';
 }
 
 function loadDanhSachSachNhanh() {

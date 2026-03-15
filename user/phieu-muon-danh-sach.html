@@ -320,9 +320,9 @@
                         <th style="width:100px">Mã phiếu</th>
                         <th style="width:90px">Mã ĐG</th>
                         <th>Tên độc giả</th>
+                        <th>Sách mượn</th>
                         <th style="width:100px">Ngày mượn</th>
                         <th style="width:100px">Hạn trả</th>
-                        <th style="width:70px; text-align:center">Số sách</th>
                         <th style="width:140px">Trạng thái</th>
                         <th style="width:160px; text-align:center">Hành động</th>
                     </tr>
@@ -478,14 +478,22 @@ function taiDanhSach() {
             hanhDong = '<span style="color:#2E7D32;font-size:12px;font-weight:bold;">✓ Đã hoàn tất</span>';
         }
 
+        // Hiển thị danh sách sách (tên sách hoặc mã sách + tên sách)
+        var danhSachSachHtml = '';
+        if (pm.danhSachSach && pm.danhSachSach.length > 0) {
+            danhSachSachHtml = pm.danhSachSach.map(function(sach) {
+                return '<div style="margin-bottom:2px;"><strong>' + (sach.maSach || '') + '</strong>: ' + (sach.tenSach || '') + '</div>';
+            }).join('');
+        }
+
         html += '<tr>';
         html += '<td>' + (j + 1) + '</td>';
         html += '<td><strong>' + (pm.maPhieu || '') + '</strong></td>';
         html += '<td><strong>' + (pm.maDG || '') + '</strong></td>';
         html += '<td>' + (pm.tenDG || '') + '</td>';
+        html += '<td>' + danhSachSachHtml + '</td>';
         html += '<td>' + dinhDangNgay(pm.ngayMuon) + '</td>';
         html += '<td>' + dinhDangNgay(pm.hanTra) + '</td>';
-        html += '<td style="text-align:center;"><strong>' + (pm.danhSachSach ? pm.danhSachSach.length : 0) + '</strong></td>';
         html += '<td><span class="badge ' + badgeClass + '">' + trangThaiText + '</span></td>';
         html += '<td style="text-align:center;">' + hanhDong + '</td>';
         html += '</tr>';
