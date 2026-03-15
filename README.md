@@ -7,7 +7,7 @@ Nhờ đó, hệ thống nâng cao hiệu quả quản lý, giảm thiểu sai s
 
 ## 📘 Thông tin dự án
 
-- **Môn học:** Phân tích và Thiết kế Hệ thống Thông tin (PTTKHTTT)
+- **Môn học:** Phân tích thiết kế hệ thống thông tin (PTTKHTTT)
 - **Đề tài:** Xây dựng hệ thống quản lý thư viện (Library Management System)
 
 ---
