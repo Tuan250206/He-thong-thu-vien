@@ -1,3 +1,40 @@
-📚 He-thong-thu-vien - Library Management System
+# 📚 Hệ Thống Quản Lý Thư Viện - Library Management System
 
-**He-thong-thu-vien** là một ứng dụng quản lý nghiệp vụ thư viện hiện đại, hỗ trợ tự động hóa các quy trình vận hành như quản lý bạn đọc, tài liệu, mượn trả sách và thống kê báo cáo, giúp tối ưu hoạt động của bất kỳ thư viện nào.
+**Hệ Thống Quản Lý Thư Viện** là một hệ thống thông tin được thiết kế nhằm tự động hóa và tối ưu hóa các quy trình nghiệp vụ tại thư viện. Hệ thống hỗ trợ quản lý tập trung các đối tượng như tài liệu, độc giả, cán bộ thư viện, đồng thời cho phép thực hiện toàn bộ các nghiệp vụ mượn, trả, gia hạn tài liệu, xử lý vi phạm và tổng hợp, thống kê báo cáo một cách nhanh chóng, minh bạch.
+Qua đó, hệ thống góp phần nâng cao hiệu quả quản lý, giảm thiểu sai sót thủ công, tăng khả năng tra cứu, kiểm tra và hỗ trợ nhà quản lý ra quyết định kịp thời trong mọi hoạt động vận hành thư viện hiện đại.
+
+---
+
+## 📘 Thông tin dự án
+
+- **Môn học:** Phân tích và Thiết kế Hệ thống Thông tin (PTTKHTTT)
+- **Đề tài:** Xây dựng hệ thống quản lý thư viện (Library Management System)
+
+---
+
+## ✨ Tính năng chính
+
+- **Quản lý độc giả:** Thêm mới, chỉnh sửa thông tin, khóa/mở thẻ độc giả, tra cứu và xem lịch sử mượn trả.
+- **Quản lý tài liệu:** Thêm mới và cập nhật thông tin sách, nhập/xuất kho, kiểm kê và quản lý nhà cung cấp tài liệu.
+- **Quản lý dịch vụ tuần hoàn:** Ghi nhận giao dịch mượn/trả sách, gia hạn mượn, xử lý vi phạm và phiếu phạt.
+- **Tra cứu thông tin:** Tìm kiếm sách theo từ khóa; xem nhanh trạng thái, thông tin chi tiết từng tài liệu.
+- **Thống kê và tổng hợp số liệu:** Tổng hợp số liệu mượn trả, tồn kho, vi phạm, top sách/độc giả, hỗ trợ xuất báo cáo quản lý.
+- **Quản trị hệ thống:** Tạo, sửa, xóa tài khoản nhân viên và phân quyền sử dụng phần mềm.
+- **Giao diện trực quan:** Xây dựng bằng HTML, CSS, JavaScript; thân thiện với người dùng, dễ thao tác.
+
+---
+
+## 🛠️ Công nghệ sử dụng
+
+- **Frontend:** HTML, CSS, JavaScript
+- **Công cụ phát triển:** Visual Studio Code (VS Code)
+- **Quản lý mã nguồn:** Git & GitHub
+---
+
+## 🚀 Hướng dẫn cài đặt & sử dụng
+
+1. **Yêu cầu:** Máy tính có trình duyệt hiện đại (Chrome, Firefox, Edge...)  
+2. **Clone project:**
+    ```sh
+    git clone https://github.com/Tuan250206/He-thong-thu-vien.git
+    ```
