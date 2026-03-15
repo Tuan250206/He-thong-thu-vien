@@ -6,33 +6,47 @@
 <title>Trả sách - Thư viện</title>
 <link rel="stylesheet" href="common.css">
 <style>
+/* --- Giữ nguyên các style cũ của bạn --- */
 .page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 .page-title h2 { font-size: 17px; color: #333; }
 .card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 .card h3 { font-size: 15px; color: #2196F3; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #E3F2FD; }
 .form-group { margin-bottom: 14px; }
 .form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
-.form-group input, .form-group select { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 320px; }
-.form-group input:focus { outline: none; border-color: #2196F3; }
+.form-group input { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 320px; }
+
+.quick-select-wrapper { margin-top: 15px; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+.scroll-area { max-height: 400px; overflow-y: auto; }
+.table-quick { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table-quick thead { background: #2196F3; color: white; position: sticky; top: 0; }
+.table-quick th { padding: 12px 10px; text-align: left; }
+.table-quick td { padding: 10px; border-bottom: 1px solid #eee; }
+.table-quick tbody tr:hover { background-color: #f1f8ff; cursor: pointer; }
+
 .btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
 .btn-primary { background: #2196F3; color: white; }
-.btn-primary:hover { background: #1976D2; }
 .btn-success { background: #4CAF50; color: white; }
-.btn-success:hover { background: #388E3C; }
+.btn-danger { background: #f44336; color: white; font-size: 12px; padding: 4px 10px; }
+.btn-select { background: #FF9800; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-weight: bold; }
+
 .info-box { background: #FFFDE7; border: 1px solid #F9A825; border-radius: 4px; padding: 12px 15px; margin-top: 10px; font-size: 13px; }
-.info-box p { margin-bottom: 4px; }
-.error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
 .warn-box { background: #FFF3E0; border: 1px solid #FFCC80; color: #E65100; padding: 10px 14px; border-radius: 4px; margin-bottom: 12px; font-size: 13px; }
+.error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
+
 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 th { background: #2196F3; color: white; padding: 10px 12px; text-align: left; font-size: 13px; }
-td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
-tr:hover td { background: #F5F5F5; }
-td select { padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; width: 120px; }
+td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
 .tong-tien { background: #FFEBEE; border: 2px solid #EF9A9A; border-radius: 4px; padding: 12px 20px; margin-top: 15px; font-size: 15px; font-weight: bold; color: #C62828; text-align: right; }
 .tong-tien.no-fine { background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32; }
 .qua-han { color: #D32F2F; font-weight: bold; }
-.con-han { color: #388E3C; }
 .hidden { display: none; }
+
+/* --- CSS BỔ SUNG CHO MODAL QR --- */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+.modal-content { background-color: white; margin: 5% auto; padding: 20px; border-radius: 8px; width: 400px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.qr-container { margin: 20px 0; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; }
+.qr-container img { width: 250px; height: 250px; display: block; margin: 0 auto; }
+.modal-footer { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
 </style>
 </head>
 <body>
@@ -79,6 +93,7 @@ td select { padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; font-s
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
+
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -91,187 +106,123 @@ td select { padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; font-s
 <div class="content">
     <div class="page-title"><h2>↩️ Trả sách</h2></div>
 
-    <div class="card">
-        <h3>🔍 Tìm phiếu mượn</h3>
+    <div class="card" id="cardChonPhieu">
+        <h3>🔍 Danh sách phiếu đang mượn</h3>
         <div class="form-group">
-            <label>Mã phiếu hoặc Mã độc giả:</label>
-            <input type="text" id="maTimInput" placeholder="Nhập mã phiếu (PM...) hoặc mã độc giả..." onkeydown="if(event.keyCode===13) timPhieu()">
-            <button class="btn btn-primary" onclick="timPhieu()" style="margin-left:8px;">🔍 Tìm</button>
+            <label>Tìm kiếm nhanh:</label>
+            <input type="text" id="filterInput" placeholder="Nhập tên độc giả hoặc mã phiếu..." onkeyup="locPhieu()">
         </div>
-        <div id="ketQuaTim"></div>
+        <div class="quick-select-wrapper">
+            <div class="scroll-area">
+                <table class="table-quick">
+                    <thead>
+                        <tr>
+                            <th>Mã Phiếu</th>
+                            <th>Độc giả</th>
+                            <th>Ngày mượn</th>
+                            <th>Hạn trả</th>
+                            <th>Số sách</th>
+                            <th style="text-align:center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsPhieuMuonActive"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div class="card hidden" id="cardThongTinPhieu">
-        <h3>📋 Thông tin phiếu mượn</h3>
+        <h3>📋 Thông tin phiếu mượn đã chọn</h3>
         <div id="chiTietPhieu"></div>
     </div>
 
     <div class="card hidden" id="cardTraSach">
-        <h3>📚 Chọn sách cần trả</h3>
-        <p style="margin-bottom:10px;font-size:12px;color:#888;">Tích chọn sách cần trả và chọn tình trạng sách khi trả.</p>
+        <h3>📚 Chi tiết sách trả</h3>
         <div id="bangSachTra"></div>
         <div id="khuTongPhat"></div>
         <div style="margin-top:20px;">
-            <button class="btn btn-success" onclick="xacNhanTra()">✅ Xác nhận trả sách</button>
-            <button class="btn btn-primary" onclick="resetTrang()" style="margin-left:10px;background:#757575;">🔄 Tìm phiếu khác</button>
+            <button class="btn btn-success" onclick="kiemTraTruocKhiTra()">✅ Xác nhận trả sách</button>
+            <button class="btn btn-primary" onclick="resetTrang()" style="margin-left:10px;background:#757575;">🔄 Quay lại danh sách</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalThanhToan" class="modal">
+    <div class="modal-content">
+        <h3 style="color: #C62828;">💰 Thanh toán bồi thường</h3>
+        <p id="txtSoTienModal" style="font-weight: bold; font-size: 18px; margin: 10px 0;"></p>
+        <div class="qr-container">
+            <img src="../img/QR.jpg" alt="QR Ngân Hàng" id="imgQR">
+            <p style="font-size: 12px; color: #666; margin-top: 10px;">Vui lòng quét mã để chuyển khoản bồi thường rách/mất sách</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" onclick="xacNhanTra(true)">✅ Đã nhận được tiền</button>
+            <button class="btn" style="background: #757575; color: white;" onclick="dongModal()">Hủy</button>
         </div>
     </div>
 </div>
 
 <script>
 var phieuHienTai = null;
-var dsDuLieuDropdown = [];
+var tongPhatGlobal = 0;
 
 window.onload = function() {
     var user = localStorage.getItem('currentUser') || 'Nhân viên';
     var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
     var tenHienThi = userInfo.hoTen || user;
     document.getElementById('tenNguoiDung').textContent = tenHienThi;
+    loadDanhSachPhieuActive();
+    
+    // Kiểm tra nếu có parameter từ URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var maPhieuURL = urlParams.get('ma');
+    if (maPhieuURL) {
+        chonPhieu(maPhieuURL);
+    }
 };
 
-function layNgayHomNay() {
-    var d = new Date();
-    var thang = String(d.getMonth() + 1).padStart(2, '0');
-    var ngay = String(d.getDate()).padStart(2, '0');
-    return d.getFullYear() + '-' + thang + '-' + ngay;
-}
-
-function dinhDangNgay(str) {
-    if (!str) return '---';
-    var p = str.split('-');
-    if (p.length !== 3) return str;
-    return p[2] + '/' + p[1] + '/' + p[0];
-}
-
-function dinhDangTien(so) {
-    so = Math.round(so);
-    if (so === 0) return '0 đ';
-    var str = so.toString();
-    var result = '';
-    for (var i = 0; i < str.length; i++) {
-        if (i > 0 && (str.length - i) % 3 === 0) result += '.';
-        result += str[i];
-    }
-    return result + ' đ';
-}
-
-function tinhSoNgay(ngay1Str, ngay2Str) {
-    var d1 = new Date(ngay1Str);
-    var d2 = new Date(ngay2Str);
-    return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
-}
-
-function hienThiLoi(idEl, msg) {
-    document.getElementById(idEl).innerHTML = '<div class="error-box">⚠️ ' + msg + '</div>';
-}
-
-function timPhieu() {
-    var maTim = document.getElementById('maTimInput').value.trim();
-    var elKetQua = document.getElementById('ketQuaTim');
-    elKetQua.innerHTML = '';
-    document.getElementById('cardThongTinPhieu').className = 'card hidden';
-    document.getElementById('cardTraSach').className = 'card hidden';
-    phieuHienTai = null;
-
-    if (!maTim) {
-        hienThiLoi('ketQuaTim', 'Vui lòng nhập mã phiếu hoặc mã độc giả!');
-        return;
-    }
-
+function loadDanhSachPhieuActive() {
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    var phieuTimThay = null;
+    var html = '';
     for (var i = 0; i < dsPhieuMuon.length; i++) {
-        if (dsPhieuMuon[i].maPhieu === maTim && dsPhieuMuon[i].trangThai === 'Đang mượn') {
-            phieuTimThay = dsPhieuMuon[i];
-            break;
+        var p = dsPhieuMuon[i];
+        if (p.trangThai === 'Đang mượn' || p.trangThai === 'Quá hạn') {
+            var isQuaHan = tinhSoNgay(p.hanTra, layNgayHomNay()) > 0;
+            var alertClass = isQuaHan ? 'class="qua-han"' : '';
+            html += '<tr><td><strong>' + p.maPhieu + '</strong></td><td>' + p.tenDG + '</td><td>' + dinhDangNgay(p.ngayMuon) + '</td>';
+            html += '<td ' + alertClass + '>' + dinhDangNgay(p.hanTra) + '</td><td>' + p.danhSachSach.length + ' cuốn</td>';
+            html += '<td style="text-align:center"><button class="btn-select" onclick="chonPhieu(\'' + p.maPhieu + '\')">Chọn trả</button></td></tr>';
         }
     }
-
-    if (phieuTimThay) {
-        hienThiChiTietPhieu(phieuTimThay);
-        return;
-    }
-
-    var phieuCuaDG = [];
-    for (var j = 0; j < dsPhieuMuon.length; j++) {
-        if (dsPhieuMuon[j].maDG === maTim && dsPhieuMuon[j].trangThai === 'Đang mượn') {
-            phieuCuaDG.push(dsPhieuMuon[j]);
-        }
-    }
-
-    if (phieuCuaDG.length === 0) {
-        hienThiLoi('ketQuaTim', 'Không tìm thấy phiếu mượn đang hoạt động với: <strong>' + maTim + '</strong>');
-        return;
-    }
-
-    if (phieuCuaDG.length === 1) {
-        hienThiChiTietPhieu(phieuCuaDG[0]);
-        return;
-    }
-
-    dsDuLieuDropdown = phieuCuaDG;
-    var html = '<div class="info-box"><p><strong>Tìm thấy ' + phieuCuaDG.length + ' phiếu mượn</strong> đang hoạt động của độc giả.</p>';
-    html += '<p style="margin-top:8px;">Vui lòng chọn phiếu cần trả:</p>';
-    html += '<select id="chonPhieuDropdown" style="width:400px;padding:7px;margin-top:8px;border:1px solid #ccc;border-radius:4px;" onchange="chonPhieuTuDropdown()">';
-    html += '<option value="">-- Chọn phiếu mượn --</option>';
-
-    for (var k = 0; k < phieuCuaDG.length; k++) {
-        var p = phieuCuaDG[k];
-        html += '<option value="' + p.maPhieu + '">' + p.maPhieu + ' | Ngày mượn: ' + dinhDangNgay(p.ngayMuon) + ' | Hạn trả: ' + dinhDangNgay(p.hanTra) + ' | ' + p.danhSachSach.length + ' cuốn</option>';
-    }
-    html += '</select></div>';
-    elKetQua.innerHTML = html;
+    document.getElementById('dsPhieuMuonActive').innerHTML = html || '<tr><td colspan="6" style="text-align:center;">Trống.</td></tr>';
 }
 
-function chonPhieuTuDropdown() {
-    var maPhieu = document.getElementById('chonPhieuDropdown').value;
-    if (!maPhieu) {
-        document.getElementById('cardThongTinPhieu').className = 'card hidden';
-        document.getElementById('cardTraSach').className = 'card hidden';
-        return;
-    }
-    for (var i = 0; i < dsDuLieuDropdown.length; i++) {
-        if (dsDuLieuDropdown[i].maPhieu === maPhieu) {
-            hienThiChiTietPhieu(dsDuLieuDropdown[i]);
-            break;
-        }
+function chonPhieu(maPhieu) {
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    phieuHienTai = dsPhieuMuon.find(p => p.maPhieu === maPhieu);
+    if (phieuHienTai) {
+        document.getElementById('cardChonPhieu').className = 'card hidden';
+        hienThiChiTietPhieu(phieuHienTai);
     }
 }
 
 function hienThiChiTietPhieu(phieu) {
-    phieuHienTai = phieu;
     var homNay = layNgayHomNay();
     var soNgayQuaHan = tinhSoNgay(phieu.hanTra, homNay);
-    var quaHan = soNgayQuaHan > 0;
-
-    var trangThaiHtml = quaHan ? '<span class="qua-han">⚠️ Quá hạn ' + soNgayQuaHan + ' ngày!</span>' : '<span class="con-han">✅ ' + phieu.trangThai + '</span>';
-
     document.getElementById('cardThongTinPhieu').className = 'card';
-    document.getElementById('chiTietPhieu').innerHTML = '<div class="info-box">'
-        + '<p><strong>Mã phiếu:</strong> ' + phieu.maPhieu + '</p>'
-        + '<p><strong>Mã DG:</strong> ' + phieu.maDG + ' &nbsp;|&nbsp; <strong>Tên:</strong> ' + phieu.tenDG + '</p>'
-        + '<p><strong>Ngày mượn:</strong> ' + dinhDangNgay(phieu.ngayMuon) + ' &nbsp;|&nbsp; <strong>Hạn trả:</strong> ' + dinhDangNgay(phieu.hanTra) + '</p>'
-        + '<p><strong>Trạng thái:</strong> ' + trangThaiHtml + '</p>'
-        + '<p><strong>Số sách:</strong> ' + phieu.danhSachSach.length + ' cuốn</p></div>';
-
+    document.getElementById('chiTietPhieu').innerHTML = '<div class="info-box"><p><strong>Độc giả:</strong> ' + phieu.tenDG + '</p></div>';
     hienThiBangSachTra(phieu, soNgayQuaHan);
     document.getElementById('cardTraSach').className = 'card';
 }
 
 function hienThiBangSachTra(phieu, soNgayQuaHan) {
-    var html = '';
-    if (soNgayQuaHan > 0) {
-        html += '<div class="warn-box">⏰ Phiếu mượn quá hạn <strong>' + soNgayQuaHan + ' ngày</strong>. Tiền phạt quá hạn: ' + dinhDangTien(soNgayQuaHan * 2000) + ' / cuốn (không mất/hư hỏng).</div>';
-    }
-
-    html += '<table><tr><th style="width:50px;">Chọn</th><th>Mã sách</th><th>Tên sách</th><th>Tình trạng</th><th style="text-align:right;padding-right:15px;">Tiền phạt</th></tr>';
-
+    var html = '<table><tr><th>Trả</th><th>Mã sách</th><th>Tên sách</th><th>Tình trạng</th><th style="text-align:right;">Phạt</th></tr>';
     for (var i = 0; i < phieu.danhSachSach.length; i++) {
         var s = phieu.danhSachSach[i];
-        html += '<tr><td style="text-align:center;"><input type="checkbox" id="cb_' + i + '" checked onchange="capNhatTienPhat()"></td>';
+        html += '<tr><td><input type="checkbox" id="cb_' + i + '" checked onchange="capNhatTienPhat()"></td>';
         html += '<td>' + s.maSach + '</td><td>' + s.tenSach + '</td>';
-        html += '<td><select id="tt_' + i + '" onchange="capNhatTienPhat()"><option value="Tốt">Tốt</option><option value="Rách">Rách</option><option value="Hư hỏng">Hư hỏng</option><option value="Mất">Mất</option></select></td>';
-        html += '<td style="text-align:right;padding-right:15px;" id="phat_' + i + '">0 đ</td></tr>';
+        html += '<td><select id="tt_' + i + '" onchange="capNhatTienPhat()"><option value="Tốt">Tốt</option><option value="Rách">Rách</option><option value="Mất">Mất</option></select></td>';
+        html += '<td style="text-align:right;" id="phat_' + i + '">0 đ</td></tr>';
     }
     html += '</table>';
     document.getElementById('bangSachTra').innerHTML = html;
@@ -279,187 +230,186 @@ function hienThiBangSachTra(phieu, soNgayQuaHan) {
 }
 
 function capNhatTienPhat() {
-    if (!phieuHienTai) return;
     var homNay = layNgayHomNay();
     var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuHienTai.hanTra, homNay));
-    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-    var tongPhat = 0;
-    var coChonSach = false;
+    // Lấy danh sách sách gốc từ kho để truy xuất giá bồi thường (giaBT)
+    var dsSachGoc = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    
+    // ✅ FIX LỖI 6: Phạt quá hạn chỉ tính 1 lần cho cả phiếu, không nhân với số sách
+    var phatQuaHan = soNgayQuaHan * 2000;
+    var phatRachMat = 0;
+    var soSachDuocChonTra = 0;
 
     for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
         var cbEl = document.getElementById('cb_' + i);
         var ttEl = document.getElementById('tt_' + i);
-        var phatEl = document.getElementById('phat_' + i);
-        if (!cbEl || !ttEl || !phatEl) continue;
-
+        
+        // ✅ FIX LỖI 7: Kiểm tra số sách được chọn trả
+        if (cbEl.checked) {
+            soSachDuocChonTra++;
+        }
+        
+        // Nếu không tích chọn trả cuốn này thì bỏ qua không tính phạt
         if (!cbEl.checked) {
-            phatEl.textContent = '---';
-            phatEl.style.color = '#aaa';
+            document.getElementById('phat_' + i).textContent = '---';
             continue;
         }
 
-        coChonSach = true;
-        var maSach = phieuHienTai.danhSachSach[i].maSach;
-        var giaBT = 0;
-        for (var j = 0; j < dsSach.length; j++) {
-            if (dsSach[j].maSach === maSach) {
-                giaBT = parseFloat(dsSach[j].giaBT) || 0;
-                break;
-            }
+        var phatCuonNay = 0; // Mỗi cuốn chỉ tính phạt rách/mất
+
+        if (ttEl.value === 'Rách') {
+            phatCuonNay = 15000; // Phạt rách đồng giá 15k
+            phatRachMat += phatCuonNay;
+        } 
+        else if (ttEl.value === 'Mất') {
+            // Tìm thông tin sách trong kho dựa trên mã sách của cuốn đang trả
+            var maSachHienTai = phieuHienTai.danhSachSach[i].maSach;
+            var thongTinSach = dsSachGoc.find(s => s.maSach === maSachHienTai);
+            
+            // Lấy giaBT từ dữ liệu, nếu không có thì mặc định là 0
+            var tienBoiThuong = thongTinSach && thongTinSach.giaBT ? parseFloat(thongTinSach.giaBT) : 0;
+            phatCuonNay = tienBoiThuong;
+            phatRachMat += phatCuonNay;
         }
 
-        var tinhTrang = ttEl.value;
-        var phatCuonNay = 0;
-
-        if (tinhTrang === 'Mất') {
-            phatCuonNay = giaBT;
-        } else {
-            phatCuonNay = soNgayQuaHan * 2000;
-            if (tinhTrang === 'Rách' || tinhTrang === 'Hư hỏng') {
-                phatCuonNay += giaBT * 0.5;
-            }
-        }
-
-        tongPhat += phatCuonNay;
-        phatEl.textContent = dinhDangTien(phatCuonNay);
-        phatEl.style.color = phatCuonNay > 0 ? '#C62828' : '#388E3C';
+        document.getElementById('phat_' + i).textContent = phatCuonNay > 0 ? dinhDangTien(phatCuonNay) : '0 đ';
     }
 
-    var khuTongPhat = document.getElementById('khuTongPhat');
+    var tongPhat = phatQuaHan + phatRachMat;
+    tongPhatGlobal = tongPhat;
+    
+    var noiDung = '';
+    if (phatQuaHan > 0) {
+        noiDung += '<div>💰 Phạt quá hạn (' + soNgayQuaHan + ' ngày): <strong>' + dinhDangTien(phatQuaHan) + '</strong></div>';
+    }
+    if (phatRachMat > 0) {
+        noiDung += '<div>💰 Phạt rách/mất sách: <strong>' + dinhDangTien(phatRachMat) + '</strong></div>';
+    }
+    
     if (tongPhat > 0) {
-        khuTongPhat.innerHTML = '<div class="tong-tien">💰 Tổng tiền phạt: <span id="tongTienPhat">' + dinhDangTien(tongPhat) + '</span></div>';
-    } else if (coChonSach) {
-        khuTongPhat.innerHTML = '<div class="tong-tien no-fine">✅ Không có tiền phạt</div>';
+        noiDung += '<hr style="margin: 10px 0; border: none; border-top: 2px solid #C62828;">';
+        noiDung += '<div style="font-size: 16px;">💰 <strong>TỔNG TIỀN PHẠT: ' + dinhDangTien(tongPhat) + '</strong></div>';
+        document.getElementById('khuTongPhat').innerHTML = '<div class="tong-tien">' + noiDung + '</div>';
     } else {
-        khuTongPhat.innerHTML = '<div class="warn-box">⚠️ Vui lòng chọn ít nhất một cuốn sách để trả.</div>';
+        document.getElementById('khuTongPhat').innerHTML = '<div class="tong-tien no-fine">✅ Không có tiền phạt</div>';
+    }
+    
+    // ✅ FIX LỖI 7: Cảnh báo nếu chưa chọn trả hết sách
+    if (soSachDuocChonTra < phieuHienTai.danhSachSach.length) {
+        var canhBao = '<div class="warn-box">⚠️ Bạn chưa chọn trả hết ' + phieuHienTai.danhSachSach.length + ' cuốn sách! (Đã chọn: ' + soSachDuocChonTra + ')</div>';
+        document.getElementById('khuTongPhat').innerHTML = canhBao + document.getElementById('khuTongPhat').innerHTML;
     }
 }
 
-function xacNhanTra() {
-    if (!phieuHienTai) {
-        alert('Lỗi: Chưa chọn phiếu mượn!');
-        return;
-    }
-
-    var sachTraList = [];
+// LOGIC MỚI: Kiểm tra tiền phạt rách/mất trước khi hiện QR
+function kiemTraTruocKhiTra() {
+    // ✅ FIX LỖI 7: Bắt buộc phải trả hết sách
+    var soSachDuocChonTra = 0;
     for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
-        var cb = document.getElementById('cb_' + i);
-        var tt = document.getElementById('tt_' + i);
-        if (cb && cb.checked) {
-            sachTraList.push({ index: i, maSach: phieuHienTai.danhSachSach[i].maSach, tenSach: phieuHienTai.danhSachSach[i].tenSach, tinhTrang: tt ? tt.value : 'Tốt' });
+        var cbEl = document.getElementById('cb_' + i);
+        if (cbEl && cbEl.checked) {
+            soSachDuocChonTra++;
         }
     }
-
-    if (sachTraList.length === 0) {
-        alert('Vui lòng chọn ít nhất một cuốn sách để trả!');
+    
+    if (soSachDuocChonTra < phieuHienTai.danhSachSach.length) {
+        alert('❌ Bạn phải trả hết ' + phieuHienTai.danhSachSach.length + ' cuốn sách!\n\nHiện tại chỉ chọn trả: ' + soSachDuocChonTra + ' cuốn.\n\nVui lòng tích chọn tất cả các sách cần trả.');
         return;
     }
-
-    var homNay = layNgayHomNay();
-    var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuHienTai.hanTra, homNay));
-    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-
-    var tongPhat = 0;
-    var loaiVPCuoiCung = '';
-    var coMat = false;
-    var coHuHong = false;
-    var coQuaHan = soNgayQuaHan > 0;
-
-    for (var s = 0; s < sachTraList.length; s++) {
-        var st = sachTraList[s];
-        var giaBT = 0;
-        for (var j = 0; j < dsSach.length; j++) {
-            if (dsSach[j].maSach === st.maSach) {
-                giaBT = parseFloat(dsSach[j].giaBT) || 0;
-                break;
-            }
-        }
-
-        if (st.tinhTrang === 'Mất') {
-            tongPhat += giaBT;
-            coMat = true;
-        } else {
-            tongPhat += soNgayQuaHan * 2000;
-            if (st.tinhTrang === 'Rách' || st.tinhTrang === 'Hư hỏng') {
-                tongPhat += giaBT * 0.5;
-                coHuHong = true;
-            }
-        }
-    }
-
-    if (coMat) loaiVPCuoiCung = 'Mất sách';
-    else if (coHuHong) loaiVPCuoiCung = 'Hư hỏng';
-    else if (coQuaHan) loaiVPCuoiCung = 'Quá hạn';
-
-    var tenSachTra = '';
-    for (var t = 0; t < sachTraList.length; t++) {
-        tenSachTra += '\n  - ' + sachTraList[t].tenSach + ' [' + sachTraList[t].tinhTrang + ']';
-    }
-    var xacNhan = confirm('XÁC NHẬN TRẢ SÁCH\n\nĐộc giả: ' + phieuHienTai.tenDG + '\nPhiếu: ' + phieuHienTai.maPhieu + '\nSách trả:' + tenSachTra + '\n\n' + (tongPhat > 0 ? '💰 Tiền phạt: ' + dinhDangTien(tongPhat) : '✅ Không có tiền phạt'));
-    if (!xacNhan) return;
-
-    for (var si = 0; si < sachTraList.length; si++) {
-        if (sachTraList[si].tinhTrang !== 'Mất') {
-            for (var di = 0; di < dsSach.length; di++) {
-                if (dsSach[di].maSach === sachTraList[si].maSach) {
-                    dsSach[di].soLuongCon = parseInt(dsSach[di].soLuongCon) + 1;
-                    break;
-                }
-            }
-        }
-    }
-    localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
-
-    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    var idSachTra = {};
-    for (var si2 = 0; si2 < sachTraList.length; si2++) {
-        idSachTra[sachTraList[si2].maSach] = true;
-    }
-
-    for (var pi = 0; pi < dsPhieuMuon.length; pi++) {
-        if (dsPhieuMuon[pi].maPhieu === phieuHienTai.maPhieu) {
-            for (var bi = 0; bi < dsPhieuMuon[pi].danhSachSach.length; bi++) {
-                if (idSachTra[dsPhieuMuon[pi].danhSachSach[bi].maSach]) {
-                    dsPhieuMuon[pi].danhSachSach[bi].tinhTrang = sachTraList.filter(function(x) { return x.maSach === dsPhieuMuon[pi].danhSachSach[bi].maSach; })[0].tinhTrang;
-                }
-            }
-            var tatCaTra = (sachTraList.length === phieuHienTai.danhSachSach.length);
-            if (tatCaTra) {
-                dsPhieuMuon[pi].trangThai = 'Đã trả';
-                dsPhieuMuon[pi].ngayTra = homNay;
-            }
+    
+    var coSanhRachMat = false;
+    for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
+        var ttEl = document.getElementById('tt_' + i);
+        var cbEl = document.getElementById('cb_' + i);
+        if (cbEl.checked && (ttEl.value === 'Rách' || ttEl.value === 'Mất')) {
+            coSanhRachMat = true;
             break;
         }
     }
-    localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
 
-    var maPhatMoi = '';
-    if (tongPhat > 0) {
-        maPhatMoi = 'MPH' + Date.now();
-        var phieuPhat = { maPhat: maPhatMoi, maPhieu: phieuHienTai.maPhieu, maDG: phieuHienTai.maDG, tenDG: phieuHienTai.tenDG, loaiVP: loaiVPCuoiCung, soTien: tongPhat, ngayPhat: homNay, trangThai: 'Chưa thanh toán' };
-        var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
-        dsPhat.push(phieuPhat);
-        localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
-    }
-
-    var thongBao = '✅ TRẢ SÁCH THÀNH CÔNG!\n\nPhiếu: ' + phieuHienTai.maPhieu + '\nĐộc giả: ' + phieuHienTai.tenDG + '\nSố sách đã trả: ' + sachTraList.length + ' cuốn\n';
-    if (tongPhat > 0) {
-        thongBao += '💰 Tiền phạt: ' + dinhDangTien(tongPhat) + '\n📋 Mã phiếu phạt: ' + maPhatMoi + ' (xem tại trang Xử lý phạt)';
+    // Nếu có tiền phạt (do quá hạn hoặc rách/mất) thì hiện Modal QR ngân hàng
+    if (tongPhatGlobal > 0) {
+        document.getElementById('txtSoTienModal').innerText = "Số tiền cần thanh toán: " + dinhDangTien(tongPhatGlobal);
+        document.getElementById('modalThanhToan').style.display = 'block';
     } else {
-        thongBao += '✅ Không có tiền phạt.';
+        // Không phạt thì xác nhận trả bình thường
+        if(confirm("Xác nhận trả sách?")) {
+            xacNhanTra(false);
+        }
     }
-    alert(thongBao);
-    resetTrang();
+}
+
+function dongModal() {
+    document.getElementById('modalThanhToan').style.display = 'none';
+}
+
+function xacNhanTra(daThuTien) {
+    if (!phieuHienTai) return;
+    
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+
+    var indexPhieu = dsPhieuMuon.findIndex(p => p.maPhieu === phieuHienTai.maPhieu);
+    if (indexPhieu !== -1) {
+        dsPhieuMuon[indexPhieu].trangThai = 'Đã trả';
+        dsPhieuMuon[indexPhieu].ngayTraThucTe = layNgayHomNay();
+        if(daThuTien) dsPhieuMuon[indexPhieu].ghiChuPhat = "Đã thu bồi thường qua Ngân hàng: " + dinhDangTien(tongPhatGlobal);
+    }
+
+    // Cập nhật kho
+    phieuHienTai.danhSachSach.forEach((sachTra, index) => {
+        var cbEl = document.getElementById('cb_' + index);
+        var ttEl = document.getElementById('tt_' + index);
+        // Chỉ cộng lại kho nếu sách không bị "Mất"
+        if (cbEl && cbEl.checked && ttEl.value !== 'Mất') {
+            var sachTrongKho = dsSach.find(s => s.maSach === sachTra.maSach);
+            if (sachTrongKho) {
+                sachTrongKho.soLuongCon = (parseInt(sachTrongKho.soLuongCon) || 0) + 1;
+            }
+        }
+    });
+
+    localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
+    localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
+
+    dongModal();
+    alert('✅ Trả sách thành công!');
+    resetTrang(); 
 }
 
 function resetTrang() {
     phieuHienTai = null;
-    dsDuLieuDropdown = [];
-    document.getElementById('maTimInput').value = '';
-    document.getElementById('ketQuaTim').innerHTML = '';
+    tongPhatGlobal = 0;
+    document.getElementById('cardChonPhieu').className = 'card';
     document.getElementById('cardThongTinPhieu').className = 'card hidden';
     document.getElementById('cardTraSach').className = 'card hidden';
-    document.getElementById('maTimInput').focus();
+    loadDanhSachPhieuActive();
+}
+
+// Các hàm tiện ích (giữ nguyên)
+function layNgayHomNay() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function dinhDangNgay(str) {
+    if (!str) return '---';
+    var p = str.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+}
+function dinhDangTien(so) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(so);
+}
+function tinhSoNgay(ngay1Str, ngay2Str) {
+    var d1 = new Date(ngay1Str);
+    var d2 = new Date(ngay2Str);
+    return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+}
+function locPhieu() {
+    var input = document.getElementById("filterInput").value.toUpperCase();
+    var tr = document.getElementById("dsPhieuMuonActive").getElementsByTagName("tr");
+    for (var i = 0; i < tr.length; i++) {
+        tr[i].style.display = tr[i].innerText.toUpperCase().indexOf(input) > -1 ? "" : "none";
+    }
 }
 </script>
 </body>
