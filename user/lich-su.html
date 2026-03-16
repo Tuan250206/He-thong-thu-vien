@@ -183,14 +183,13 @@ function xayDungGiaoDich() {
     // Luôn push giao dịch mượn
     tatCa.push({ ngay: pm.ngayMuon || '', loai: 'Mượn', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: chiTiet || 'Phiếu mượn', soTien: null, createdAt: pm.createdAtMuon || Date.now()  });
 
-    // Giao dịch trả: luôn push nếu phiếu đã trả và có ngày trả thực tế
-    if (pm.trangThai === 'Đã trả' && pm.ngayTraThucTe) {
-    var coPhat = dsPhat.some(phat => phat.maPhieu === pm.maPhieu);
-    if (!coPhat) {
-      tatCa.push({ ngay: pm.ngayTraThucTe, loai: 'Trả', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: chiTiet || 'Phiếu trả', soTien: null, createdAt: pm.createdAtTra || Date.now() });
+    // Giao dịch trả: Kiểm tra xem tất cả sách trong phiếu đã được trả chưa
+    if (pm.danhSachSach && pm.danhSachSach.length > 0) {
+      var tatCaSachDaTra = pm.danhSachSach.every(function(s) { return s.daTra === true; });
+      if (tatCaSachDaTra && pm.ngayTraThucTe) {
+        tatCa.push({ ngay: pm.ngayTraThucTe, loai: 'Trả', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: chiTiet || 'Phiếu trả', soTien: null, createdAt: pm.createdAtTra || Date.now() });
+      }
     }
-    // Nếu có phạt → chỉ hiện dòng "Phạt", bỏ qua dòng "Trả"
-  }
 
     // Giao dịch gia hạn: luôn push nếu có thuộc tính loaiGiaHan và ngày gia hạn
     if (pm.loaiGiaHan && pm.ngayGiaHan) {
@@ -203,15 +202,15 @@ function xayDungGiaoDich() {
     tatCa.push({ ngay: p.ngayPhat || '', loai: 'Phạt', maGD: p.maPhat || '--', maDG: p.maDG || '--', tenDG: p.tenDG || '--', chiTiet: (p.loaiVP || 'Vi phạm') + ' - Phiếu: ' + (p.maPhieu || '--'), soTien: p.soTien ? Number(p.soTien) : 0, createdAt: p.createdAt || Date.now() });
   }
 
-// ==== PATCH begin ====
+// ==== PATCH begin ==== 
 tatCa.forEach(function(item) {
     if (!item.createdAt) {
         item.createdAt = item.ngay ? Date.parse(item.ngay) : Date.now();
     }
 });
-// ==== PATCH end ====
+// ==== PATCH end ==== 
 
-// ==== SORT begin ====
+// ==== SORT begin ==== 
 tatCa.sort(function(a, b) {
     return b.createdAt - a.createdAt;
 });

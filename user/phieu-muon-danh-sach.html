@@ -381,7 +381,23 @@ function capNhatTrangThaiPhieu() {
     var daCapNhat = false;
 
     for (var i = 0; i < danhSach.length; i++) {
-        if (danhSach[i].trangThai === 'Đang mượn' && danhSach[i].hanTra < homNay) {
+        // Kiểm tra xem tất cả sách trong phiếu đã được trả chưa
+        if (danhSach[i].danhSachSach && danhSach[i].danhSachSach.length > 0) {
+            var tatCaSachDaTra = danhSach[i].danhSachSach.every(function(s) { return s.daTra === true; });
+            
+            // Nếu đã trả hết sách thì đổi trạng thái thành "Đã trả"
+            if (tatCaSachDaTra && danhSach[i].trangThai !== 'Đã trả') {
+                danhSach[i].trangThai = 'Đã trả';
+                daCapNhat = true;
+            }
+            // Nếu chưa trả hết sách và đã quá hạn thì đổi thành "Quá hạn"
+            else if (!tatCaSachDaTra && danhSach[i].trangThai === 'Đang mượn' && danhSach[i].hanTra < homNay) {
+                danhSach[i].trangThai = 'Quá hạn';
+                daCapNhat = true;
+            }
+        }
+        // Trường hợp không có danh sách sách (dữ liệu cũ)
+        else if (danhSach[i].trangThai === 'Đang mượn' && danhSach[i].hanTra < homNay) {
             danhSach[i].trangThai = 'Quá hạn';
             daCapNhat = true;
         }

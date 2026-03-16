@@ -192,14 +192,13 @@ function formatISO(d) {
 
 function formatNgay(str) {
   if (!str) return '--';
-    var arr = str.split(' ');
-    var date = arr[0];
-    var p = date.split('-');
-    if (p.length === 3) {
-      return p[2] + '/' + p[1] + '/' + p[0];
-    }
-    return date;
-  return str;
+  var arr = str.split(' ');
+  var date = arr[0];
+  var p = date.split('-');
+  if (p.length === 3) {
+    return p[2] + '/' + p[1] + '/' + p[0];
+  }
+  return date;
 }
 
 function formatTien(so) {
@@ -256,15 +255,16 @@ function tinhThongKe(tuNgay, denNgay) {
     phieuMuonLoc.push(pm);
   }
 
+  // Đếm phiếu đã trả từ danh sách phiếu đã lọc theo ngày mượn
   var phieuTraLoc = [];
-  for (var i = 0; i < dsPhieuMuon.length; i++) {
-    var pm = dsPhieuMuon[i];
-    if (pm.trangThai === 'Đã trả' || pm.trangThai === 'Da tra') {
-      // Không lọc theo ngày trả, chỉ lọc theo ngày mượn nếu cần
-      var ngayMuon = pm.ngayMuon || '';
-      if (tuNgay && ngayMuon < tuNgay) continue;
-      if (denNgay && ngayMuon > denNgay) continue;
-      phieuTraLoc.push(pm);
+  for (var i = 0; i < phieuMuonLoc.length; i++) {
+    var pm = phieuMuonLoc[i];
+    // Kiểm tra xem tất cả sách trong phiếu đã được trả chưa
+    if (pm.danhSachSach && pm.danhSachSach.length > 0) {
+      var tatCaSachDaTra = pm.danhSachSach.every(function(s) { return s.daTra === true; });
+      if (tatCaSachDaTra) {
+        phieuTraLoc.push(pm);
+      }
     }
   }
 
@@ -287,7 +287,8 @@ for (var i = 0; i < phieuMuonLoc.length; i++) {
 }
 
 for (var i = 0; i < phieuTraLoc.length; i++) {
-  var ngay = formatNgayKey(phieuTraLoc[i].ngayTraThucTe || phieuTraLoc[i].ngayTra || phieuTraLoc[i].hanTra);
+  // Sử dụng ngày mượn để đồng nhất với cột "Số phiếu mượn"
+  var ngay = formatNgayKey(phieuTraLoc[i].ngayMuon);
   if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
   theoNgay[ngay].tra++;
 }
@@ -423,11 +424,12 @@ function hienThiThongKe() {
 
   var bodyTopDG = document.getElementById('bodyTopDocGia');
   if (kq.topDG.length === 0) {
-    bodyTopDG.innerHTML = '<tr class="empty-row"><td colspan="5">Không có dữ liệu</td></tr>';
+    bodyTopDG.innerHTML = '<tr class=\"empty-row\"><td colspan=\"5\">Không có dữ liệu</td></tr>';
   } else {
     var html = '';
     for (var i = 0; i < kq.topDG.length; i++) {
-      var dg = kq.topDG[i];html += '<tr><td>' + (i + 1) + '</td><td>' + dg.maDG + '</td><td>' + dg.tenDG + '</td><td>' + dg.ngheNghiep + '</td><td><strong class="so-xanh">' + dg.soLan + '</strong></td></tr>';
+      var dg = kq.topDG[i];
+      html += '<tr><td>' + (i + 1) + '</td><td>' + dg.maDG + '</td><td>' + dg.tenDG + '</td><td>' + dg.ngheNghiep + '</td><td><strong class=\"so-xanh\">' + dg.soLan + '</strong></td></tr>';
     }
     bodyTopDG.innerHTML = html;
   }
