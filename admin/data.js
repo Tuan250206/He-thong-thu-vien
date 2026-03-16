@@ -2,12 +2,7 @@
 // FILE: data.js - SIÊU DỮ LIỆU MẪU (36 CUỐN SÁCH)
 // ==========================================
 const DU_LIEU_MAU = {
-    admins: [
-        { id: 1, username: "admin", password: "123", hoTen: "Nguyễn Quản Trị", vaiTro: "Admin", role: "admin", trangThai: "Hoạt động", sdtNv: "0901234567", emailNv: "admin@thuvien.com" },
-        { id: 2, username: "thukho", password: "123", hoTen: "Trần Thủ Kho", vaiTro: "Thủ kho", role: "thukho", trangThai: "Hoạt động", sdtNv: "0912345678", emailNv: "thukho@thuvien.com" },
-        { id: 3, username: "thuthu", password: "123", hoTen: "Lê Thị Thủ Thư", vaiTro: "Thủ thư", role: "thuthu", trangThai: "Hoạt động", sdtNv: "0923456789", emailNv: "thuthu@thuvien.com" },
-        { id: 4, username: "nhanvien_khoa", password: "123", hoTen: "Phạm Nghỉ Việc", vaiTro: "Thủ thư", role: "thuthu", trangThai: "Khóa", sdtNv: "0934567890", emailNv: "nghiviec@thuvien.com" }
-    ],
+
     sach: [
         // --- NHÓM 1: CÔNG NGHỆ THÔNG TIN & WEB ---
         { maSach: "S001", tenSach: "Lập trình Python cơ bản", tacGia: "Nguyễn Văn A", nxb: "NXB Trẻ", namXB: 2023, theLoai: "CNTT", soLuongTong: 50, soLuongCon: 45, giaNhap: 100000, giaBT: 150000, viTri: "A-1-1", danhMucChinh: "Công nghệ kỹ thuật", danhMucPhu: "Lập trình", tuKhoa: "python, cơ bản, code", ddc: "005.133" },
@@ -85,15 +80,12 @@ const DU_LIEU_MAU = {
         { ngay: "2026-03-01", nguoi: "thukho", soSach: 36 }
     ]
 };
-// DÁN ĐOẠN NÀY VÀO CUỐI FILE DATA.JS
 // ==========================================
 // TỰ ĐỘNG NẠP DỮ LIỆU VÀO LOCALSTORAGE KHI LOAD FILE NÀY
 // ==========================================
-localStorage.setItem('admins', JSON.stringify(DU_LIEU_MAU.admins));
+
 localStorage.setItem('danhSachSach', JSON.stringify(DU_LIEU_MAU.sach));
 localStorage.setItem('danhSachNCC', JSON.stringify(DU_LIEU_MAU.ncc));
 localStorage.setItem('phieuNhapKho', JSON.stringify(DU_LIEU_MAU.phieuNhap));
 localStorage.setItem('phieuXuatKho', JSON.stringify(DU_LIEU_MAU.phieuXuat));
 localStorage.setItem('lichSuKiemKe', JSON.stringify(DU_LIEU_MAU.kiemKe));
-
-console.log("✅ Đã ép nạp thành công bộ dữ liệu mẫu 36 cuốn sách!");

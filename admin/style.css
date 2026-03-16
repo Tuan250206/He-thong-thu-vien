@@ -125,3 +125,45 @@ tr:hover td { background:#f9f9f9; }
     color: #16a34a; /* Đổi màu chữ thành xanh đậm */
     font-weight: bold;
 }
+/* =========================================
+   CSS CHO KHU VỰC LỌC LỊCH SỬ (MỚI THÊM)
+========================================= */
+.filter-box {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 15px; 
+    background-color: #f8f9fa; 
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    align-items: flex-end; 
+}
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    flex: 1; 
+}
+.filter-group label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #333;
+    font-size: 14px;
+}
+.filter-group input,
+.filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+}
+.filter-group input:focus,
+.filter-group select:focus {
+    border-color: #4CAF50;
+}
+.filter-actions {
+    display: flex;
+    gap: 10px;
+}
