@@ -100,7 +100,7 @@
         <tr>
           <th>Ngày</th>
           <th>Số phiếu mượn</th>
-          <th>Số phiếu trả</th>
+          <th>Số phiếu mượn đã trả</th>
           <th>Phí phạt (đ)</th>
         </tr>
       </thead>
@@ -160,7 +160,7 @@
       </thead>
       <tbody id="bodyTongQuan">
         <tr><td class="row-label">Tổng phiếu mượn</td><td class="row-value" id="tk-tongMuon">--</td></tr>
-        <tr><td class="row-label">Tổng phiếu trả</td><td class="row-value" id="tk-tongTra">--</td></tr>
+        <tr><td class="row-label">Tổng phiếu mượn đã trả</td><td class="row-value" id="tk-tongTra">--</td></tr>
         <tr><td class="row-label">Tổng vi phạm</td><td class="row-value" id="tk-tongVP">--</td></tr>
         <tr><td class="row-label">Tổng phí phạt</td><td class="row-value" id="tk-tongPhi">--</td></tr>
         <tr><td class="row-label">Trung bình sách/phiếu</td><td class="row-value" id="tk-tbSach">--</td></tr>
@@ -192,13 +192,43 @@ function formatISO(d) {
 
 function formatNgay(str) {
   if (!str) return '--';
-  var p = str.split('-');
-  if (p.length === 3) return p[2] + '/' + p[1] + '/' + p[0];
+    var arr = str.split(' ');
+    var date = arr[0];
+    var p = date.split('-');
+    if (p.length === 3) {
+      return p[2] + '/' + p[1] + '/' + p[0];
+    }
+    return date;
   return str;
 }
 
 function formatTien(so) {
-  return Number(so || 0).toLocaleString('vi-VN');
+  return Number(so || 0).toLocaleString('vi-VN') + ' đ';
+}
+// Định dạng ngày thành dd/MM/yyyy và biến ngày về dạng này để gom nhóm (key)
+function formatNgayKey(ngay) {
+  if (!ngay) return '';
+  var part = ngay.split(' ')[0];
+  var p = part.split('-');
+  if (p.length === 3) return p[2] + '/' + p[1] + '/' + p[0];
+  return part;
+}
+
+// Để sort đúng kiểu dd/MM/yyyy khi render thống kê
+function parseDateKey(str) {
+  var p = str.split('/');
+  if (p.length === 3) return new Date(p[2], p[1]-1, p[0]);
+  return new Date(str);
+}
+// Chuyển ngày về yyyy-MM-dd để lọc so sánh
+function toISODate(str) {
+  if (!str) return '';
+  // Nếu là 'yyyy-MM-dd' thì giữ luôn
+  if (str.indexOf('-') > 0) return str.split(' ')[0];
+  // Nếu là 'dd/MM/yyyy' thì chuyển
+  var p = str.split('/');
+  if (p.length === 3) return p[2] + '-' + p[1] + '-' + p[0];
+  return str;
 }
 
 function tinhThongKe(tuNgay, denNgay) {
@@ -229,47 +259,56 @@ function tinhThongKe(tuNgay, denNgay) {
   var phieuTraLoc = [];
   for (var i = 0; i < dsPhieuMuon.length; i++) {
     var pm = dsPhieuMuon[i];
-    if (pm.trangThai !== 'Đã trả' && pm.trangThai !== 'Da tra') continue;
-    var ngay = pm.ngayTra || pm.hanTra || '';
-    if (tuNgay && ngay < tuNgay) continue;
-    if (denNgay && ngay > denNgay) continue;
-    phieuTraLoc.push(pm);
+    if (pm.trangThai === 'Đã trả' || pm.trangThai === 'Da tra') {
+      // Không lọc theo ngày trả, chỉ lọc theo ngày mượn nếu cần
+      var ngayMuon = pm.ngayMuon || '';
+      if (tuNgay && ngayMuon < tuNgay) continue;
+      if (denNgay && ngayMuon > denNgay) continue;
+      phieuTraLoc.push(pm);
+    }
   }
 
   var phatLoc = [];
   for (var i = 0; i < dsPhat.length; i++) {
     var p = dsPhat[i];
-    var ngay = p.ngayPhat || '';
+    var ngay = toISODate(p.ngayPhat || '');
     if (tuNgay && ngay < tuNgay) continue;
     if (denNgay && ngay > denNgay) continue;
     phatLoc.push(p);
   }
 
-  var theoNgay = {};
-  for (var i = 0; i < phieuMuonLoc.length; i++) {
-    var ngay = phieuMuonLoc[i].ngayMuon || '';
-    if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
-    theoNgay[ngay].muon++;
-  }
-  for (var i = 0; i < phieuTraLoc.length; i++) {
-    var ngay = phieuTraLoc[i].ngayTra || phieuTraLoc[i].hanTra || '';
-    if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
-    theoNgay[ngay].tra++;
-  }
-  for (var i = 0; i < phatLoc.length; i++) {
-    var ngay = phatLoc[i].ngayPhat || '';
-    if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
-    theoNgay[ngay].phi += Number(phatLoc[i].soTien || 0);
-  }
+  // Khởi tạo object thống kê cho từng ngày
+var theoNgay = {};
 
-  var dsNgay = [];
-  for (var k in theoNgay) {
-    if (theoNgay.hasOwnProperty(k)) {
-      dsNgay.push({ngay: k, muon: theoNgay[k].muon, tra: theoNgay[k].tra, phi: theoNgay[k].phi});
-    }
-  }
-  dsNgay.sort(function(a, b) { return a.ngay.localeCompare(b.ngay); });
+for (var i = 0; i < phieuMuonLoc.length; i++) {
+  var ngay = formatNgayKey(phieuMuonLoc[i].ngayMuon);
+  if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
+  theoNgay[ngay].muon++;
+}
 
+for (var i = 0; i < phieuTraLoc.length; i++) {
+  var ngay = formatNgayKey(phieuTraLoc[i].ngayTraThucTe || phieuTraLoc[i].ngayTra || phieuTraLoc[i].hanTra);
+  if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
+  theoNgay[ngay].tra++;
+}
+
+for (var i = 0; i < phatLoc.length; i++) {
+  var ngay = formatNgayKey(phatLoc[i].ngayPhat);
+  var soTien = phatLoc[i].soTien ? Number(phatLoc[i].soTien) : 0;
+  if (!theoNgay[ngay]) theoNgay[ngay] = {muon: 0, tra: 0, phi: 0};
+  theoNgay[ngay].phi += soTien;
+}
+
+// Gom lại ra mảng (1 ngày chỉ 1 dòng)I
+var dsNgay = [];
+for (var k in theoNgay) {
+  if (theoNgay.hasOwnProperty(k)) {
+    var row = {ngay: k, muon: theoNgay[k].muon, tra: theoNgay[k].tra, phi: theoNgay[k].phi};
+    // Chỉ đẩy nếu có hoạt động
+    if (row.muon > 0 || row.tra > 0 || row.phi > 0) dsNgay.push(row);
+  }
+}
+dsNgay.sort(function(a, b) { return parseDateKey(a.ngay) - parseDateKey(b.ngay); });
   var demSach = {};
   for (var i = 0; i < phieuMuonLoc.length; i++) {
     var pm = phieuMuonLoc[i];
@@ -312,10 +351,12 @@ function tinhThongKe(tuNgay, denNgay) {
   topDG.sort(function(a, b) { return b.soLan - a.soLan; });
   if (topDG.length > 10) topDG = topDG.slice(0, 10);
 
+  // Tổng phí phạt và tổng vi phạm lấy từ dsPhat (giống xử lý phạt)
   var tongPhi = 0;
   for (var i = 0; i < phatLoc.length; i++) {
-    tongPhi += Number(phatLoc[i].soTien || 0);
+    tongPhi += phatLoc[i].soTien ? Number(phatLoc[i].soTien) : 0;
   }
+  var tongViPham = phatLoc.length;
   var tongSach = 0;
   for (var i = 0; i < phieuMuonLoc.length; i++) {
     var pm = phieuMuonLoc[i];
@@ -361,7 +402,7 @@ function hienThiThongKe() {
       html += '<td><strong>' + formatNgay(row.ngay) + '</strong></td>';
       html += '<td><span class="so-xanh">' + row.muon + '</span></td>';
       html += '<td>' + row.tra + '</td>';
-      html += '<td>' + (row.phi > 0 ? '<span class="so-do">' + formatTien(row.phi) + '</span>' : '0') + '</td>';
+      html += '<td>' + (row.phi > 0 ? '<span class="so-do">' + formatTien(row.phi) + '</span>' : '0 đ') + '</td>';
       html += '</tr>';
     }
     bodyNgay.innerHTML = html;
@@ -395,7 +436,7 @@ function hienThiThongKe() {
   document.getElementById('tk-tongMuon').innerText = tq.tongMuon + ' phiếu';
   document.getElementById('tk-tongTra').innerText = tq.tongTra + ' phiếu';
   document.getElementById('tk-tongVP').innerText = tq.tongVP + ' trường hợp';
-  document.getElementById('tk-tongPhi').innerText = formatTien(tq.tongPhi) + ' đ';
+  document.getElementById('tk-tongPhi').innerText = formatTien(tq.tongPhi);
   document.getElementById('tk-tbSach').innerText = tq.tbSach + ' cuốn/phiếu';
 }
 

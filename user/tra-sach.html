@@ -345,6 +345,7 @@ function dongModal() {
 
 function xacNhanTra(daThuTien) {
     if (!phieuHienTai) return;
+    const now = Date.now();
     
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
@@ -353,7 +354,16 @@ function xacNhanTra(daThuTien) {
     if (indexPhieu !== -1) {
         dsPhieuMuon[indexPhieu].trangThai = 'Đã trả';
         dsPhieuMuon[indexPhieu].ngayTraThucTe = layNgayHomNay();
+        dsPhieuMuon[indexPhieu].createdAtTra = now;
         if(daThuTien) dsPhieuMuon[indexPhieu].ghiChuPhat = "Đã thu bồi thường qua Ngân hàng: " + dinhDangTien(tongPhatGlobal);
+
+        // Ghi nhận tình trạng từng cuốn sách khi trả
+        for (var i = 0; i < dsPhieuMuon[indexPhieu].danhSachSach.length; i++) {
+            var ttEl = document.getElementById('tt_' + i);
+            if (ttEl) {
+                dsPhieuMuon[indexPhieu].danhSachSach[i].tinhTrangTra = ttEl.value;
+            }
+        }
     }
 
     // Cập nhật kho
@@ -364,11 +374,47 @@ function xacNhanTra(daThuTien) {
         if (cbEl && cbEl.checked && ttEl.value !== 'Mất') {
             var sachTrongKho = dsSach.find(s => s.maSach === sachTra.maSach);
             if (sachTrongKho) {
-                sachTrongKho.soLuongCon = (parseInt(sachTrongKho.soLuongCon) || 0) + 1;
+                var soLuongTong = parseInt(sachTrongKho.soLuongTong) || 0;
+                var soLuongCon = (parseInt(sachTrongKho.soLuongCon) || 0) + 1;
+                // Đảm bảo không vượt quá tổng số lượng
+                sachTrongKho.soLuongCon = Math.min(soLuongCon, soLuongTong);
             }
         }
     });
 
+    if (daThuTien && tongPhatGlobal > 0) {
+        var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
+        var homNay = layNgayHomNay();
+        // Lặp qua từng sách bị rách/mất để ghi nhận từng khoản phạt
+        for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
+            var ttEl = document.getElementById('tt_' + i);
+            if (ttEl.value === 'Rách' || ttEl.value === 'Mất') {
+                var soTienPhat = 0;
+                if (ttEl.value === 'Rách') {
+                    soTienPhat = 15000;
+                } 
+                else if (ttEl.value === 'Mất') {
+                    // Lấy giá bồi thường từ KHO GỐC
+                    var maSachHienTai = phieuHienTai.danhSachSach[i].maSach;
+                    var thongTinSach = dsSach.find(s => s.maSach === maSachHienTai);
+                    soTienPhat = thongTinSach && thongTinSach.giaBT ? parseFloat(thongTinSach.giaBT) : 0;
+                }
+                dsPhat.push({
+                    maPhat: 'PHAT' + Date.now() + '_' + i,
+                    maPhieu: phieuHienTai.maPhieu,
+                    maDG: phieuHienTai.maDG,
+                    tenDG: phieuHienTai.tenDG,
+                    loaiVP: ttEl.value === 'Rách' ? 'Rách sách' : 'Mất sách',
+                    soTien: soTienPhat,
+                    ngayPhat: homNay,
+                    trangThai: 'Đã thanh toán',
+                    createdAt: now + i  
+                    
+                });
+            }
+        }
+        localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
+    }
     localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
     localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
 
@@ -389,7 +435,13 @@ function resetTrang() {
 // Các hàm tiện ích (giữ nguyên)
 function layNgayHomNay() {
     var d = new Date();
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    var yyyy = d.getFullYear();
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    var dd = String(d.getDate()).padStart(2, '0');
+    var hh = String(d.getHours()).padStart(2, '0');
+    var mi = String(d.getMinutes()).padStart(2, '0');
+    var ss = String(d.getSeconds()).padStart(2, '0');
+    return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mi + ':' + ss;
 }
 function dinhDangNgay(str) {
     if (!str) return '---';

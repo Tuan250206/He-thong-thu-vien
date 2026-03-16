@@ -380,6 +380,9 @@ function xacNhanGiaHan() {
     if (index !== -1) {
         dsPhieuMuon[index].hanTra = hanTraMoi;
         dsPhieuMuon[index].soLanGiaHan = soLanGiaHan;
+        dsPhieuMuon[index].loaiGiaHan = true;
+        dsPhieuMuon[index].ngayGiaHan = layNgayHomNay();
+        dsPhieuMuon[index].createdAtGiaHan = Date.now();
         localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
         alert('✅ Gia hạn thành công!');
         resetTrang();

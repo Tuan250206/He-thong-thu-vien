@@ -480,7 +480,7 @@ function hienThiBang(danhSach) {
     html += '<th>Tên độc giả</th>';
     html += '<th style="width:120px;">Loại vi phạm</th>';
     html += '<th style="width:100px; text-align:right;">Số tiền</th>';
-    html += '<th style="width:100px;">Ngày phạt</th>';
+        html += '<th style="width:100px;">Ngày phạt (dd/MM/yyyy)</th>';
     html += '<th style="width:130px;">Trạng thái</th>';
     html += '<th style="width:130px; text-align:center;">Hành động</th>';
     html += '</tr></thead><tbody>';
@@ -504,7 +504,17 @@ function hienThiBang(danhSach) {
         html += '<td>' + p.tenDG + '</td>';
         html += '<td><span class="' + layClassLoaiVP(p.loaiVP) + '">' + layIconLoaiVP(p.loaiVP) + ' ' + p.loaiVP + '</span></td>';
         html += '<td style="text-align:right;" class="tien">' + dinhDangTien(p.soTien) + '</td>';
-        html += '<td>' + dinhDangNgay(p.ngayPhat) + '</td>';
+            var ngayPhat = '-';
+            if (p.ngayPhat) {
+                var d = p.ngayPhat.split(' ')[0];
+                var arr = d.split('-');
+                if (arr.length === 3) {
+                    ngayPhat = arr[2] + '/' + arr[1] + '/' + arr[0];
+                } else {
+                    ngayPhat = d;
+                }
+            }
+            html += '<td>' + ngayPhat + '</td>';
         html += '<td><span class="badge ' + (chuaTT ? 'badge-chua' : 'badge-da') + '">' + (chuaTT ? '💳 Chưa thu' : '✅ Đã thanh toán') + '</span></td>';
         html += '<td style="text-align:center;">' + nutHanhDong + '</td>';
         html += '</tr>';

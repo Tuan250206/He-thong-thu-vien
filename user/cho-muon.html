@@ -103,10 +103,10 @@
 
 <div class="sidebar">
     <div class="menu-nhom">Nghiệp vụ</div>
-    <a href="dashboard.html" class="menu-item">
+    <a href="dashboard.html" class="menu-item active">
         <span class="menu-icon">🏠</span>Trang chủ
     </a>
-    <a href="cho-muon.html" class="menu-item active">
+    <a href="cho-muon.html" class="menu-item">
         <span class="menu-icon">📋</span>Cho mượn
     </a>
     <a href="tra-sach.html" class="menu-item">
@@ -146,6 +146,7 @@
 </div>
 
 
+
 <div class="content">
     <div class="page-title"><h2>🤝 Cho mượn sách</h2></div>
 
@@ -164,6 +165,7 @@
                         <tr>
                             <th>Mã ĐG</th>
                             <th>Họ và tên</th>
+                            <th>Email</th>
                             <th style="text-align:center">Chọn</th>
                         </tr>
                     </thead>
@@ -246,6 +248,7 @@ function loadDanhSachDocGiaNhanh() {
         html += '<tr>';
         html += '<td><strong>' + dg.maDG + '</strong></td>';
         html += '<td>' + dg.hoTen + '</td>';
+        html += '<td>' + (dg.email || '-') + '</td>';
         html += '<td style="text-align:center"><button class="btn-select-dg" onclick="chonDocGia(\'' + dg.maDG + '\')">Chọn</button></td>';
         html += '</tr>';
     }
@@ -278,7 +281,7 @@ function loadDanhSachSachNhanh() {
             });
             
             var textTooltip = nguoiMuon.length > 0 
-                ? "Đang được mượn bởi:\\n" + nguoiMuon.join("\\n") 
+                ? "Đang được mượn bởi:\n" + nguoiMuon.join("\n") 
                 : "Hết sách (Chưa rõ người mượn)";
 
             actionHtml = '<span class="badge-het" data-borrowers="' + textTooltip + '">Hết sách ℹ️</span>';
@@ -327,32 +330,6 @@ function chonSach(maSach) {
 
     if (daMuonChuaTra) {
         hienThiLoi('loiSach', 'Độc giả đang mượn cuốn này và chưa trả. Không thể mượn nữa!');
-        return;
-    }
-
-    // ✅ FIX LỖI 4: Kiểm tra xem có ai đang đặt chỗ sách này không
-    var dsDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
-    var nguoiDatCho = null;
-    
-    for (var i = 0; i < dsDatCho.length; i++) {
-        var dc = dsDatCho[i];
-        if (dc.maSach === maSach && dc.trangThai === 'Chờ lấy') {
-            // Nếu chính độc giả hiện tại đang đặt chỗ thì cho phép
-            if (dc.maDG === docGiaHienTai.maDG) {
-                nguoiDatCho = null; // Cho phép mượn
-                break;
-            } else {
-                nguoiDatCho = dc; // Người khác đang đặt
-                break;
-            }
-        }
-    }
-    
-    var sl = parseInt(sach.soLuongCon || 0);
-    
-    // Nếu chỉ còn 1 cuốn và có người khác đang đặt chỗ → không cho mượn
-    if (nguoiDatCho && sl === 1) {
-        hienThiLoi('loiSach', 'Cuốn sách cuối cùng đã được đặt chỗ bởi: ' + nguoiDatCho.tenDG + ' (' + nguoiDatCho.maDG + ')');
         return;
     }
 
@@ -501,13 +478,13 @@ function xacNhanChoMuon() {
         hanTra: hanTra,
         danhSachSach: JSON.parse(JSON.stringify(sachDaChon)),
         trangThai: 'Đang mượn',
-        soLanGiaHan: 0
+        createdAtMuon: Date.now()
     });
 
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
     sachDaChon.forEach(sdc => {
         var sInKho = dsSach.find(s => s.maSach === sdc.maSach);
-        if(sInKho) sInKho.soLuongCon = Math.max(0, parseInt(sInKho.soLuongCon || 0) - 1);
+        if(sInKho) sInKho.soLuongCon = Math.max(0, parseInt(sInKho.soLuongCon) - 1);
     });
 
     localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
