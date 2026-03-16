@@ -464,7 +464,8 @@ function xacNhanLaySach(maDatCho) {
             }],
             trangThai: 'Đang mượn',
             soLanGiaHan: 0,
-            ghiChu: 'Từ đặt chỗ ' + maDatCho
+            ghiChu: 'Từ đặt chỗ ' + maDatCho,
+            createdAtMuon: Date.now() // <-- bổ sung này (quan trọng cho lịch sử sort)
         });
         
         // Giảm số lượng sách
