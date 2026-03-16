@@ -61,52 +61,17 @@ td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
 
 <div class="sidebar">
     <div class="menu-nhom">Nghiệp vụ</div>
-    <a href="dashboard.html" class="menu-item">
-        <span class="menu-icon">🏠</span>Trang chủ
-    </a>
-    <a href="cho-muon.html" class="menu-item">
-        <span class="menu-icon">📋</span>Cho mượn
-    </a>
-    <a href="tra-sach.html" class="menu-item active">
-        <span class="menu-icon">↩️</span>Trả sách
-    </a>
-    <a href="gia-han.html" class="menu-item">
-        <span class="menu-icon">⏰</span>Gia hạn
-    </a>
-    <a href="xu-ly-phat.html" class="menu-item">
-        <span class="menu-icon">💰</span>Xử lý phạt
-    </a>
-    <a href="phieu-muon-danh-sach.html" class="menu-item">
-        <span class="menu-icon">📄</span>Phiếu mượn
-    </a>
-    <a href="dat-cho.html" class="menu-item">
-        <span class="menu-icon">🔖</span>Đặt chỗ
-    </a>
-    <a href="danh-sach-dat-cho.html" class="menu-item">
-        <span class="menu-icon">📋</span>DS đặt chỗ
-    </a>
-
+    <a href="dashboard.html" class="menu-item"><span class="menu-icon">🏠</span>Trang chủ</a>
+    <a href="cho-muon.html" class="menu-item"><span class="menu-icon">📋</span>Cho mượn</a>
+    <a href="tra-sach.html" class="menu-item active"><span class="menu-icon">↩️</span>Trả sách</a>
+    <a href="gia-han.html" class="menu-item"><span class="menu-icon">⏰</span>Gia hạn</a>
+    <a href="xu-ly-phat.html" class="menu-item"><span class="menu-icon">💰</span>Xử lý phạt</a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item"><span class="menu-icon">📄</span>Phiếu mượn</a>
+    <a href="dat-cho.html" class="menu-item"><span class="menu-icon">🔖</span>Đặt chỗ</a>
+    <a href="danh-sach-dat-cho.html" class="menu-item"><span class="menu-icon">📋</span>DS đặt chỗ</a>
     <div class="menu-nhom">Quản lý</div>
-    <a href="doc-gia-danh-sach.html" class="menu-item">
-        <span class="menu-icon">👥</span>Độc giả
-    </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
-    <a href="sach-danh-sach.html" class="menu-item">
-        <span class="menu-icon">📚</span>Sách
-    </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
-    </a>
-
-    <div class="menu-nhom">Báo cáo</div>
-    <a href="lich-su.html" class="menu-item">
-        <span class="menu-icon">📋</span>Lịch sử
-    </a>
-    <a href="thong-ke.html" class="menu-item">
-        <span class="menu-icon">📊</span>Thống kê
-    </a>
+    <a href="doc-gia-danh-sach.html" class="menu-item"><span class="menu-icon">👥</span>Độc giả</a>
+    <a href="sach-danh-sach.html" class="menu-item"><span class="menu-icon">📚</span>Sách</a>
 </div>
 
 <div class="content">
@@ -127,7 +92,7 @@ td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
                             <th>Độc giả</th>
                             <th>Ngày mượn</th>
                             <th>Hạn trả</th>
-                            <th>Số sách</th>
+                            <th>Sách còn lại</th>
                             <th style="text-align:center">Hành động</th>
                         </tr>
                     </thead>
@@ -174,17 +139,8 @@ var tongPhatGlobal = 0;
 
 window.onload = function() {
     var user = localStorage.getItem('currentUser') || 'Nhân viên';
-    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
-    var tenHienThi = userInfo.hoTen || user;
-    document.getElementById('tenNguoiDung').textContent = tenHienThi;
+    document.getElementById('tenNguoiDung').textContent = user;
     loadDanhSachPhieuActive();
-    
-    // Kiểm tra nếu có parameter từ URL
-    var urlParams = new URLSearchParams(window.location.search);
-    var maPhieuURL = urlParams.get('ma');
-    if (maPhieuURL) {
-        chonPhieu(maPhieuURL);
-    }
 };
 
 function loadDanhSachPhieuActive() {
@@ -193,11 +149,16 @@ function loadDanhSachPhieuActive() {
     for (var i = 0; i < dsPhieuMuon.length; i++) {
         var p = dsPhieuMuon[i];
         if (p.trangThai === 'Đang mượn' || p.trangThai === 'Quá hạn') {
-            var isQuaHan = tinhSoNgay(p.hanTra, layNgayHomNay()) > 0;
-            var alertClass = isQuaHan ? 'class="qua-han"' : '';
-            html += '<tr><td><strong>' + p.maPhieu + '</strong></td><td>' + p.tenDG + '</td><td>' + dinhDangNgay(p.ngayMuon) + '</td>';
-            html += '<td ' + alertClass + '>' + dinhDangNgay(p.hanTra) + '</td><td>' + p.danhSachSach.length + ' cuốn</td>';
-            html += '<td style="text-align:center"><button class="btn-select" onclick="chonPhieu(\'' + p.maPhieu + '\')">Chọn trả</button></td></tr>';
+            // Đếm số sách thực sự chưa trả trong phiếu
+            var soSachChuaTra = p.danhSachSach.filter(s => !s.daTra).length;
+            
+            if (soSachChuaTra > 0) {
+                var isQuaHan = tinhSoNgay(p.hanTra, layNgayHomNay()) > 0;
+                var alertClass = isQuaHan ? 'class="qua-han"' : '';
+                html += '<tr><td><strong>' + p.maPhieu + '</strong></td><td>' + p.tenDG + '</td><td>' + dinhDangNgay(p.ngayMuon) + '</td>';
+                html += '<td ' + alertClass + '>' + dinhDangNgay(p.hanTra) + '</td><td>' + soSachChuaTra + ' cuốn</td>';
+                html += '<td style="text-align:center"><button class="btn-select" onclick="chonPhieu(\'' + p.maPhieu + '\')">Chọn trả</button></td></tr>';
+            }
         }
     }
     document.getElementById('dsPhieuMuonActive').innerHTML = html || '<tr><td colspan="6" style="text-align:center;">Trống.</td></tr>';
@@ -225,6 +186,10 @@ function hienThiBangSachTra(phieu, soNgayQuaHan) {
     var html = '<table><tr><th>Trả</th><th>Mã sách</th><th>Tên sách</th><th>Tình trạng</th><th style="text-align:right;">Phạt</th></tr>';
     for (var i = 0; i < phieu.danhSachSach.length; i++) {
         var s = phieu.danhSachSach[i];
+        
+        // NẾU SÁCH ĐÃ TRẢ RỒI THÌ KHÔNG HIỆN DÒNG NÀY NỮA
+        if (s.daTra) continue;
+
         html += '<tr><td><input type="checkbox" id="cb_' + i + '" checked onchange="capNhatTienPhat()"></td>';
         html += '<td>' + s.maSach + '</td><td>' + s.tenSach + '</td>';
         html += '<td><select id="tt_' + i + '" onchange="capNhatTienPhat()"><option value="Tốt">Tốt</option><option value="Rách">Rách</option><option value="Mất">Mất</option></select></td>';
@@ -238,108 +203,44 @@ function hienThiBangSachTra(phieu, soNgayQuaHan) {
 function capNhatTienPhat() {
     var homNay = layNgayHomNay();
     var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuHienTai.hanTra, homNay));
-    // Lấy danh sách sách gốc từ kho để truy xuất giá bồi thường (giaBT)
     var dsSachGoc = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-    
-    // ✅ FIX LỖI 6: Phạt quá hạn chỉ tính 1 lần cho cả phiếu, không nhân với số sách
-    var phatQuaHan = soNgayQuaHan * 2000;
-    var phatRachMat = 0;
-    var soSachDuocChonTra = 0;
+    var tongPhat = 0;
 
     for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
+        var s = phieuHienTai.danhSachSach[i];
+        if (s.daTra) continue; // Bỏ qua sách đã trả
+
         var cbEl = document.getElementById('cb_' + i);
         var ttEl = document.getElementById('tt_' + i);
         
-        // ✅ FIX LỖI 7: Kiểm tra số sách được chọn trả
-        if (cbEl.checked) {
-            soSachDuocChonTra++;
-        }
-        
-        // Nếu không tích chọn trả cuốn này thì bỏ qua không tính phạt
-        if (!cbEl.checked) {
-            document.getElementById('phat_' + i).textContent = '---';
+        if (!cbEl || !cbEl.checked) {
+            if(document.getElementById('phat_' + i)) document.getElementById('phat_' + i).textContent = '---';
             continue;
         }
 
-        var phatCuonNay = 0; // Mỗi cuốn chỉ tính phạt rách/mất
-
-        if (ttEl.value === 'Rách') {
-            phatCuonNay = 15000; // Phạt rách đồng giá 15k
-            phatRachMat += phatCuonNay;
-        } 
+        var phatCuonNay = soNgayQuaHan * 2000;
+        if (ttEl.value === 'Rách') phatCuonNay += 15000;
         else if (ttEl.value === 'Mất') {
-            // Tìm thông tin sách trong kho dựa trên mã sách của cuốn đang trả
-            var maSachHienTai = phieuHienTai.danhSachSach[i].maSach;
-            var thongTinSach = dsSachGoc.find(s => s.maSach === maSachHienTai);
-            
-            // Lấy giaBT từ dữ liệu, nếu không có thì mặc định là 0
-            var tienBoiThuong = thongTinSach && thongTinSach.giaBT ? parseFloat(thongTinSach.giaBT) : 0;
-            phatCuonNay = tienBoiThuong;
-            phatRachMat += phatCuonNay;
+            var thongTinSach = dsSachGoc.find(sg => sg.maSach === s.maSach);
+            phatCuonNay += thongTinSach && thongTinSach.giaBT ? parseFloat(thongTinSach.giaBT) : 0;
         }
 
-        document.getElementById('phat_' + i).textContent = phatCuonNay > 0 ? dinhDangTien(phatCuonNay) : '0 đ';
+        tongPhat += phatCuonNay;
+        document.getElementById('phat_' + i).textContent = dinhDangTien(phatCuonNay);
     }
 
-    var tongPhat = phatQuaHan + phatRachMat;
     tongPhatGlobal = tongPhat;
-    
-    var noiDung = '';
-    if (phatQuaHan > 0) {
-        noiDung += '<div>💰 Phạt quá hạn (' + soNgayQuaHan + ' ngày): <strong>' + dinhDangTien(phatQuaHan) + '</strong></div>';
-    }
-    if (phatRachMat > 0) {
-        noiDung += '<div>💰 Phạt rách/mất sách: <strong>' + dinhDangTien(phatRachMat) + '</strong></div>';
-    }
-    
-    if (tongPhat > 0) {
-        noiDung += '<hr style="margin: 10px 0; border: none; border-top: 2px solid #C62828;">';
-        noiDung += '<div style="font-size: 16px;">💰 <strong>TỔNG TIỀN PHẠT: ' + dinhDangTien(tongPhat) + '</strong></div>';
-        document.getElementById('khuTongPhat').innerHTML = '<div class="tong-tien">' + noiDung + '</div>';
-    } else {
-        document.getElementById('khuTongPhat').innerHTML = '<div class="tong-tien no-fine">✅ Không có tiền phạt</div>';
-    }
-    
-    // ✅ FIX LỖI 7: Cảnh báo nếu chưa chọn trả hết sách
-    if (soSachDuocChonTra < phieuHienTai.danhSachSach.length) {
-        var canhBao = '<div class="warn-box">⚠️ Bạn chưa chọn trả hết ' + phieuHienTai.danhSachSach.length + ' cuốn sách! (Đã chọn: ' + soSachDuocChonTra + ')</div>';
-        document.getElementById('khuTongPhat').innerHTML = canhBao + document.getElementById('khuTongPhat').innerHTML;
-    }
+    document.getElementById('khuTongPhat').innerHTML = tongPhat > 0 ? 
+        '<div class="tong-tien">💰 Tổng tiền phạt: ' + dinhDangTien(tongPhat) + '</div>' : 
+        '<div class="tong-tien no-fine">✅ Không có tiền phạt</div>';
 }
 
-// LOGIC MỚI: Kiểm tra tiền phạt rách/mất trước khi hiện QR
 function kiemTraTruocKhiTra() {
-    // ✅ FIX LỖI 7: Bắt buộc phải trả hết sách
-    var soSachDuocChonTra = 0;
-    for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
-        var cbEl = document.getElementById('cb_' + i);
-        if (cbEl && cbEl.checked) {
-            soSachDuocChonTra++;
-        }
-    }
-    
-    if (soSachDuocChonTra < phieuHienTai.danhSachSach.length) {
-        alert('❌ Bạn phải trả hết ' + phieuHienTai.danhSachSach.length + ' cuốn sách!\n\nHiện tại chỉ chọn trả: ' + soSachDuocChonTra + ' cuốn.\n\nVui lòng tích chọn tất cả các sách cần trả.');
-        return;
-    }
-    
-    var coSanhRachMat = false;
-    for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
-        var ttEl = document.getElementById('tt_' + i);
-        var cbEl = document.getElementById('cb_' + i);
-        if (cbEl.checked && (ttEl.value === 'Rách' || ttEl.value === 'Mất')) {
-            coSanhRachMat = true;
-            break;
-        }
-    }
-
-    // Nếu có tiền phạt (do quá hạn hoặc rách/mất) thì hiện Modal QR ngân hàng
     if (tongPhatGlobal > 0) {
         document.getElementById('txtSoTienModal').innerText = "Số tiền cần thanh toán: " + dinhDangTien(tongPhatGlobal);
         document.getElementById('modalThanhToan').style.display = 'block';
     } else {
-        // Không phạt thì xác nhận trả bình thường
-        if(confirm("Xác nhận trả sách?")) {
+        if(confirm("Xác nhận trả những cuốn sách đã chọn?")) {
             xacNhanTra(false);
         }
     }
@@ -354,32 +255,54 @@ function xacNhanTra(daThuTien) {
     
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-
     var indexPhieu = dsPhieuMuon.findIndex(p => p.maPhieu === phieuHienTai.maPhieu);
-    if (indexPhieu !== -1) {
-        dsPhieuMuon[indexPhieu].trangThai = 'Đã trả';
-        dsPhieuMuon[indexPhieu].ngayTraThucTe = layNgayHomNay();
-        if(daThuTien) dsPhieuMuon[indexPhieu].ghiChuPhat = "Đã thu bồi thường qua Ngân hàng: " + dinhDangTien(tongPhatGlobal);
-    }
 
-    // Cập nhật kho
-    phieuHienTai.danhSachSach.forEach((sachTra, index) => {
-        var cbEl = document.getElementById('cb_' + index);
-        var ttEl = document.getElementById('tt_' + index);
-        // Chỉ cộng lại kho nếu sách không bị "Mất"
-        if (cbEl && cbEl.checked && ttEl.value !== 'Mất') {
-            var sachTrongKho = dsSach.find(s => s.maSach === sachTra.maSach);
-            if (sachTrongKho) {
-                sachTrongKho.soLuongCon = (parseInt(sachTrongKho.soLuongCon) || 0) + 1;
+    if (indexPhieu !== -1) {
+        var phieuTrongStore = dsPhieuMuon[indexPhieu];
+        var tatCaSachDaDuocTra = true;
+
+        phieuTrongStore.danhSachSach.forEach((s, idx) => {
+            // Nếu sách đã trả từ trước đó thì bỏ qua
+            if (s.daTra) return;
+
+            var cbEl = document.getElementById('cb_' + idx);
+            var ttEl = document.getElementById('tt_' + idx);
+
+            if (cbEl && cbEl.checked) {
+                // ĐÁNH DẤU CUỐN NÀY ĐÃ TRẢ
+                s.daTra = true;
+                s.ngayTraThucTe = layNgayHomNay();
+                s.tinhTrangKhiTra = ttEl.value;
+
+                // Cập nhật kho (trừ khi bị mất)
+                if (ttEl.value !== 'Mất') {
+                    var sachTrongKho = dsSach.find(sk => sk.maSach === s.maSach);
+                    if (sachTrongKho) {
+                        sachTrongKho.soLuongCon = (parseInt(sachTrongKho.soLuongCon) || 0) + 1;
+                    }
+                }
+            } else {
+                // Nếu vẫn còn ít nhất 1 cuốn chưa được tích chọn trả
+                tatCaSachDaDuocTra = false;
             }
+        });
+
+        // CHỈ ĐỔI TRẠNG THÁI PHIẾU NẾU TRẢ HẾT SÁCH
+        if (tatCaSachDaDuocTra) {
+            phieuTrongStore.trangThai = 'Đã trả';
+            phieuTrongStore.ngayTraThucTe = layNgayHomNay();
         }
-    });
+        
+        if(daThuTien) {
+            phieuTrongStore.ghiChuPhat = (phieuTrongStore.ghiChuPhat || "") + " | Đã thu: " + dinhDangTien(tongPhatGlobal);
+        }
+    }
 
     localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
     localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
 
     dongModal();
-    alert('✅ Trả sách thành công!');
+    alert('✅ Đã cập nhật trạng thái trả sách!');
     resetTrang(); 
 }
 
@@ -392,7 +315,7 @@ function resetTrang() {
     loadDanhSachPhieuActive();
 }
 
-// Các hàm tiện ích (giữ nguyên)
+// Các hàm tiện ích giữ nguyên
 function layNgayHomNay() {
     var d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');

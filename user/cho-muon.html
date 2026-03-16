@@ -132,14 +132,8 @@
     <a href="doc-gia-danh-sach.html" class="menu-item">
         <span class="menu-icon">👥</span>Độc giả
     </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
-    </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
     </a>
 
     <div class="menu-nhom">Báo cáo</div>
@@ -170,7 +164,7 @@
                         <tr>
                             <th>Mã ĐG</th>
                             <th>Họ và tên</th>
-                            <th>Lớp</th>
+                            <th>Email</th>
                             <th style="text-align:center">Chọn</th>
                         </tr>
                     </thead>
@@ -253,7 +247,7 @@ function loadDanhSachDocGiaNhanh() {
         html += '<tr>';
         html += '<td><strong>' + dg.maDG + '</strong></td>';
         html += '<td>' + dg.hoTen + '</td>';
-        html += '<td>' + (dg.lop || '-') + '</td>';
+        html += '<td>' + (dg.email || '-') + '</td>';
         html += '<td style="text-align:center"><button class="btn-select-dg" onclick="chonDocGia(\'' + dg.maDG + '\')">Chọn</button></td>';
         html += '</tr>';
     }
@@ -286,7 +280,7 @@ function loadDanhSachSachNhanh() {
             });
             
             var textTooltip = nguoiMuon.length > 0 
-                ? "Đang được mượn bởi:\\n" + nguoiMuon.join("\\n") 
+                ? "Đang được mượn bởi:\n" + nguoiMuon.join("\n") 
                 : "Hết sách (Chưa rõ người mượn)";
 
             actionHtml = '<span class="badge-het" data-borrowers="' + textTooltip + '">Hết sách ℹ️</span>';
@@ -335,32 +329,6 @@ function chonSach(maSach) {
 
     if (daMuonChuaTra) {
         hienThiLoi('loiSach', 'Độc giả đang mượn cuốn này và chưa trả. Không thể mượn nữa!');
-        return;
-    }
-
-    // ✅ FIX LỖI 4: Kiểm tra xem có ai đang đặt chỗ sách này không
-    var dsDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
-    var nguoiDatCho = null;
-    
-    for (var i = 0; i < dsDatCho.length; i++) {
-        var dc = dsDatCho[i];
-        if (dc.maSach === maSach && dc.trangThai === 'Chờ lấy') {
-            // Nếu chính độc giả hiện tại đang đặt chỗ thì cho phép
-            if (dc.maDG === docGiaHienTai.maDG) {
-                nguoiDatCho = null; // Cho phép mượn
-                break;
-            } else {
-                nguoiDatCho = dc; // Người khác đang đặt
-                break;
-            }
-        }
-    }
-    
-    var sl = parseInt(sach.soLuongCon || 0);
-    
-    // Nếu chỉ còn 1 cuốn và có người khác đang đặt chỗ → không cho mượn
-    if (nguoiDatCho && sl === 1) {
-        hienThiLoi('loiSach', 'Cuốn sách cuối cùng đã được đặt chỗ bởi: ' + nguoiDatCho.tenDG + ' (' + nguoiDatCho.maDG + ')');
         return;
     }
 
