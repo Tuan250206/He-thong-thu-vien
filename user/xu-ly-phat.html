@@ -497,13 +497,23 @@ function hienThiBang(danhSach) {
             nutHanhDong = '<span style="color:#2E7D32;font-size:12px;font-weight:bold;">✓ Đã xong' + ngayTT + '</span>';
         }
 
+        // Hiển thị số tiền với thông tin đã nhận/còn thiếu nếu có
+        var displaySoTien = dinhDangTien(p.soTien);
+        if (p.soTienDaNhan && p.soTienConThieu && chuaTT) {
+            displaySoTien = '<div style="line-height:1.6;">' + 
+                '<strong>' + dinhDangTien(p.soTien) + '</strong><br>' +
+                '<small style="color:#2E7D32;">Đã nhận: ' + dinhDangTien(p.soTienDaNhan) + '</small><br>' +
+                '<small style="color:#C62828;">Còn thiếu: ' + dinhDangTien(p.soTienConThieu) + '</small>' +
+                '</div>';
+        }
+
         html += '<tr>';
         html += '<td>' + (i + 1) + '</td>';
         html += '<td style="font-size:11px;font-family:monospace;"><strong>' + p.maPhat + '</strong></td>';
         html += '<td><strong>' + p.maDG + '</strong></td>';
         html += '<td>' + p.tenDG + '</td>';
         html += '<td><span class="' + layClassLoaiVP(p.loaiVP) + '">' + layIconLoaiVP(p.loaiVP) + ' ' + p.loaiVP + '</span></td>';
-        html += '<td style="text-align:right;" class="tien">' + dinhDangTien(p.soTien) + '</td>';
+        html += '<td style="text-align:right;" class="tien">' + displaySoTien + '</td>';
             var ngayPhat = '-';
             if (p.ngayPhat) {
                 var d = p.ngayPhat.split(' ')[0];
