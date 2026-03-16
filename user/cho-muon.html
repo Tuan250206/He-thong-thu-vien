@@ -89,12 +89,17 @@
         border-style: solid;
         border-color: #333 transparent transparent transparent;
     }
+
+    th {
+        background: #2196F3;
+        color: #fff !important;
+    }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>📚 Hệ Thống Thư Viện</h1>
+    <h1>📚 HỆ THỐNG QUẢN LÝ THƯ VIỆN</h1>
     <div class="user-info">
         Xin chào! <strong id="tenNguoiDung">Nhân viên</strong>
         &nbsp;|&nbsp;<a href="../index.html">Đăng xuất</a>
@@ -242,14 +247,24 @@ window.onload = function() {
 function loadDanhSachDocGiaNhanh() {
     var dsDocGia = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
     var html = '';
+    var today = new Date();
+
     for (var i = 0; i < dsDocGia.length; i++) {
         var dg = dsDocGia[i];
-        if(dg.trangThai === 'Khóa') continue;
+        var biKhoa = (dg.trangThaiThe === 'Khóa');
+        var hetHan = false;
+        if (dg.ngayHetHan) hetHan = new Date(dg.ngayHetHan) < today;
+        var canChon = !biKhoa && !hetHan;
         html += '<tr>';
         html += '<td><strong>' + dg.maDG + '</strong></td>';
         html += '<td>' + dg.hoTen + '</td>';
         html += '<td>' + (dg.email || '-') + '</td>';
-        html += '<td style="text-align:center"><button class="btn-select-dg" onclick="chonDocGia(\'' + dg.maDG + '\')">Chọn</button></td>';
+        if (canChon) {
+            html += '<td style="text-align:center"><button class="btn-select-dg" onclick="chonDocGia(\'' + dg.maDG + '\')">Chọn</button></td>';
+        } else {
+            var msg = biKhoa ? 'Thẻ bị khóa' : 'Thẻ hết hạn';
+            html += '<td style="text-align:center"><span style="color:red;font-weight:bold;" title="' + msg + '">' + msg + '</span></td>';
+        }
         html += '</tr>';
     }
     document.getElementById('dsDocGiaNhanh').innerHTML = html || '<tr><td colspan="4" style="text-align:center">Chưa có dữ liệu độc giả</td></tr>';
@@ -374,8 +389,14 @@ function timDocGia() {
         return;
     }
 
-    if (docGia.trangThai === 'Khóa') {
-        hienThiLoi('ketQuaDocGia', 'Tài khoản độc giả đã bị khóa!');
+    if (docGia.trangThaiThe === 'Khóa') {
+        hienThiLoi('ketQuaDocGia', '❌ Thẻ thư viện đang bị KHÓA, không thể giao dịch!');
+        return;
+    }
+    var hetHan = false;
+    if (docGia.ngayHetHan) hetHan = new Date(docGia.ngayHetHan) < new Date();
+    if (hetHan) {
+        hienThiLoi('ketQuaDocGia', '❌ Thẻ thư viện đã HẾT HẠN, không thể giao dịch!');
         return;
     }
 
