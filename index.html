@@ -38,31 +38,34 @@
             margin-bottom: 60px;
         }
 
-        /* Khung chứa hai thẻ chọn vai trò */
+        /* Khung chứa các thẻ chọn vai trò */
         .khung-the {
             text-align: center;
             margin-bottom: 50px;
+            /* Dùng Flexbox để các thẻ tự động canh giữa và dàn đều */
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px; 
         }
 
         /* Thẻ chọn vai trò */
         .the-chon {
-            display: inline-block;
             background: white;
             border-radius: 12px;
-            padding: 40px 45px;
-            margin: 0 20px;
+            padding: 40px 30px;
             width: 280px;
             cursor: pointer;
             text-decoration: none;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            vertical-align: top;
             border: 3px solid transparent;
-            transition: box-shadow 0.2s;
+            transition: box-shadow 0.2s, transform 0.2s;
         }
 
         .the-chon:hover {
             box-shadow: 0 15px 45px rgba(0,0,0,0.35);
             border-color: rgba(255,255,255,0.5);
+            transform: translateY(-5px); /* Hiệu ứng nảy lên nhẹ */
         }
 
         .the-chon .icon {
@@ -86,6 +89,7 @@
         /* Màu riêng cho từng thẻ */
         .the-thu .ten { color: #2196F3; }
         .quan-ly-kho .ten { color: #9c27b0; }
+        .quan-tri-vien .ten { color: #FF9800; }
 
         /* Nhãn loại trên thẻ */
         .nhan-loai {
@@ -101,13 +105,7 @@
 
         .the-thu .nhan-loai { background: #e3f2fd; color: #2196F3; }
         .quan-ly-kho .nhan-loai { background: #f3e5f5; color: #9c27b0; }
-
-        /* Phần chân trang */
-        .chan-trang {
-            color: rgba(255,255,255,0.6);
-            font-size: 13px;
-            margin-top: 20px;
-        }
+        .quan-tri-vien .nhan-loai { background: #fff3e0; color: #FF9800; }
     </style>
 </head>
 <body>
@@ -116,7 +114,6 @@
         <h1 class="tieu-de">HỆ THỐNG QUẢN LÝ THƯ VIỆN</h1>
         <p class="phu-de">Chọn vai trò để đăng nhập vào hệ thống</p>
 
-        <!-- Hai thẻ chọn vai trò -->
         <div class="khung-the">
             <a href="user/login.html" class="the-chon the-thu">
                 <span class="nhan-loai">Nghiệp vụ thư viện</span>
@@ -131,11 +128,19 @@
                 <div class="ten">QUẢN LÝ KHO</div>
                 <div class="mo-ta">Quản lý kho sách, nhập xuất hàng, nhà cung cấp và theo dõi tồn kho thư viện</div>
             </a>
+
+            <a href="quantri/login.html" class="the-chon quan-tri-vien">
+                <span class="nhan-loai">Quản trị hệ thống</span>
+                <div class="icon">🛡️</div>
+                <div class="ten">QUẢN TRỊ VIÊN</div>
+                <div class="mo-ta">Quản lý tài khoản, phân quyền, thiết lập hệ thống và xem báo cáo</div>
+            </a>
         </div>
 
     </div>
 
     <script>
+
         // Hàm đệm số với số 0 ở đầu (thay cho padStart để dùng ES5)
         function dem2(n) {
             return n < 10 ? '0' + n : '' + n;
@@ -572,6 +577,9 @@
         window.onload = function () {
             khoiTaoDuLieu();
         };
+
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('currentUserInfo');
     </script>
     <script>
         localStorage.removeItem('currentUser');

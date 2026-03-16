@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý tài khoản - Hệ thống thư viện</title>
+    <title>Quản Trị Hệ Thống - Đăng Nhập</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Bổ sung thêm style cho password và email dựa trên css có sẵn của bạn */
         input[type="password"], input[type="email"] { 
             width: 98%; padding: 7px; margin: 3px 0; border: 1px solid #ddd; font-size: 13px; 
         }
-        /* Style nhỏ cho ô tìm kiếm */
         .search-box { padding: 8px; width: 250px; border: 1px solid #ddd; font-size: 13px; }
     </style>
 </head>
 <body>
     <div id="header">
-        <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
+        <h1>🏢 Quản Trị Hệ Thống - Đăng Nhập</h1>
         <div class="userInfo">
             Xin chào: <strong id="tenAdmin">Admin</strong>
             <a href="login.html" onclick="dangXuat()">Đăng xuất</a>
@@ -24,17 +22,7 @@
     </div>
     
     <div id="sidebar">
-        <a href="dashboard.html">🏠 Trang chủ</a>
-        <a href="sach-them.html">➕ Thêm sách</a>
-        <a href="sach-sua.html">✏️ Sửa sách</a>
-        <a href="bien-muc.html">📋 Biên mục</a>
-        <a href="in-barcode.html">🏷️ In tem sách</a>
-        <a href="kiem-ke.html">📊 Kiểm kê</a>
-        <a href="nhap-kho-danh-sach.html">📥 Phiếu nhập</a>
-        <a href="xuat-kho-danh-sach.html">📤 Phiếu xuất</a>
-        <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
-        <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
-        <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
+
         <a class="active" href="tai-khoan.html">👥 Quản lý tài khoản</a>
     </div>
     
@@ -119,40 +107,9 @@
                         <th style="width: 20%; text-align: center;">Thao tác</th>
                     </tr>
                 </thead>
+                
                 <tbody id="danhSachTK">
-                    <tr>
-                        <td>1</td>
-                        <td><strong>admin_tong</strong></td>
-                        <td>Cao Thanh Tuyền</td>
-                        <td class="warn">Quản trị viên</td>
-                        <td>🟢 Hoạt động</td>
-                        <td style="text-align: center;">
-                            <button onclick="suaTK(1)" style="background: #f0ad4e;">Sửa</button>
-                            <button onclick="xoaTK(1)" class="btn-danger">Khóa</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><strong>thukho_01</strong></td>
-                        <td>Nguyễn Văn A</td>
-                        <td style="color: #4CAF50; font-weight: bold;">Thủ kho</td>
-                        <td>🟢 Hoạt động</td>
-                        <td style="text-align: center;">
-                            <button onclick="suaTK(2)" style="background: #f0ad4e;">Sửa</button>
-                            <button onclick="xoaTK(2)" class="btn-danger">Khóa</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><strong>thuthu_01</strong></td>
-                        <td>Trần Thị B</td>
-                        <td style="color: #2196F3; font-weight: bold;">Thủ thư</td>
-                        <td>🔴 Đã khóa</td>
-                        <td style="text-align: center;">
-                            <button onclick="suaTK(3)" style="background: #f0ad4e;">Sửa</button>
-                            <button onclick="moKhoaTK(3)" style="background: #00BCD4;">Mở</button>
-                        </td>
-                    </tr>
+                    
                 </tbody>
             </table>
         </div>
