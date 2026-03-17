@@ -1,17 +1,21 @@
+
+// =========================================================
+// 1. XỬ LÝ ĐĂNG NHẬP / ĐĂNG XUẤT / KIỂM TRA PHIÊN
+// =========================================================
+
 function kiemTraDangNhapChung() {
     var user = localStorage.getItem('currentAdmin');
     var trangHienTai = window.location.pathname.toLowerCase();
 
-    // 1. NẾU CHƯA ĐĂNG NHẬP VÀ ĐANG KHÔNG Ở TRANG LOGIN -> Đuổi về trang đăng nhập
     if (!user && !trangHienTai.includes('login.html')) { 
         window.location.href = 'login.html'; 
         return; 
     }
     
-    // 2. NẾU CHƯA ĐĂNG NHẬP NHƯNG ĐANG Ở TRANG LOGIN -> Dừng lại, không làm gì cả
+    // Nếu chưa đăng nhập nhưng đang ở trang login -> Dừng lại, cho phép đăng nhập
     if (!user) return; 
 
-    // 3. NẾU ĐÃ ĐĂNG NHẬP -> Tìm và in tên hiển thị
+    // Nếu đã đăng nhập -> Tìm và in tên hiển thị lên header/dashboard
     var theTen = document.getElementById('adminName') || document.getElementById('tenAdmin');
     if (theTen) {
         var admins = JSON.parse(localStorage.getItem('admins') || '[]');
@@ -26,18 +30,45 @@ function kiemTraDangNhapChung() {
     }
 }
 
-function dangXuat() {
-    localStorage.removeItem('currentAdmin');
+function dangNhapSuperAdmin() {
+    var u = document.getElementById('username').value.trim();
+    var p = document.getElementById('password').value.trim();
+    var errMsg = document.getElementById('errMsg');
+    var tatCaTaiKhoan = JSON.parse(localStorage.getItem('admins')) || [];
+
+    var userHopLe = tatCaTaiKhoan.find(function(tk) {
+        return tk.username === u && tk.password === p && (tk.vaiTro === 'Admin' || tk.role === 'admin');
+    });
+
+    if (userHopLe) {
+        // Đăng nhập thành công
+        errMsg.style.display = 'none';
+        localStorage.setItem('currentAdmin', userHopLe.username);
+        window.location.href = 'tai-khoan.html'; // Chuyển hướng vào trang quản lý tài khoản
+    } else {
+        // Đăng nhập thất bại
+        errMsg.style.display = 'block';
+        document.getElementById('password').value = ''; // Xóa pass cho người dùng nhập lại
+    }
 }
 
-function formatTien(n) {
-    return Number(n || 0).toLocaleString('vi-VN');
+function dangXuat() {
+    localStorage.removeItem('currentAdmin');
+    window.location.href = 'login.html'; // Đăng xuất xong thì quay về trang đăng nhập
 }
+
+
 // =========================================================
-// MODULE: QUẢN LÝ TÀI KHOẢN (Đã đồng bộ Key 'admins')
+// 2. MODULE: QUẢN LÝ TÀI KHOẢN (CRUD)
 // =========================================================
 
 let idSuaTKHienTai = null;
+
+// Khởi tạo và đổ dữ liệu ra bảng lần đầu
+function khoiTaoTaiKhoan() {
+    let dsTK = JSON.parse(localStorage.getItem('admins')) || [];
+    hienThiDanhSachTK(dsTK);
+}
 
 // Hàm vẽ bảng dữ liệu
 function hienThiDanhSachTK(data) {
@@ -91,7 +122,7 @@ function luuTaiKhoan() {
     }
 
     if (idSuaTKHienTai !== null) {
-        // CẬP NHẬT
+        // TRẠNG THÁI: CẬP NHẬT
         let index = dsTK.findIndex((tk, idx) => (tk.id === idSuaTKHienTai || idx === idSuaTKHienTai));
         if (index !== -1) {
             dsTK[index].username = username;
@@ -100,13 +131,13 @@ function luuTaiKhoan() {
             dsTK[index].sdtNv = sdtNv;
             dsTK[index].emailNv = emailNv;
             dsTK[index].vaiTro = vaiTro;
-            dsTK[index].role = vaiTro; // Lưu thêm role để dự phòng tương thích code cũ
+            dsTK[index].role = vaiTro; 
             dsTK[index].trangThai = trangThai;
             alert('Cập nhật tài khoản thành công!');
         }
         idSuaTKHienTai = null; 
     } else {
-        // THÊM MỚI
+        // TRẠNG THÁI: THÊM MỚI
         if(dsTK.find(tk => tk.username === username)) {
             alert('Lỗi: Username này đã tồn tại!');
             return;
@@ -150,7 +181,6 @@ function xoaTK(idOrIndex) {
         hienThiDanhSachTK(dsTK);
     }
 }
-
 // Hàm mở khóa tài khoản
 function moKhoaTK(idOrIndex) {
     if(confirm("Xác nhận MỞ KHÓA cho tài khoản này?")) {
@@ -161,7 +191,6 @@ function moKhoaTK(idOrIndex) {
         hienThiDanhSachTK(dsTK);
     }
 }
-
 // Hàm tìm kiếm
 function timKiem() {
     let dsTK = JSON.parse(localStorage.getItem('admins')) || [];
@@ -174,36 +203,24 @@ function timKiem() {
     hienThiDanhSachTK(ketQua); 
 }
 
-// ---> HÀM NÀY BỊ THIẾU TRONG CODE CỦA BẠN <---
-function khoiTaoTaiKhoan() {
-    let dsTK = JSON.parse(localStorage.getItem('admins')) || [];
-    hienThiDanhSachTK(dsTK);
+// =========================================================
+// 3. TIỆN ÍCH & KHỞI CHẠY HỆ THỐNG
+// =========================================================
+
+function formatTien(n) {
+    return Number(n || 0).toLocaleString('vi-VN');
 }
 
-// Hàm gọi chạy code khi load trang
 window.onload = function() {
     kiemTraDangNhapChung();
     if (document.getElementById('formTaiKhoan')) {
         khoiTaoTaiKhoan(); 
     }
-}
-
-//login 
-function dangNhapSuperAdmin() {
-    var u = document.getElementById('username').value.trim();
-    var p = document.getElementById('password').value.trim();
-    var errMsg = document.getElementById('errMsg');
-    var tatCaTaiKhoan = JSON.parse(localStorage.getItem('admins')) || [];
-    var userHopLe = tatCaTaiKhoan.find(function(tk) {
-        return tk.username === u && tk.password === p && (tk.vaiTro === 'Admin' || tk.role === 'admin');
-    });
-
-    if (userHopLe) {
-        errMsg.style.display = 'none';
-        localStorage.setItem('currentAdmin', userHopLe.username);
-        window.location.href = 'tai-khoan.html'; 
-    } else {
-        errMsg.style.display = 'block';
-        document.getElementById('password').value = '';
+    
+    let passInput = document.getElementById('password');
+    if (passInput && window.location.pathname.toLowerCase().includes('login.html')) {
+        passInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') dangNhapSuperAdmin();
+        });
     }
 }
