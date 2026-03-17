@@ -72,16 +72,9 @@ tbody td { padding: 8px 12px; font-size: 13px; border-bottom: 1px solid #eee; ve
     <a href="doc-gia-danh-sach.html" class="menu-item">
         <span class="menu-icon">👥</span>Độc giả
     </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
-    </a>
-
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item active">
         <span class="menu-icon">📋</span>Lịch sử
@@ -153,9 +146,17 @@ function formatISO(d) {
 
 function formatNgay(str) {
   if (!str) return '--';
-  var p = str.split('-');
-  if (p.length === 3) return p[2] + '/' + p[1] + '/' + p[0];
-  return str;
+  // Tách ngày và giờ nếu có
+  var date = str;
+  var arr = str.split(' ');
+  if (arr.length >= 1) {
+    date = arr[0];
+  }
+  var p = date.split('-');
+  if (p.length === 3) {
+    return p[2] + '/' + p[1] + '/' + p[0];
+  }
+  return date;
 }
 
 function formatTien(so) {
@@ -164,6 +165,7 @@ function formatTien(so) {
 }
 
 function xayDungGiaoDich() {
+    // Chỉ hiện các giao dịch phạt từ dsPhat (rách/mất), không push phạt quá hạn để tránh lỗi treo
   var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
   var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
   var tatCa = [];
@@ -178,25 +180,44 @@ function xayDungGiaoDich() {
       }
       chiTiet = tenSach.join(', ');
     }
-    tatCa.push({ ngay: pm.ngayMuon || '', loai: 'Mượn', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: chiTiet || 'Phiếu mượn', soTien: null });
+    // Luôn push giao dịch mượn
+    tatCa.push({ ngay: pm.ngayMuon || '', loai: 'Mượn', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: chiTiet || 'Phiếu mượn', soTien: null, createdAt: pm.createdAtMuon || Date.now()  });
 
-    if (pm.trangThai === 'Đã trả' || pm.trangThai === 'Da tra') {
-      tatCa.push({ ngay: pm.ngayTra || pm.hanTra || '', loai: 'Trả', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: 'Trả sách - ' + (chiTiet || pm.maPhieu), soTien: null });
+    // Giao dịch trả: Kiểm tra xem tất cả sách trong phiếu đã được trả chưa
+    if (pm.danhSachSach && pm.danhSachSach.length > 0) {
+      var tatCaSachDaTra = pm.danhSachSach.every(function(s) { return s.daTra === true; });
+      if (tatCaSachDaTra && pm.ngayTraThucTe) {
+        tatCa.push({ ngay: pm.ngayTraThucTe, loai: 'Trả', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: chiTiet || 'Phiếu trả', soTien: null, createdAt: pm.createdAtTra || Date.now() });
+      }
     }
 
-    if (pm.soLanGiaHan && pm.soLanGiaHan > 0) {
-      tatCa.push({ ngay: pm.ngayGiaHan || pm.hanTra || '', loai: 'Gia hạn', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: 'Gia hạn lần ' + pm.soLanGiaHan + ' - hạn mới: ' + formatNgay(pm.hanTra), soTien: null });
+    // Giao dịch gia hạn: luôn push nếu có thuộc tính loaiGiaHan và ngày gia hạn
+    if (pm.loaiGiaHan && pm.ngayGiaHan) {
+      tatCa.push({ ngay: pm.ngayGiaHan, loai: 'Gia hạn', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: chiTiet || 'Gia hạn phiếu', soTien: null, createdAt: pm.createdAtGiaHan || Date.now() });
     }
   }
 
   for (var k = 0; k < dsPhat.length; k++) {
     var p = dsPhat[k];
-    tatCa.push({ ngay: p.ngayPhat || '', loai: 'Phạt', maGD: p.maPhat || '--', maDG: p.maDG || '--', tenDG: p.tenDG || '--', chiTiet: (p.loaiVP || 'Vi phạm') + ' - Phiếu: ' + (p.maPhieu || '--'), soTien: p.soTien || 0 });
+    // Lấy soTien (số tiền còn thiếu) thay vì tongTienGoc để hiển thị đúng phí phạt thực tế
+    var soTienThucTe = p.soTien || 0;
+    // Thêm thông tin trạng thái thanh toán
+    var trangThaiText = (p.trangThai === 'Chưa thu') ? ' (chưa thanh toán hết)' : '';
+    tatCa.push({ ngay: p.ngayPhat || '', loai: 'Phạt', maGD: p.maPhat || '--', maDG: p.maDG || '--', tenDG: p.tenDG || '--', chiTiet: (p.loaiVP || 'Vi phạm') + ' - Phiếu: ' + (p.maPhieu || '--'), soTien: soTienThucTe, trangThaiPhat: trangThaiText, createdAt: p.createdAt || Date.now() });
   }
 
-  tatCa.sort(function(a, b) {
-    return (b.ngay || '').localeCompare(a.ngay || '');
-  });
+// ==== PATCH begin ==== 
+tatCa.forEach(function(item) {
+    if (!item.createdAt) {
+        item.createdAt = item.ngay ? Date.parse(item.ngay) : Date.now();
+    }
+});
+// ==== PATCH end ==== 
+
+// ==== SORT begin ==== 
+tatCa.sort(function(a, b) {
+    return b.createdAt - a.createdAt;
+});
 
   return tatCa;
 }
@@ -210,11 +231,13 @@ function locLichSu() {
   var ketQua = [];
 
   for (var i = 0; i < tatCa.length; i++) {
-    var gd = tatCa[i];
-    if (tuNgay && gd.ngay && gd.ngay < tuNgay) continue;
-    if (denNgay && gd.ngay && gd.ngay > denNgay) continue;
-    if (loai && gd.loai !== loai) continue;
-    ketQua.push(gd);
+      var gd = tatCa[i];
+      // CHUẨN HÓA ngày về yyyy-MM-dd (10 ký tự đầu) để so sánh với input date
+      var ngayLichSu = gd.ngay ? gd.ngay.substring(0, 10) : '';
+      if (tuNgay && ngayLichSu && ngayLichSu < tuNgay) continue;
+      if (denNgay && ngayLichSu && ngayLichSu > denNgay) continue;
+      if (loai && gd.loai !== loai) continue;
+      ketQua.push(gd);
   }
 
   hienThiBang(ketQua);
@@ -241,7 +264,9 @@ function hienThiBang(ds) {
 
     var soTienHtml = '--';
     if (gd.soTien !== null && gd.soTien !== undefined) {
-      soTienHtml = '<span class="tien">' + formatTien(gd.soTien) + '</span>';
+      // Thêm trạng thái thanh toán nếu có
+      var trangThaiText = gd.trangThaiPhat || '';
+      soTienHtml = '<span class="tien">' + formatTien(gd.soTien) + trangThaiText + '</span>';
     }
 
     html += '<tr>';

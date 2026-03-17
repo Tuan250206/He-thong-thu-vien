@@ -256,11 +256,9 @@ function kiemTraQuaHan() {
             var ngayHan = new Date(dc.hanLaySach);
             ngayHan.setHours(0, 0, 0, 0);
             
-            // Chỉ hủy nếu quá hạn ít nhất 1 ngày
             if (ngayHan < homNay) {
                 dc.trangThai = 'Đã hủy';
                 dc.ghiChu = 'Tự động hủy do quá hạn lấy sách';
-                dc.ngayHuy = layNgayHomNay();
                 coThayDoi = true;
             }
         }
@@ -444,35 +442,12 @@ function xacNhanLaySach(maDatCho) {
     }
     
     if (datCho) {
-        // ✅ FIX LỖI 3: Kiểm tra giới hạn 5 cuốn trước khi cho lấy sách
-        var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-        var soSachDangMuon = 0;
-        
-        dsPhieuMuon.forEach(function(p) {
-            if (p.maDG === datCho.maDG && p.trangThai === 'Đang mượn') {
-                soSachDangMuon += p.danhSachSach.length;
-            }
-        });
-        
-        if (soSachDangMuon >= 5) {
-            alert('❌ Độc giả đã mượn tối đa 5 cuốn! Không thể lấy sách đặt chỗ.\n\nVui lòng yêu cầu độc giả trả bớt sách trước.');
-            // Hoàn tác trạng thái
-            for (var j = 0; j < danhSach.length; j++) {
-                if (danhSach[j].maDatCho === maDatCho) {
-                    danhSach[j].trangThai = 'Chờ lấy';
-                    delete danhSach[j].ngayLay;
-                    break;
-                }
-            }
-            localStorage.setItem('danhSachDatCho', JSON.stringify(danhSach));
-            return;
-        }
-        
         // Lấy thông tin đầy đủ của sách từ danhSachSach
         var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
         var sach = dsSach.find(function(s) { return s.maSach === datCho.maSach; });
         
         // Tạo phiếu mượn tự động
+        var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
         var maPhieu = 'PM' + Date.now();
         var hanTra = tinhNgaySau(new Date(), 14);
         
@@ -488,11 +463,13 @@ function xacNhanLaySach(maDatCho) {
                 tacGia: sach ? (sach.tacGia || '---') : '---'
             }],
             trangThai: 'Đang mượn',
-            ghiChu: 'Từ đặt chỗ ' + maDatCho
+            soLanGiaHan: 0,
+            ghiChu: 'Từ đặt chỗ ' + maDatCho,
+            createdAtMuon: Date.now() // <-- bổ sung này (quan trọng cho lịch sử sort)
         });
         
-        // Giảm số lượng sách (chỉ giảm nếu > 0)
-        if (sach && sach.soLuongCon > 0) {
+        // Giảm số lượng sách
+        if (sach) {
             sach.soLuongCon = Math.max(0, parseInt(sach.soLuongCon || 0) - 1);
         }
         

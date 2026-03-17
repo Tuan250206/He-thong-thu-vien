@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Kiểm tra dữ liệu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 { color: #1565C0; }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #2196F3;
+        }
+        .btn {
+            padding: 10px 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .btn:hover {
+            background: #1976D2;
+        }
+        .btn-danger {
+            background: #f44336;
+        }
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #81c784;
+        }
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+        .status.warning {
+            background: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ffb74d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug - Kiểm tra dữ liệu hệ thống</h1>
+        
+        <div class="section">
+            <h3>Trạng thái khởi tạo</h3>
+            <div id="statusInit"></div>
+        </div>
+
+        <div class="section">
+            <h3>Thao tác</h3>
+            <button class="btn" onclick="kiemTraDuLieu()">🔄 Kiểm tra dữ liệu</button>
+            <button class="btn btn-danger" onclick="xoaDuLieu()">🗑️ Xóa toàn bộ dữ liệu</button>
+            <button class="btn" onclick="khoiTaoLai()">🔧 Khởi tạo lại</button>
+            <button class="btn" onclick="location.href='sach-danh-sach.html'">📚 Đến trang sách</button>
+        </div>
+
+        <div class="section">
+            <h3>Thông tin chi tiết</h3>
+            <div id="ketQua"></div>
+        </div>
+
+        <div class="section">
+            <h3>Dữ liệu JSON (danhSachSach)</h3>
+            <pre id="jsonData"></pre>
+        </div>
+    </div>
+
+    <script>
+        function kiemTraTrangThai() {
+            var daKhoiTao = localStorage.getItem('daKhoiTao');
+            var statusDiv = document.getElementById('statusInit');
+            
+            if (daKhoiTao === 'true') {
+                statusDiv.innerHTML = '<div class="status success">✅ Hệ thống đã được khởi tạo</div>';
+            } else {
+                statusDiv.innerHTML = '<div class="status warning">⚠️ Hệ thống chưa được khởi tạo</div>';
+            }
+        }
+
+        function kiemTraDuLieu() {
+            var ketQuaDiv = document.getElementById('ketQua');
+            var jsonDiv = document.getElementById('jsonData');
+            var html = '';
+
+            // Kiểm tra từng key trong localStorage
+            var keys = [
+                'daKhoiTao',
+                'danhSachSach',
+                'danhSachDocGia',
+                'danhSachPhieuMuon',
+                'danhSachPhat',
+                'danhSachDatCho',
+                'danhSachNCC',
+                'danhSachPhieuNhap',
+                'danhSachPhieuXuat',
+                'users',
+                'admins'
+            ];
+
+            html += '<table style="width:100%; border-collapse: collapse;">';
+            html += '<tr style="background:#2196F3; color:white;"><th style="padding:8px; text-align:left;">Key</th><th style="padding:8px; text-align:left;">Trạng thái</th><th style="padding:8px; text-align:left;">Số lượng</th></tr>';
+
+            keys.forEach(function(key) {
+                var data = localStorage.getItem(key);
+                var status = '';
+                var count = '';
+
+                if (!data) {
+                    status = '<span style="color:#f44336;">❌ Không tồn tại</span>';
+                } else if (key === 'daKhoiTao') {
+                    status = '<span style="color:#4caf50;">✅ ' + data + '</span>';
+                } else {
+                    try {
+                        var parsed = JSON.parse(data);
+                        status = '<span style="color:#4caf50;">✅ Hợp lệ</span>';
+                        count = Array.isArray(parsed) ? parsed.length + ' item(s)' : 'Object';
+                    } catch (e) {
+                        status = '<span style="color:#f44336;">❌ JSON không hợp lệ</span>';
+                    }
+                }
+
+                html += '<tr style="border-bottom:1px solid #ddd;">';
+                html += '<td style="padding:8px;"><strong>' + key + '</strong></td>';
+                html += '<td style="padding:8px;">' + status + '</td>';
+                html += '<td style="padding:8px;">' + count + '</td>';
+                html += '</tr>';
+            });
+
+            html += '</table>';
+            ketQuaDiv.innerHTML = html;
+
+            // Hiển thị dữ liệu sách
+            var danhSachSach = localStorage.getItem('danhSachSach');
+            if (danhSachSach) {
+                try {
+                    var sachData = JSON.parse(danhSachSach);
+                    jsonDiv.textContent = JSON.stringify(sachData, null, 2);
+                    
+                    // Thống kê
+                    var tongSoLuong = 0;
+                    var tongCon = 0;
+                    sachData.forEach(function(s) {
+                        tongSoLuong += parseInt(s.soLuongTong) || 0;
+                        tongCon += parseInt(s.soLuongCon) || 0;
+                    });
+                    
+                    jsonDiv.textContent = '// Tổng số đầu sách: ' + sachData.length + '\n';
+                    jsonDiv.textContent += '// Tổng số lượng sách: ' + tongSoLuong + ' cuốn\n';
+                    jsonDiv.textContent += '// Số sách còn lại: ' + tongCon + ' cuốn\n\n';
+                    jsonDiv.textContent += JSON.stringify(sachData, null, 2);
+                } catch (e) {
+                    jsonDiv.textContent = 'LỖI: ' + e.message;
+                }
+            } else {
+                jsonDiv.textContent = '(Không có dữ liệu)';
+            }
+
+            kiemTraTrangThai();
+        }
+
+        function xoaDuLieu() {
+            if (confirm('Bạn có chắc muốn XÓA TOÀN BỘ dữ liệu không?\n\nLưu ý: Hành động này không thể hoàn tác!')) {
+                localStorage.clear();
+                alert('✅ Đã xóa toàn bộ dữ liệu!');
+                kiemTraDuLieu();
+            }
+        }
+
+        function khoiTaoLai() {
+            if (confirm('Xóa dữ liệu cũ và khởi tạo lại từ đầu?')) {
+                localStorage.clear();
+                alert('Đã xóa dữ liệu cũ.\n\nBây giờ hãy quay lại trang index.html để khởi tạo dữ liệu mới!');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Tự động kiểm tra khi tải trang
+        window.onload = function() {
+            kiemTraDuLieu();
+        };
+    </script>
+</body>
+</html>

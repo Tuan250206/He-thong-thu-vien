@@ -36,6 +36,22 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
 .no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
 .count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
 .cf::after { content: ""; display: table; clear: both; }
+.btn-advanced {
+    background: #FF9800;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+    display: inline-block;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+.btn-advanced:hover {
+    background: #F57C00;
+}
 </style>
 </head>
 <body>
@@ -82,7 +98,6 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
     <a href="sach-danh-sach.html" class="menu-item active">
         <span class="menu-icon">📚</span>Sách
     </a>
-
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -102,6 +117,7 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
                 <option value="">📂 Tất cả thể loại</option>
             </select>
             <button class="btn btn-blue" onclick="timKiemSach()">🔍 Tìm</button>
+            <a href="sach-tim-kiem.html" class="btn btn-advanced" style="float:right; text-decoration:none;">🔍 Tìm kiếm nâng cao</a>
         </div>
 
         <div class="count-info" id="lblSoLuong">Đang tải...</div>

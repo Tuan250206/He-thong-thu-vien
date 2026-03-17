@@ -13,40 +13,44 @@
 .form-col { float: left; width: 50%; padding-right: 15px; }
 .form-col:last-child { padding-right: 0; }
 .form-col label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 13px; }
-.form-col input[type="text"], .form-col input[type="number"], .form-col select {
+.form-col select {
     width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; outline: none; background: white;
 }
-.form-col input:focus, .form-col select:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
+.form-col select:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
 .year-group { overflow: hidden; }
-.year-group input { float: left; width: 45%; }
-.year-group span { float: left; padding: 8px 5px; font-size: 13px; color: #666; }
-.btn-row { margin-top: 10px; overflow: hidden; }
-.btn { padding: 9px 22px; border: none; border-radius: 3px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; line-height: normal; }
-.btn-blue { background: #2196F3; color: white; margin-right: 10px; }
+.year-group input { float: left; width: 45%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; outline: none; }
+.year-group input:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
+.year-group span { float: left; width: 10%; text-align: center; line-height: 38px; color: #888; font-weight: bold; }
+.btn-row { margin-top: 20px; }
+.btn { padding: 8px 18px; border: none; border-radius: 3px; cursor: pointer; font-size: 14px; margin-right: 8px; }
+.btn-blue { background: #2196F3; color: white; }
 .btn-blue:hover { background: #1976D2; }
 .btn-grey { background: #9E9E9E; color: white; }
 .btn-grey:hover { background: #757575; }
-.btn-sm { padding: 4px 10px; font-size: 12px; }
-.btn-teal { background: #009688; color: white; }
-.btn-teal:hover { background: #00796B; }
 .table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 650px; }
+table { width: 100%; border-collapse: collapse; min-width: 700px; }
 table thead tr { background: #2196F3; color: white; }
 table th { padding: 10px 8px; text-align: left; font-size: 13px; white-space: nowrap; }
 table td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
 table tbody tr:hover { background: #e3f2fd; }
 table tbody tr:nth-child(even) { background: #fafafa; }
 table tbody tr:nth-child(even):hover { background: #e3f2fd; }
-.so-luong-do { color: #D32F2F; font-weight: bold; }
-.so-luong-cam { color: #E65100; font-weight: bold; }
-.so-luong-xanh { color: #2E7D32; font-weight: bold; }
-.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; }
+.no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
+.count-info { font-size: 13px; color: #666; margin-bottom: 10px; background: #E3F2FD; padding: 8px 12px; border-radius: 4px; }
+.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; white-space: nowrap; }
 .badge-co-sach { background: #E8F5E9; color: #2E7D32; border: 1px solid #81C784; }
 .badge-het-sach { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
-.no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
-.count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
-.hint-msg { text-align: center; color: #1565C0; padding: 25px; font-size: 14px; background: #E3F2FD; border-radius: 5px; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-teal { background: #009688; color: white; text-decoration: none; }
+.btn-teal:hover { background: #00796B; }
 .cf::after { content: ""; display: table; clear: both; }
+.btn-orange {
+    background: #FF9800;
+    color: white;
+}
+.btn-orange:hover {
+    background: #F57C00;
+}
 </style>
 </head>
 <body>
@@ -90,16 +94,9 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
     <a href="doc-gia-danh-sach.html" class="menu-item">
         <span class="menu-icon">👥</span>Độc giả
     </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
-    <a href="sach-tim-kiem.html" class="menu-item active">
-        <span class="menu-icon">🔍</span>Tìm sách
-    </a>
-
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -114,59 +111,51 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
 
     <div class="card">
         <div class="section-label">🔎 Điều kiện tìm kiếm</div>
-
+        
         <div class="form-row cf">
-            <div class="form-col">
-                <label>Tên sách</label>
-                <input type="text" id="timTenSach" placeholder="Nhập tên sách..." />
-            </div>
             <div class="form-col">
                 <label>Tác giả</label>
-                <input type="text" id="timTacGia" placeholder="Nhập tên tác giả..." />
+                <select id="tacGia">
+                    <option value="">-- Tất cả tác giả --</option>
+                </select>
             </div>
-        </div>
-
-        <div class="form-row cf">
             <div class="form-col">
                 <label>Nhà xuất bản</label>
-                <input type="text" id="timNXB" placeholder="Nhập nhà xuất bản..." />
-            </div>
-            <div class="form-col">
-                <label>Thể loại</label>
-                <select id="timTheLoai">
-                    <option value="">-- Tất cả thể loại --</option>
+                <select id="nxb">
+                    <option value="">-- Tất cả NXB --</option>
                 </select>
             </div>
         </div>
 
         <div class="form-row cf">
             <div class="form-col">
+                <label>Thể loại</label>
+                <select id="theLoai">
+                    <option value="">-- Tất cả thể loại --</option>
+                </select>
+            </div>
+            <div class="form-col">
                 <label>Năm xuất bản</label>
                 <div class="year-group">
-                    <input type="number" id="timNamTu" placeholder="Từ năm" min="1900" max="2099" />
-                    <span>—</span>
-                    <input type="number" id="timNamDen" placeholder="Đến năm" min="1900" max="2099" style="float:right; width:45%;" />
+                    <input type="number" id="namTu" placeholder="Từ năm" min="1900" max="2100" />
+                    <span>→</span>
+                    <input type="number" id="namDen" placeholder="Đến năm" min="1900" max="2100" />
                 </div>
             </div>
-            <div class="form-col"></div>
         </div>
 
         <div class="btn-row">
-            <button class="btn btn-blue" onclick="timKiemSach()">🔍 Tìm kiếm</button>
-            <button class="btn btn-grey" onclick="datLai()">🔄 Đặt lại</button>
+            <button class="btn btn-blue" onclick="timKiem()">🔍 Tìm kiếm</button>
+            <button class="btn btn-orange" onclick="datLai()">🔄 Đặt lại</button>
+            <a href="sach-danh-sach.html" class="btn btn-grey" style="text-decoration:none">← Quay lại danh sách</a>
         </div>
     </div>
 
-    <div class="card" id="cardKetQua">
+    <div class="card">
         <div class="section-label">📋 Kết quả tìm kiếm</div>
+        <div class="count-info" id="lblSoLuong">Chưa có kết quả. Vui lòng chọn điều kiện và nhấn Tìm kiếm.</div>
 
-        <div class="count-info" id="lblSoLuong" style="display:none"></div>
-
-        <div id="goiY" class="hint-msg">
-            💡 Nhập điều kiện tìm kiếm ở trên và nhấn <strong>Tìm kiếm</strong>
-        </div>
-
-        <div class="table-wrap" id="bangKetQuaWrap" style="display:none">
+        <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
@@ -174,21 +163,23 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
                         <th style="width:80px">Mã sách</th>
                         <th>Tên sách</th>
                         <th style="width:120px">Tác giả</th>
+                        <th style="width:120px">NXB</th>
                         <th style="width:100px">Thể loại</th>
+                        <th style="width:70px">Năm XB</th>
                         <th style="width:90px">Còn/Tổng</th>
                         <th style="width:85px">Trạng thái</th>
-                        <th style="width:110px">Hành động</th>
+                        <th style="width:80px">Hành động</th>
                     </tr>
                 </thead>
-                <tbody id="bangSach"></tbody>
+                <tbody id="bangKetQua">
+                    <tr><td colspan="10" class="no-data">Chưa có kết quả tìm kiếm</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-var daTimKiem = false;
-
 function kiemTraDangNhap() {
     var nguoiDung = localStorage.getItem('currentUser');
     if (!nguoiDung) {
@@ -202,7 +193,6 @@ function kiemTraDangNhap() {
     return true;
 }
 
-
 function layDanhSachSach() {
     var data = localStorage.getItem('danhSachSach');
     if (!data) return [];
@@ -210,120 +200,137 @@ function layDanhSachSach() {
     catch (e) { return []; }
 }
 
-function taiTheLoai() {
+// Load dữ liệu vào combobox
+function taiDuLieuCombobox() {
     var danhSach = layDanhSachSach();
+    
+    // Tác giả
+    var dsTacGia = {};
+    var dsNXB = {};
     var dsTheLoai = {};
+    
     for (var i = 0; i < danhSach.length; i++) {
-        var tl = danhSach[i].theLoai;
-        if (tl) dsTheLoai[tl] = true;
+        if (danhSach[i].tacGia) dsTacGia[danhSach[i].tacGia] = true;
+        if (danhSach[i].nxb) dsNXB[danhSach[i].nxb] = true;
+        if (danhSach[i].theLoai) dsTheLoai[danhSach[i].theLoai] = true;
     }
-    var sel = document.getElementById('timTheLoai');
-    var html = '<option value="">-- Tất cả thể loại --</option>';
-    for (var ten in dsTheLoai) {
-        html += '<option value="' + ten + '">' + ten + '</option>';
+    
+    // Fill Tác giả
+    var selTacGia = document.getElementById('tacGia');
+    var htmlTacGia = '<option value="">-- Tất cả tác giả --</option>';
+    var arrTacGia = [];
+    for (var tg in dsTacGia) arrTacGia.push(tg);
+    arrTacGia.sort();
+    for (var j = 0; j < arrTacGia.length; j++) {
+        htmlTacGia += '<option value="' + arrTacGia[j] + '">' + arrTacGia[j] + '</option>';
     }
-    sel.innerHTML = html;
+    selTacGia.innerHTML = htmlTacGia;
+    
+    // Fill NXB
+    var selNXB = document.getElementById('nxb');
+    var htmlNXB = '<option value="">-- Tất cả NXB --</option>';
+    var arrNXB = [];
+    for (var n in dsNXB) arrNXB.push(n);
+    arrNXB.sort();
+    for (var k = 0; k < arrNXB.length; k++) {
+        htmlNXB += '<option value="' + arrNXB[k] + '">' + arrNXB[k] + '</option>';
+    }
+    selNXB.innerHTML = htmlNXB;
+    
+    // Fill Thể loại
+    var selTheLoai = document.getElementById('theLoai');
+    var htmlTheLoai = '<option value="">-- Tất cả thể loại --</option>';
+    var arrTheLoai = [];
+    for (var tl in dsTheLoai) arrTheLoai.push(tl);
+    arrTheLoai.sort();
+    for (var m = 0; m < arrTheLoai.length; m++) {
+        htmlTheLoai += '<option value="' + arrTheLoai[m] + '">' + arrTheLoai[m] + '</option>';
+    }
+    selTheLoai.innerHTML = htmlTheLoai;
 }
 
-function mauSoLuong(soLuongCon) {
-    if (soLuongCon === 0) return 'so-luong-do';
-    if (soLuongCon <= 2) return 'so-luong-cam';
-    return 'so-luong-xanh';
-}
-
-function timKiemSach() {
-    daTimKiem = true;
-
-    var timTenSach = document.getElementById('timTenSach').value.trim().toLowerCase();
-    var timTacGia = document.getElementById('timTacGia').value.trim().toLowerCase();
-    var timNXB = document.getElementById('timNXB').value.trim().toLowerCase();
-    var timTheLoai = document.getElementById('timTheLoai').value;
-    var timNamTu = document.getElementById('timNamTu').value.trim();
-    var timNamDen = document.getElementById('timNamDen').value.trim();
-
-    var namTu = timNamTu ? parseInt(timNamTu, 10) : 0;
-    var namDen = timNamDen ? parseInt(timNamDen, 10) : 9999;
-
-    if (timNamTu && timNamDen && namTu > namDen) {
-        alert('⚠ Năm bắt đầu không được lớn hơn năm kết thúc!');
-        return;
-    }
-
+function timKiem() {
+    var tacGia = document.getElementById('tacGia').value;
+    var nxb = document.getElementById('nxb').value;
+    var theLoai = document.getElementById('theLoai').value;
+    var namTu = document.getElementById('namTu').value;
+    var namDen = document.getElementById('namDen').value;
+    
     var danhSach = layDanhSachSach();
     var ketQua = [];
-
+    
     for (var i = 0; i < danhSach.length; i++) {
         var s = danhSach[i];
-
-        if (timTenSach && !(s.tenSach && s.tenSach.toLowerCase().indexOf(timTenSach) !== -1)) continue;
-        if (timTacGia && !(s.tacGia && s.tacGia.toLowerCase().indexOf(timTacGia) !== -1)) continue;
-        if (timNXB && !(s.nxb && s.nxb.toLowerCase().indexOf(timNXB) !== -1)) continue;
-        if (timTheLoai && s.theLoai !== timTheLoai) continue;
-
-        if (timNamTu || timNamDen) {
-            var namXB = parseInt(s.namXB, 10) || 0;
-            if (namXB < namTu || namXB > namDen) continue;
-        }
-
-        ketQua.push(s);
+        var khop = true;
+        
+        if (tacGia && s.tacGia !== tacGia) khop = false;
+        if (nxb && s.nxb !== nxb) khop = false;
+        if (theLoai && s.theLoai !== theLoai) khop = false;
+        
+        if (namTu && parseInt(s.namXB) < parseInt(namTu)) khop = false;
+        if (namDen && parseInt(s.namXB) > parseInt(namDen)) khop = false;
+        
+        if (khop) ketQua.push(s);
     }
+    
+    hienThiKetQua(ketQua);
+}
 
+function hienThiKetQua(ketQua) {
     var lblSoLuong = document.getElementById('lblSoLuong');
-    var goiY = document.getElementById('goiY');
-    var bangWrap = document.getElementById('bangKetQuaWrap');
-    var bangSach = document.getElementById('bangSach');
-
-    goiY.style.display = 'none';
-    lblSoLuong.style.display = 'block';
-    lblSoLuong.innerHTML = 'Tìm thấy <strong>' + ketQua.length + '</strong> kết quả';
-
+    var bang = document.getElementById('bangKetQua');
+    
     if (ketQua.length === 0) {
-        bangWrap.style.display = 'none';
-        bangSach.innerHTML = '';
-        lblSoLuong.innerHTML += ' &nbsp;⚠ Không có sách phù hợp với điều kiện tìm kiếm';
+        lblSoLuong.innerHTML = '⚠️ Không tìm thấy sách nào phù hợp với điều kiện';
+        bang.innerHTML = '<tr><td colspan="10" class="no-data">Không có kết quả phù hợp</td></tr>';
         return;
     }
-
-    bangWrap.style.display = 'block';
-
+    
+    lblSoLuong.innerHTML = '✅ Tìm thấy <strong>' + ketQua.length + '</strong> cuốn sách';
+    
     var html = '';
-    for (var j = 0; j < ketQua.length; j++) {
-        var sach = ketQua[j];
-        var soLuongCon = parseInt(sach.soLuongCon, 10) || 0;
-        var soLuongTong = parseInt(sach.soLuongTong, 10) || 0;
-        var classColor = mauSoLuong(soLuongCon);
-        var trangThai = soLuongCon > 0 ? 'Còn sách' : 'Hết sách';
-        var badgeClass = soLuongCon > 0 ? 'badge-co-sach' : 'badge-het-sach';
-
+    for (var i = 0; i < ketQua.length; i++) {
+        var s = ketQua[i];
+        var soLuongCon = parseInt(s.soLuongCon) || 0;
+        var soLuongTong = parseInt(s.soLuongTong) || 0;
+        
+        var trangThai = '';
+        var badgeClass = '';
+        
+        if (soLuongCon > 0) {
+            trangThai = '✅ Còn sách';
+            badgeClass = 'badge-co-sach';
+        } else {
+            trangThai = '❌ Hết sách';
+            badgeClass = 'badge-het-sach';
+        }
+        
         html += '<tr>';
-        html += '<td>' + (j + 1) + '</td>';
-        html += '<td><strong>' + (sach.maSach || '') + '</strong></td>';
-        html += '<td>' + (sach.tenSach || '') + '</td>';
-        html += '<td>' + (sach.tacGia || '') + '</td>';
-        html += '<td>' + (sach.theLoai || '') + '</td>';
-        html += '<td><span class="' + classColor + '">' + soLuongCon + '</span> / ' + soLuongTong + '</td>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td><strong>' + (s.maSach || '') + '</strong></td>';
+        html += '<td>' + (s.tenSach || '') + '</td>';
+        html += '<td>' + (s.tacGia || '') + '</td>';
+        html += '<td>' + (s.nxb || '') + '</td>';
+        html += '<td>' + (s.theLoai || '') + '</td>';
+        html += '<td>' + (s.namXB || '') + '</td>';
+        html += '<td style="text-align:center;">' + soLuongCon + '/' + soLuongTong + '</td>';
         html += '<td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td>';
-        html += '<td>';
-        html += '<a href="sach-chi-tiet.html?ma=' + encodeURIComponent(sach.maSach) + '" class="btn btn-sm btn-teal">🔍 Chi tiết</a>';
-        html += '</td>';
+        html += '<td><a href="sach-chi-tiet.html?ma=' + encodeURIComponent(s.maSach) + '" class="btn btn-sm btn-teal">👁 Xem</a></td>';
         html += '</tr>';
     }
-    bangSach.innerHTML = html;
+    
+    bang.innerHTML = html;
 }
 
 function datLai() {
-    document.getElementById('timTenSach').value = '';
-    document.getElementById('timTacGia').value = '';
-    document.getElementById('timNXB').value = '';
-    document.getElementById('timTheLoai').value = '';
-    document.getElementById('timNamTu').value = '';
-    document.getElementById('timNamDen').value = '';
-
-    document.getElementById('lblSoLuong').style.display = 'none';
-    document.getElementById('bangKetQuaWrap').style.display = 'none';
-    document.getElementById('goiY').style.display = 'block';
-    document.getElementById('bangSach').innerHTML = '';
-    daTimKiem = false;
+    document.getElementById('tacGia').value = '';
+    document.getElementById('nxb').value = '';
+    document.getElementById('theLoai').value = '';
+    document.getElementById('namTu').value = '';
+    document.getElementById('namDen').value = '';
+    
+    document.getElementById('lblSoLuong').innerHTML = 'Chưa có kết quả. Vui lòng chọn điều kiện và nhấn Tìm kiếm.';
+    document.getElementById('bangKetQua').innerHTML = '<tr><td colspan="10" class="no-data">Chưa có kết quả tìm kiếm</td></tr>';
 }
 
 function dangXuat() {
@@ -335,7 +342,7 @@ function dangXuat() {
 }
 
 if (kiemTraDangNhap()) {
-    taiTheLoai();
+    taiDuLieuCombobox();
 }
 </script>
 </body>

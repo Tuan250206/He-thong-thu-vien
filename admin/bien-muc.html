@@ -4,38 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Biên mục - Quản lý kho</title>
-<style>
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
-.header { background: #4CAF50; color: white; padding: 15px 20px; overflow: hidden; }
-.header h1 { margin: 0; font-size: 22px; float: left; }
-.header span { float: right; line-height: 30px; }
-.header a { color: white; }
-.sidebar { width: 200px; background: #fff; float: left; min-height: 600px; border-right: 1px solid #ddd; }
-.sidebar a { display: block; padding: 10px 15px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; font-size: 13px; }
-.sidebar a:hover { background: #e8f5e9; }
-.content { margin-left: 210px; padding: 20px; background: white; min-height: 600px; }
-label { display: block; margin-top: 8px; font-weight: bold; font-size: 13px; }
-input[type="text"], select, textarea { width: 98%; padding: 7px; margin: 3px 0; border: 1px solid #ddd; font-size: 13px; }
-textarea { height: 60px; }
-button { background: #4CAF50; color: white; padding: 8px 16px; border: none; cursor: pointer; margin-right: 8px; font-size: 13px; }
-button:hover { background: #388E3C; }
-.search-bar { margin-bottom: 20px; padding: 15px; background: #e8f5e9; border: 1px solid #4CAF50; }
-.book-info { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; margin-bottom: 15px; }
-.form-row { overflow: hidden; }
-.col3 { width: 30%; float: left; margin-right: 3%; }
-.col2 { width: 48%; float: left; margin-right: 2%; }
-.clearfix { clear: both; }
-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
-table th { background: #4CAF50; color: white; padding: 8px; text-align: left; }
-table td { padding: 8px; border-bottom: 1px solid #ddd; }
-#formBienMuc { display: none; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="header">
-  <h1>📚 Quản lý kho thư viện - ADMIN</h1>
-  <span>Xin chào: <strong id="adminName">Admin</strong> | <a href="login.html">Đăng xuất</a></span>
-</div>
+ <div id="header">
+        <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
+        <div class="userInfo">
+            Xin chào: <strong id="tenAdmin">Admin</strong>
+            <a href="login.html" onclick="dangXuat()">Đăng xuất</a>
+        </div>
+    </div>
 <div class="sidebar">
   <a href="dashboard.html">🏠 Trang chủ</a>
   <a href="sach-them.html">➕ Thêm sách</a>
@@ -51,14 +29,17 @@ table td { padding: 8px; border-bottom: 1px solid #ddd; }
   <a href="ncc-them.html">➕ Thêm NCC</a>
   <a href="lich-su-nhap-xuat.html">📊 Lịch sử N/X</a>
   <a href="thong-ke-ton-kho.html">📈 Thống kê tồn kho</a>
+   <hr style="border-top: 1px solid #ccc; margin: 10px 0;"> <a class="active" href="tai-khoan.html">👥 Quản lý tài khoản</a> </div>
 </div>
 <div class="content">
   <h2>📚 Biên mục sách</h2>
-  <div class="search-bar">
-    <strong>Tìm sách để biên mục:</strong><br><br>
-    <input type="text" id="timMa" placeholder="Mã sách hoặc tên sách..." style="width:300px;">
-    <button onclick="timSach()">🔍 Tìm</button>
-  </div>
+  <div class="search-bar" style="position: relative;">
+  <strong>Tìm sách để biên mục:</strong><br><br>
+  <input type="text" id="timMa" placeholder="Mã sách hoặc tên sách..." style="width:300px;" oninput="goiYSach(this.value)">
+  <button onclick="timSach()">🔍 Tìm</button>
+  
+  <div id="boxGoiY" class="suggestion-box" style="display: none;"></div>
+</div>
 
   <div id="formBienMuc">
     <div class="book-info">
@@ -119,85 +100,7 @@ table td { padding: 8px; border-bottom: 1px solid #ddd; }
     <tbody id="tbodyBienMuc"></tbody>
   </table>
 </div>
-<script>
-var sachHienTai = null;
 
-function kiemTraAdmin() {
-  var admin = localStorage.getItem('currentAdmin');
-  if (!admin) { window.location.href = 'login.html'; return; }
-  document.getElementById('adminName').innerText = admin;
-}
-
-function timSach() {
-  var tim = document.getElementById('timMa').value.trim().toLowerCase();
-  if (!tim) { alert('Vui lòng nhập mã hoặc tên sách!'); return; }
-  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  sachHienTai = null;
-  for (var i = 0; i < ds.length; i++) {
-    if (ds[i].maSach.toLowerCase() === tim || ds[i].tenSach.toLowerCase().indexOf(tim) >= 0) {
-      sachHienTai = ds[i]; break;
-    }
-  }
-  if (!sachHienTai) { alert('Không tìm thấy sách!'); return; }
-  document.getElementById('tenSachHienThi').innerText = sachHienTai.tenSach;
-  document.getElementById('tacGiaHienThi').innerText = sachHienTai.tacGia;
-  document.getElementById('maSachHienThi').innerText = sachHienTai.maSach;
-  // Điền thông tin biên mục đã có
-  document.getElementById('danhMucChinh').value = sachHienTai.danhMucChinh || '';
-  document.getElementById('danhMucPhu').value = sachHienTai.danhMucPhu || '';
-  document.getElementById('tuKhoa').value = sachHienTai.tuKhoa || '';
-  document.getElementById('ddc').value = sachHienTai.ddc || '';
-  if (sachHienTai.viTri) {
-    var parts = sachHienTai.viTri.split('-');
-    document.getElementById('viTriKhu').value = parts[0] || '';
-    document.getElementById('viTriKe').value = parts[1] || '';
-    document.getElementById('viTriNgan').value = parts[2] || '';
-  }
-  document.getElementById('ghiChu').value = sachHienTai.ghiChu || '';
-  document.getElementById('formBienMuc').style.display = 'block';
-}
-
-function luuBienMuc() {
-  if (!sachHienTai) return;
-  var khu = document.getElementById('viTriKhu').value.trim();
-  var ke = document.getElementById('viTriKe').value.trim();
-  var ngan = document.getElementById('viTriNgan').value.trim();
-  var viTri = (khu && ke && ngan) ? khu + '-' + ke + '-' + ngan : sachHienTai.viTri;
-
-  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  for (var i = 0; i < ds.length; i++) {
-    if (ds[i].maSach === sachHienTai.maSach) {
-      ds[i].danhMucChinh = document.getElementById('danhMucChinh').value;
-      ds[i].danhMucPhu = document.getElementById('danhMucPhu').value.trim();
-      ds[i].tuKhoa = document.getElementById('tuKhoa').value.trim();
-      ds[i].ddc = document.getElementById('ddc').value.trim();
-      ds[i].viTri = viTri;
-      ds[i].ghiChu = document.getElementById('ghiChu').value.trim();
-      break;
-    }
-  }
-  localStorage.setItem('danhSachSach', JSON.stringify(ds));
-  alert('Lưu biên mục thành công!');
-  document.getElementById('formBienMuc').style.display = 'none';
-  taiDanhSach();
-}
-
-function taiDanhSach() {
-  var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  var tbody = document.getElementById('tbodyBienMuc');
-  tbody.innerHTML = '';
-  for (var i = 0; i < ds.length; i++) {
-    var s = ds[i];
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td>' + s.maSach + '</td><td>' + s.tenSach + '</td><td>' + s.theLoai + '</td>' +
-      '<td>' + (s.danhMucChinh || '-') + '</td><td>' + (s.ddc || '-') + '</td>' +
-      '<td>' + (s.viTri || '-') + '</td><td>' + (s.tuKhoa || '-') + '</td>';
-    tbody.appendChild(tr);
-  }
-}
-
-kiemTraAdmin();
-taiDanhSach();
-</script>
+<script src="script.js"></script>
 </body>
 </html>

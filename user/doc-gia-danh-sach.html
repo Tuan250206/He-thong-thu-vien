@@ -35,6 +35,21 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
 .no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
 .count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
 .cf::after { content: ""; display: table; clear: both; }
+.ma-the {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.badge-pending {
+    background: #fff9c4;
+    color: #f57f17;
+    border: 1px solid #ffe082;
+}
 </style>
 </head>
 <body>
@@ -81,7 +96,6 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
     </a>
-
     <div class="menu-nhom">Báo cáo</div>
     <a href="lich-su.html" class="menu-item">
         <span class="menu-icon">📋</span>Lịch sử
@@ -109,16 +123,19 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
                     <tr>
                         <th style="width:45px">STT</th>
                         <th style="width:80px">Mã ĐG</th>
+                        <th style="width:80px">Mã Thẻ</th>        <!-- ← THÊM -->
                         <th>Họ và tên</th>
-                        <th style="width:80px">Lớp</th>
+                        <th style="width:120px">CCCD</th>          <!-- ← THÊM -->
                         <th>Email</th>
                         <th style="width:105px">SĐT</th>
+                        <th style="width:100px">Gói thẻ</th>       <!-- ← THÊM -->
+                        <th style="width:110px">Hạn thẻ</th>       <!-- ← THÊM -->
                         <th style="width:95px">Trạng thái</th>
                         <th style="width:140px">Hành động</th>
                     </tr>
                 </thead>
                 <tbody id="bangDocGia">
-                    <tr><td colspan="8" class="no-data">Đang tải dữ liệu...</td></tr>
+                    <tr><td colspan="11" class="no-data">Đang tải...</td></tr>  <!-- ← Đổi colspan -->
                 </tbody>
             </table>
         </div>
@@ -147,55 +164,80 @@ function layDanhSachDocGia() {
 }
 
 function taiDanhSach() {
-    var danhSach = layDanhSachDocGia();
-    var tuKhoa = document.getElementById('tuKhoa').value.trim().toLowerCase();
+    var tuKhoa = (document.getElementById('tuKhoa')?.value || '').trim().toLowerCase();
+    var danhSach = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
 
-    var ketQua = [];
-    if (tuKhoa) {
-        for (var i = 0; i < danhSach.length; i++) {
-            var dg = danhSach[i];
-            var tenKhop = dg.hoTen && dg.hoTen.toLowerCase().indexOf(tuKhoa) !== -1;
-            var maKhop = dg.maDG && dg.maDG.toLowerCase().indexOf(tuKhoa) !== -1;
-            if (tenKhop || maKhop) ketQua.push(dg);
-        }
-    } else {
-        ketQua = danhSach;
-    }
+    var ketQua = danhSach.filter(dg => {
+        return !tuKhoa || 
+               dg.hoTen?.toLowerCase().includes(tuKhoa) ||
+               dg.maDG?.toLowerCase().includes(tuKhoa) ||
+               (dg.email && dg.email.toLowerCase().includes(tuKhoa)) ||
+               (dg.sdt && dg.sdt.includes(tuKhoa));
+    });
 
-    var lblSoLuong = document.getElementById('lblSoLuong');
-    if (tuKhoa) {
-        lblSoLuong.innerHTML = 'Tìm thấy <strong>' + ketQua.length + '</strong> / ' + danhSach.length + ' độc giả';
-    } else {
-        lblSoLuong.innerHTML = 'Tổng số: <strong>' + danhSach.length + '</strong> độc giả';
-    }
+    var lbl = document.getElementById('lblSoLuong');
+    lbl.innerHTML = tuKhoa 
+        ? `Tìm thấy <strong>${ketQua.length}</strong> / ${danhSach.length} độc giả`
+        : `Tổng số: <strong>${danhSach.length}</strong> độc giả`;
 
     var bang = document.getElementById('bangDocGia');
     if (ketQua.length === 0) {
-        bang.innerHTML = '<tr><td colspan="8" class="no-data">⚠ Không tìm thấy độc giả nào</td></tr>';
+        bang.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#777;">Không tìm thấy độc giả nào</td></tr>';
         return;
     }
 
     var html = '';
-    for (var j = 0; j < ketQua.length; j++) {
-        var dg = ketQua[j];
-        var trangThai = dg.trangThai || 'Hoạt động';
-        var badgeClass = (trangThai === 'Khóa') ? 'badge-locked' : 'badge-active';
+    ketQua.forEach((dg, index) => {
+        var tenGoi = dg.thoiHan ? (dg.thoiHan + ' tháng') : '—';
+        var hanThe = dg.ngayHetHan ? formatNgayVN(dg.ngayHetHan) : '—';
+
+        var trangThai = 'Chưa có thẻ';
+        var badgeClass = 'badge-warning';
+
+        if (dg.maThe && dg.maThe !== '—') {
+            if (dg.trangThaiThe === 'Hoạt động') {
+                trangThai = '🟢 Hoạt động';
+                badgeClass = 'badge-active';
+            } else if (dg.trangThaiThe === 'Khóa') {
+                trangThai = '🔴 Khóa';
+                badgeClass = 'badge-locked';
+            } else {
+                trangThai = '⚪ ' + (dg.trangThaiThe || 'Không xác định');
+            }
+        }
 
         html += '<tr>';
-        html += '<td>' + (j + 1) + '</td>';
-        html += '<td><strong>' + (dg.maDG || '') + '</strong></td>';
-        html += '<td>' + (dg.hoTen || '') + '</td>';
-        html += '<td>' + (dg.lop || '') + '</td>';
-        html += '<td>' + (dg.email || '') + '</td>';
-        html += '<td>' + (dg.sdt || '') + '</td>';
-        html += '<td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td>';
-        html += '<td>';
-        html += '<a href="doc-gia-chi-tiet.html?ma=' + encodeURIComponent(dg.maDG) + '" class="btn btn-sm btn-cyan">👁 Xem</a> ';
-        html += '<button class="btn btn-sm btn-red" onclick="xoaDocGia(\'' + escapeQuote(dg.maDG) + '\')">🗑 Xóa</button>';
-        html += '</td>';
+        html += `<td>${index + 1}</td>`;
+        html += `<td><strong>${dg.maDG || '—'}</strong></td>`;
+        html += `<td>${dg.maThe || '—'}</td>`;
+        html += `<td>${dg.hoTen || '—'}</td>`;
+        html += `<td>${dg.cccd || '—'}</td>`;
+        html += `<td>${dg.email || '—'}</td>`;
+        html += `<td>${dg.sdt || '—'}</td>`;
+        html += `<td>${tenGoi}</td>`;
+        html += `<td>${hanThe}</td>`;
+        html += `<td><span class="badge ${badgeClass}">${trangThai}</span></td>`;
+        html += `<td><a href="doc-gia-chi-tiet.html?ma=${encodeURIComponent(dg.maDG)}" class="btn btn-sm btn-cyan">👁 Xem</a></td>`;
         html += '</tr>';
-    }
+    });
+
     bang.innerHTML = html;
+}
+
+// Hàm chuyển số tháng thành tên gói
+function layTenGoiThe(thoiHan) {
+    if (!thoiHan) return '—';
+    var bangGia = { 3: '3 tháng', 6: '6 tháng', 12: '1 năm', 24: '2 năm' };
+    return bangGia[thoiHan] || (thoiHan + ' tháng');
+}
+
+// Format ngày
+function formatNgayVN(ngay) {
+    if (!ngay) return '—';
+    var d = new Date(ngay);
+    var dd = ('0' + d.getDate()).slice(-2);
+    var mm = ('0' + (d.getMonth() + 1)).slice(-2);
+    return dd + '/' + mm + '/' + d.getFullYear();
 }
 
 function timKiemDocGia() {
@@ -209,41 +251,6 @@ function xuLyEnter(event) {
 function escapeQuote(str) {
     return (str || '').replace(/'/g, "\\'");
 }
-
-function xoaDocGia(ma) {
-    if (!confirm('Bạn có chắc chắn muốn xóa độc giả [' + ma + ']?\n\nThao tác này không thể hoàn tác!')) {
-        return;
-    }
-
-    var dsPhieuMuon = [];
-    try { dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]'); }
-    catch (e) { dsPhieuMuon = []; }
-
-    var soPhieuDangMuon = 0;
-    for (var i = 0; i < dsPhieuMuon.length; i++) {
-        if (dsPhieuMuon[i].maDG === ma && dsPhieuMuon[i].trangThai === 'Đang mượn') {
-            soPhieuDangMuon++;
-        }
-    }
-
-    if (soPhieuDangMuon > 0) {
-        alert('⚠ Không thể xóa!\nĐộc giả [' + ma + '] đang có ' + soPhieuDangMuon + ' phiếu mượn chưa trả.\nVui lòng xử lý trả sách trước khi xóa.');
-        return;
-    }
-
-    var danhSach = layDanhSachDocGia();
-    var danhSachMoi = [];
-    for (var j = 0; j < danhSach.length; j++) {
-        if (danhSach[j].maDG !== ma) {
-            danhSachMoi.push(danhSach[j]);
-        }
-    }
-
-    localStorage.setItem('danhSachDocGia', JSON.stringify(danhSachMoi));
-    alert('✅ Đã xóa độc giả [' + ma + '] thành công!');
-    taiDanhSach();
-}
-
 function dangXuat() {
     if (confirm('Bạn có muốn đăng xuất không?')) {
         localStorage.removeItem('currentUser');

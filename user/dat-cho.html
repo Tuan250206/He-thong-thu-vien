@@ -176,7 +176,6 @@
                         <tr>
                             <th>Mã ĐG</th>
                             <th>Họ và tên</th>
-                            <th>Lớp</th>
                             <th style="text-align:center">Chọn</th>
                         </tr>
                     </thead>
@@ -262,11 +261,10 @@ function loadDanhSachDocGiaNhanh() {
         html += '<tr>';
         html += '<td><strong>' + dg.maDG + '</strong></td>';
         html += '<td>' + dg.hoTen + '</td>';
-        html += '<td>' + (dg.lop || '-') + '</td>';
         html += '<td style="text-align:center"><button class="btn-select-dg" onclick="chonDocGia(\'' + dg.maDG + '\')">Chọn</button></td>';
         html += '</tr>';
     }
-    document.getElementById('dsDocGiaNhanh').innerHTML = html || '<tr><td colspan="4" style="text-align:center">Chưa có dữ liệu độc giả</td></tr>';
+    document.getElementById('dsDocGiaNhanh').innerHTML = html || '<tr><td colspan="3" style="text-align:center">Chưa có dữ liệu độc giả</td></tr>';
 }
 
 function loadDanhSachSachNhanh() {
@@ -290,8 +288,8 @@ function loadDanhSachSachNhanh() {
         if (daDatCho) {
             actionHtml = '<span class="badge-dat-cho" data-info="Bạn đã đặt chỗ sách này rồi!">Đã đặt ✓</span>';
         } else if (sl > 0) {
-            // ✅ FIX: CHẶN ĐẶT CHỖ KHI SÁCH CÒN SẴN
-            actionHtml = '<span class="badge-dat-cho" data-info="Sách còn sẵn, vui lòng mượn trực tiếp tại trang Cho mượn" style="background:#9E9E9E;">Còn sẵn 🛒</span>';
+            // Sách còn sẵn - hiển thị cảnh báo
+            actionHtml = '<button class="btn-select-sach" onclick="chonSach(\'' + s.maSach + '\')">🔖 Đặt chỗ</button>';
         } else {
             // Sách hết - tìm người đang mượn
             var nguoiMuon = [];
@@ -307,7 +305,7 @@ function loadDanhSachSachNhanh() {
             });
             
             var textTooltip = nguoiMuon.length > 0 
-                ? "Đang được mượn bởi:\\n" + nguoiMuon.join("\\n") 
+                ? "Đang được mượn bởi:\n" + nguoiMuon.join("\n") 
                 : "Hết sách (Chưa rõ người mượn)";
 
             actionHtml = '<button class="btn-select-sach" onclick="chonSach(\'' + s.maSach + '\')">🔖 Đặt chỗ</button>';
@@ -351,8 +349,7 @@ function chonSach(maSach) {
 
     var sl = parseInt(sach.soLuongCon || 0);
     
-    // Cảnh báo nếu sách còn sẵn
-    if (sl > 0) {
+    if (sl > 0 && sl < 15) {
         if (!confirm('⚠️ Sách này hiện còn ' + sl + ' cuốn trên kệ.\n\nBạn có thể mượn trực tiếp thay vì đặt chỗ.\n\nBạn có chắc muốn đặt chỗ không?')) {
             return;
         }

@@ -64,10 +64,10 @@ td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
     <a href="dashboard.html" class="menu-item">
         <span class="menu-icon">🏠</span>Trang chủ
     </a>
-    <a href="cho-muon.html" class="menu-item active">
+    <a href="cho-muon.html" class="menu-item">
         <span class="menu-icon">📋</span>Cho mượn
     </a>
-    <a href="tra-sach.html" class="menu-item">
+    <a href="tra-sach.html" class="menu-item active">
         <span class="menu-icon">↩️</span>Trả sách
     </a>
     <a href="gia-han.html" class="menu-item">
@@ -156,7 +156,8 @@ td { padding: 9px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
             <p style="font-size: 12px; color: #666; margin-top: 10px;">Vui lòng quét mã để chuyển khoản bồi thường rách/mất sách</p>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-success" onclick="xacNhanTra(true)">✅ Đã nhận được tiền</button>
+            <button class="btn btn-success" onclick="xacNhanTra(true)">✅ Đã nhận đủ tiền</button>
+            <button class="btn" style="background: #FF9800; color: white;" onclick="nhanMotPhan()">💵 Chưa nhận đủ</button>
             <button class="btn" style="background: #757575; color: white;" onclick="dongModal()">Hủy</button>
         </div>
     </div>
@@ -178,7 +179,10 @@ function loadDanhSachPhieuActive() {
     for (var i = 0; i < dsPhieuMuon.length; i++) {
         var p = dsPhieuMuon[i];
         if (p.trangThai === 'Đang mượn' || p.trangThai === 'Quá hạn') {
-            // Đếm số sách thực sự chưa trả trong phiếu
+            if (!p.danhSachSach || !Array.isArray(p.danhSachSach)) {
+                continue;
+            }
+            
             var soSachChuaTra = p.danhSachSach.filter(s => !s.daTra).length;
             
             if (soSachChuaTra > 0) {
@@ -216,7 +220,6 @@ function hienThiBangSachTra(phieu, soNgayQuaHan) {
     for (var i = 0; i < phieu.danhSachSach.length; i++) {
         var s = phieu.danhSachSach[i];
         
-        // NẾU SÁCH ĐÃ TRẢ RỒI THÌ KHÔNG HIỆN DÒNG NÀY NỮA
         if (s.daTra) continue;
 
         html += '<tr><td><input type="checkbox" id="cb_' + i + '" checked onchange="capNhatTienPhat()"></td>';
@@ -237,7 +240,7 @@ function capNhatTienPhat() {
 
     for (var i = 0; i < phieuHienTai.danhSachSach.length; i++) {
         var s = phieuHienTai.danhSachSach[i];
-        if (s.daTra) continue; // Bỏ qua sách đã trả
+        if (s.daTra) continue;
 
         var cbEl = document.getElementById('cb_' + i);
         var ttEl = document.getElementById('tt_' + i);
@@ -279,29 +282,108 @@ function dongModal() {
     document.getElementById('modalThanhToan').style.display = 'none';
 }
 
-function xacNhanTra(daThuTien) {
+function nhanMotPhan() {
+    var thongBao = '💵 NHẬN TIỀN MỘT PHẦN\n';
+    thongBao += '━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+    thongBao += 'Tổng tiền phạt: ' + dinhDangTien(tongPhatGlobal) + '\n';
+    thongBao += '━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+    thongBao += 'Nhập số tiền đã nhận được:';
+    
+    var nhapStr = prompt(thongBao);
+    
+    if (nhapStr === null) return;
+    
+    var soTienNhan = parseFloat(nhapStr.replace(/[,\s\.]/g, ''));
+    
+    if (isNaN(soTienNhan) || nhapStr.trim() === '') {
+        alert('⚠️ Số tiền không hợp lệ! Vui lòng nhập số.');
+        return;
+    }
+    
+    if (soTienNhan < 0) {
+        alert('⚠️ Số tiền không được âm!');
+        return;
+    }
+    
+    if (soTienNhan >= tongPhatGlobal) {
+        alert('⚠️ Số tiền đã nhận lớn hơn hoặc bằng tổng tiền phạt!\nVui lòng chọn "✅ Đã nhận đủ tiền".');
+        return;
+    }
+    
+    var tienConThieu = tongPhatGlobal - soTienNhan;
+    
+    var xacNhan = '💵 XÁC NHẬN NHẬN TIỀN MỘT PHẦN\n';
+    xacNhan += '━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+    xacNhan += 'Tổng tiền phạt: ' + dinhDangTien(tongPhatGlobal) + '\n';
+    xacNhan += 'Số tiền đã nhận: ' + dinhDangTien(soTienNhan) + '\n';
+    xacNhan += 'Số tiền còn thiếu: ' + dinhDangTien(tienConThieu) + '\n';
+    xacNhan += '━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+    xacNhan += 'Phiếu phạt sẽ được tạo với trạng thái "Chưa thu" để thu tiếp phần còn lại.\n\n';
+    xacNhan += 'Xác nhận?';
+    
+    if (confirm(xacNhan)) {
+        xacNhanTraMotPhan(soTienNhan, tienConThieu);
+    }
+}
+
+// ✅ HÀM ĐÃ SỬA LỖI - TẠO MỘT PHIẾU PHẠT TỔNG HỢP
+function xacNhanTraMotPhan(soTienDaNhan, tienConThieu) {
     if (!phieuHienTai) return;
     
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
     var indexPhieu = dsPhieuMuon.findIndex(p => p.maPhieu === phieuHienTai.maPhieu);
 
     if (indexPhieu !== -1) {
         var phieuTrongStore = dsPhieuMuon[indexPhieu];
         var tatCaSachDaDuocTra = true;
+        var homNay = layNgayHomNay();
+        var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuTrongStore.hanTra, homNay));
+        
+        // ✅ GOM TẤT CẢ SÁCH BỊ PHẠT VÀO DANH SÁCH
+        var danhSachSachBiPhat = [];
+        var tongTienPhatCuaTatCaSach = 0;
 
         phieuTrongStore.danhSachSach.forEach((s, idx) => {
-            // Nếu sách đã trả từ trước đó thì bỏ qua
             if (s.daTra) return;
 
             var cbEl = document.getElementById('cb_' + idx);
             var ttEl = document.getElementById('tt_' + idx);
 
             if (cbEl && cbEl.checked) {
-                // ĐÁNH DẤU CUỐN NÀY ĐÃ TRẢ
                 s.daTra = true;
-                s.ngayTraThucTe = layNgayHomNay();
+                s.ngayTraThucTe = homNay;
                 s.tinhTrangKhiTra = ttEl.value;
+
+                var soTienPhat = 0;
+                var loaiViPham = '';
+                
+                if (ttEl.value === 'Rách') {
+                    soTienPhat = soNgayQuaHan * 2000 + 15000;
+                    loaiViPham = 'Hư hỏng';
+                } else if (ttEl.value === 'Mất') {
+                    var dsSachGoc = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+                    var thongTinSach = dsSachGoc.find(sg => sg.maSach === s.maSach);
+                    var giaBT = thongTinSach && thongTinSach.giaBT ? parseFloat(thongTinSach.giaBT) : 0;
+                    soTienPhat = soNgayQuaHan * 2000 + giaBT;
+                    loaiViPham = 'Mất sách';
+                } else if (soNgayQuaHan > 0) {
+                    soTienPhat = soNgayQuaHan * 2000;
+                    loaiViPham = 'Quá hạn';
+                }
+
+                // ✅ Lưu thông tin sách bị phạt vào danh sách
+                if (soTienPhat > 0) {
+                    danhSachSachBiPhat.push({
+                        maSach: s.maSach,
+                        tenSach: s.tenSach,
+                        loaiVP: loaiViPham,
+                        soTien: soTienPhat,
+                        tinhTrang: ttEl.value
+                    });
+                    tongTienPhatCuaTatCaSach += soTienPhat;
+                }
 
                 // Cập nhật kho (trừ khi bị mất)
                 if (ttEl.value !== 'Mất') {
@@ -311,27 +393,164 @@ function xacNhanTra(daThuTien) {
                     }
                 }
             } else {
-                // Nếu vẫn còn ít nhất 1 cuốn chưa được tích chọn trả
                 tatCaSachDaDuocTra = false;
             }
         });
 
-        // CHỈ ĐỔI TRẠNG THÁI PHIẾU NẾU TRẢ HẾT SÁCH
+        // ✅ TẠO MỘT PHIẾU PHẠT DUY NHẤT CHO TẤT CẢ SÁCH
+        if (danhSachSachBiPhat.length > 0) {
+            var maPhatMoi = 'PF' + Date.now() + Math.floor(Math.random() * 1000);
+            
+            // Tạo ghi chú chi tiết
+            var chiTietSach = danhSachSachBiPhat.map(function(s) {
+                return s.maSach + ': ' + s.tenSach + ' - ' + s.tinhTrang + ' (' + dinhDangTien(s.soTien) + ')';
+            }).join(' | ');
+            
+            var phieuPhatMoi = {
+                maPhat: maPhatMoi,
+                maDG: phieuTrongStore.maDG,
+                tenDG: phieuTrongStore.tenDG,
+                maPhieu: phieuTrongStore.maPhieu,
+                maSach: danhSachSachBiPhat[0].maSach,
+                tenSach: danhSachSachBiPhat.length > 1 
+                    ? 'Nhiều cuốn (' + danhSachSachBiPhat.length + ' sách)'
+                    : danhSachSachBiPhat[0].tenSach,
+                loaiVP: danhSachSachBiPhat.length > 1 
+                    ? 'Nhiều loại'
+                    : danhSachSachBiPhat[0].loaiVP,
+                soTien: tienConThieu,                    // ✅ ĐÚNG: Số tiền CÒN THIẾU cần thu
+                tongTienGoc: tongTienPhatCuaTatCaSach,   // ✅ Lưu tổng tiền gốc
+                soTienDaNhan: soTienDaNhan,              // ✅ Số tiền đã nhận
+                soTienConThieu: tienConThieu,            // ✅ Số tiền còn thiếu
+                ngayPhat: homNay + ' ' + new Date().toTimeString().split(' ')[0],
+                trangThai: 'Chưa thu',
+                ngayThanhToan: null,
+                ghiChu: 'Thanh toán một phần khi trả sách' + 
+                       (soNgayQuaHan > 0 ? ' (Quá hạn ' + soNgayQuaHan + ' ngày)' : '') + 
+                       ' | Chi tiết: ' + chiTietSach +
+                       ' | Đã nhận: ' + dinhDangTien(soTienDaNhan) + 
+                       ' | Còn thiếu: ' + dinhDangTien(tienConThieu),
+                danhSachSachBiPhat: danhSachSachBiPhat
+            };
+            dsPhat.push(phieuPhatMoi);
+        }
+
         if (tatCaSachDaDuocTra) {
             phieuTrongStore.trangThai = 'Đã trả';
-            phieuTrongStore.ngayTraThucTe = layNgayHomNay();
+            phieuTrongStore.ngayTraThucTe = homNay;
         }
         
-        if(daThuTien) {
+        phieuTrongStore.ghiChuPhat = (phieuTrongStore.ghiChuPhat || "") + 
+            " | Nhận một phần: " + dinhDangTien(soTienDaNhan) + 
+            " | Còn thiếu: " + dinhDangTien(tienConThieu);
+    }
+
+    localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
+    localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
+    localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
+
+    dongModal();
+    
+    var thongBao = '✅ ĐÃ CẬP NHẬT TRẠNG THÁI!\n';
+    thongBao += '━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+    thongBao += 'Đã tạo phiếu phạt với trạng thái "Chưa thu"\n';
+    thongBao += 'Số tiền đã nhận: ' + dinhDangTien(soTienDaNhan) + '\n';
+    thongBao += 'Số tiền còn thiếu: ' + dinhDangTien(tienConThieu) + '\n';
+    thongBao += '━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+    thongBao += 'Vui lòng thu tiếp phần còn thiếu tại "Xử lý phạt"';
+    
+    alert(thongBao);
+    resetTrang(); 
+}
+
+function xacNhanTra(daThuTien) {
+    if (!phieuHienTai) return;
+    
+    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
+    var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
+    var indexPhieu = dsPhieuMuon.findIndex(p => p.maPhieu === phieuHienTai.maPhieu);
+
+    if (indexPhieu !== -1) {
+        var phieuTrongStore = dsPhieuMuon[indexPhieu];
+        var tatCaSachDaDuocTra = true;
+        var homNay = layNgayHomNay();
+        var soNgayQuaHan = Math.max(0, tinhSoNgay(phieuTrongStore.hanTra, homNay));
+
+        phieuTrongStore.danhSachSach.forEach((s, idx) => {
+            if (s.daTra) return;
+
+            var cbEl = document.getElementById('cb_' + idx);
+            var ttEl = document.getElementById('tt_' + idx);
+
+            if (cbEl && cbEl.checked) {
+                s.daTra = true;
+                s.ngayTraThucTe = homNay;
+                s.tinhTrangKhiTra = ttEl.value;
+
+                var soTienPhat = 0;
+                var loaiViPham = '';
+                
+                if (ttEl.value === 'Rách') {
+                    soTienPhat = soNgayQuaHan * 2000 + 15000;
+                    loaiViPham = 'Hư hỏng';
+                } else if (ttEl.value === 'Mất') {
+                    var dsSachGoc = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+                    var thongTinSach = dsSachGoc.find(sg => sg.maSach === s.maSach);
+                    var giaBT = thongTinSach && thongTinSach.giaBT ? parseFloat(thongTinSach.giaBT) : 0;
+                    soTienPhat = soNgayQuaHan * 2000 + giaBT;
+                    loaiViPham = 'Mất sách';
+                } else if (soNgayQuaHan > 0) {
+                    soTienPhat = soNgayQuaHan * 2000;
+                    loaiViPham = 'Quá hạn';
+                }
+
+                if (soTienPhat > 0) {
+                    var maPhatMoi = 'PF' + Date.now() + Math.floor(Math.random() * 1000);
+                    var phieuPhatMoi = {
+                        maPhat: maPhatMoi,
+                        maDG: phieuTrongStore.maDG,
+                        tenDG: phieuTrongStore.tenDG,
+                        maPhieu: phieuTrongStore.maPhieu,
+                        maSach: s.maSach,
+                        tenSach: s.tenSach,
+                        loaiVP: loaiViPham,
+                        soTien: soTienPhat,
+                        ngayPhat: homNay + ' ' + new Date().toTimeString().split(' ')[0],
+                        trangThai: daThuTien ? 'Đã thanh toán' : 'Chưa thu',
+                        ngayThanhToan: daThuTien ? homNay : null,
+                        ghiChu: 'Phạt khi trả sách - ' + ttEl.value + (soNgayQuaHan > 0 ? ' (quá hạn ' + soNgayQuaHan + ' ngày)' : '')
+                    };
+                    dsPhat.push(phieuPhatMoi);
+                }
+
+                if (ttEl.value !== 'Mất') {
+                    var sachTrongKho = dsSach.find(sk => sk.maSach === s.maSach);
+                    if (sachTrongKho) {
+                        sachTrongKho.soLuongCon = (parseInt(sachTrongKho.soLuongCon) || 0) + 1;
+                    }
+                }
+            } else {
+                tatCaSachDaDuocTra = false;
+            }
+        });
+
+        if (tatCaSachDaDuocTra) {
+            phieuTrongStore.trangThai = 'Đã trả';
+            phieuTrongStore.ngayTraThucTe = homNay;
+        }
+        
+        if(daThuTien && tongPhatGlobal > 0) {
             phieuTrongStore.ghiChuPhat = (phieuTrongStore.ghiChuPhat || "") + " | Đã thu: " + dinhDangTien(tongPhatGlobal);
         }
     }
 
     localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
     localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
+    localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
 
     dongModal();
-    alert('✅ Đã cập nhật trạng thái trả sách!');
+    alert('✅ Đã cập nhật trạng thái trả sách' + (tongPhatGlobal > 0 ? ' và tạo phiếu phạt!' : '!'));
     resetTrang(); 
 }
 
@@ -344,7 +563,6 @@ function resetTrang() {
     loadDanhSachPhieuActive();
 }
 
-// Các hàm tiện ích giữ nguyên
 function layNgayHomNay() {
     var d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');

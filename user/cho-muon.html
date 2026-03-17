@@ -145,7 +145,6 @@
     </a>
 </div>
 
-
 <div class="content">
     <div class="page-title"><h2>🤝 Cho mượn sách</h2></div>
 
@@ -271,8 +270,8 @@ function loadDanhSachSachNhanh() {
             // Tìm danh sách người đang mượn cuốn sách này
             var nguoiMuon = [];
             dsPhieuMuon.forEach(p => {
-                if (p.trangThai === 'Đang mượn') {
-                    var coSach = p.danhSachSach.some(item => item.maSach === s.maSach);
+                if (p.trangThai === 'Đang mượn' && p.danhSachSach && Array.isArray(p.danhSachSach)) {
+                    var coSach = p.danhSachSach.some(item => item.maSach === s.maSach && !item.daTra);
                     if (coSach) {
                         nguoiMuon.push("- " + p.tenDG + " (" + p.maDG + ")");
                     }
@@ -335,13 +334,15 @@ function chonSach(maSach) {
     // 3. Kiểm tra giới hạn số lượng (Tối đa 5 cuốn)
     var soSachDangGiu = 0;
     dsPhieuMuon.forEach(p => {
-        if (p.maDG === docGiaHienTai.maDG && p.trangThai === 'Đang mượn') {
-            soSachDangGiu += p.danhSachSach.length;
+        if (p.maDG === docGiaHienTai.maDG && p.trangThai === 'Đang mượn' && p.danhSachSach && Array.isArray(p.danhSachSach)) {
+            // Đếm số sách CHƯA TRẢ trong phiếu
+            var soSachChuaTra = p.danhSachSach.filter(s => !s.daTra).length;
+            soSachDangGiu += soSachChuaTra;
         }
     });
 
     if (soSachDangGiu + sachDaChon.length >= 5) {
-        hienThiLoi('loiSach', 'Vượt quá giới hạn mượn (Tối đa 5 cuốn)!');
+        hienThiLoi('loiSach', 'Vư��t quá giới hạn mượn (Tối đa 5 cuốn)!');
         return;
     }
 
@@ -382,9 +383,12 @@ function timDocGia() {
     var danhSachTenSachDangMuon = [];
     
     dsPhieuMuon.forEach(p => {
-        if (p.maDG === maDG && p.trangThai === 'Đang mượn') {
+        if (p.maDG === maDG && p.trangThai === 'Đang mượn' && p.danhSachSach && Array.isArray(p.danhSachSach)) {
             p.danhSachSach.forEach(s => {
-                danhSachTenSachDangMuon.push(s.tenSach);
+                // Chỉ tính sách CHƯA TRẢ
+                if (!s.daTra) {
+                    danhSachTenSachDangMuon.push(s.tenSach);
+                }
             });
         }
     });
@@ -476,7 +480,8 @@ function xacNhanChoMuon() {
         ngayMuon: ngayMuon,
         hanTra: hanTra,
         danhSachSach: JSON.parse(JSON.stringify(sachDaChon)),
-        trangThai: 'Đang mượn'
+        trangThai: 'Đang mượn',
+        createdAtMuon: Date.now()
     });
 
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');

@@ -480,7 +480,7 @@ function hienThiBang(danhSach) {
     html += '<th>Tên độc giả</th>';
     html += '<th style="width:120px;">Loại vi phạm</th>';
     html += '<th style="width:100px; text-align:right;">Số tiền</th>';
-    html += '<th style="width:100px;">Ngày phạt</th>';
+        html += '<th style="width:100px;">Ngày phạt (dd/MM/yyyy)</th>';
     html += '<th style="width:130px;">Trạng thái</th>';
     html += '<th style="width:130px; text-align:center;">Hành động</th>';
     html += '</tr></thead><tbody>';
@@ -497,14 +497,39 @@ function hienThiBang(danhSach) {
             nutHanhDong = '<span style="color:#2E7D32;font-size:12px;font-weight:bold;">✓ Đã xong' + ngayTT + '</span>';
         }
 
+        // Hiển thị số tiền với thông tin đã nhận/còn thiếu nếu có
+        var displaySoTien = dinhDangTien(p.soTien);
+        if (p.soTienDaNhan && p.soTienConThieu && chuaTT) {
+            // Hiển thị 3 dòng: Tổng tiền gốc, Đã nhận, Còn thiếu
+            var tongTienGoc = p.tongTienGoc || p.soTien;
+            displaySoTien = '<div style="line-height:1.6;">' + 
+                '<strong style="color:#1565C0;">Tổng: ' + dinhDangTien(tongTienGoc) + '</strong><br>' +
+                '<small style="color:#2E7D32;">✓ Đã thu: ' + dinhDangTien(p.soTienDaNhan) + '</small><br>' +
+                '<small style="color:#C62828;">⚠ Còn nợ: ' + dinhDangTien(p.soTienConThieu) + '</small>' +
+                '</div>';
+        } else if (!chuaTT && p.tongTienGoc) {
+            // Sau khi thanh toán xong, hiển thị tổng tiền với trạng thái đã thu
+            displaySoTien = '<strong style="color:#2E7D32;">' + dinhDangTien(p.tongTienGoc) + '</strong>';
+        }
+
         html += '<tr>';
         html += '<td>' + (i + 1) + '</td>';
         html += '<td style="font-size:11px;font-family:monospace;"><strong>' + p.maPhat + '</strong></td>';
         html += '<td><strong>' + p.maDG + '</strong></td>';
         html += '<td>' + p.tenDG + '</td>';
         html += '<td><span class="' + layClassLoaiVP(p.loaiVP) + '">' + layIconLoaiVP(p.loaiVP) + ' ' + p.loaiVP + '</span></td>';
-        html += '<td style="text-align:right;" class="tien">' + dinhDangTien(p.soTien) + '</td>';
-        html += '<td>' + dinhDangNgay(p.ngayPhat) + '</td>';
+        html += '<td style="text-align:right;" class="tien">' + displaySoTien + '</td>';
+            var ngayPhat = '-';
+            if (p.ngayPhat) {
+                var d = p.ngayPhat.split(' ')[0];
+                var arr = d.split('-');
+                if (arr.length === 3) {
+                    ngayPhat = arr[2] + '/' + arr[1] + '/' + arr[0];
+                } else {
+                    ngayPhat = d;
+                }
+            }
+            html += '<td>' + ngayPhat + '</td>';
         html += '<td><span class="badge ' + (chuaTT ? 'badge-chua' : 'badge-da') + '">' + (chuaTT ? '💳 Chưa thu' : '✅ Đã thanh toán') + '</span></td>';
         html += '<td style="text-align:center;">' + nutHanhDong + '</td>';
         html += '</tr>';
@@ -565,6 +590,7 @@ function thanhToan(maPhat) {
     }
 
     var soTienPhat = parseFloat(phieuPhat.soTien) || 0;
+    var tongTienGoc = phieuPhat.tongTienGoc || soTienPhat;
     
     // Hiển thị thông tin phiếu phạt
     var thongTinPhat = '💳 THANH TOÁN PHIẾU PHẠT\n';
@@ -574,7 +600,16 @@ function thanhToan(maPhat) {
     thongTinPhat += 'Loại vi phạm: ' + phieuPhat.loaiVP + '\n';
     thongTinPhat += 'Ngày phạt: ' + dinhDangNgay(phieuPhat.ngayPhat) + '\n';
     thongTinPhat += '━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    thongTinPhat += 'Số tiền phạt: ' + dinhDangTien(soTienPhat) + '\n';
+    
+    // Hiển thị thông tin thanh toán
+    if (phieuPhat.soTienDaNhan && phieuPhat.soTienConThieu) {
+        thongTinPhat += 'Tổng tiền phạt: ' + dinhDangTien(tongTienGoc) + '\n';
+        thongTinPhat += 'Đã nhận trước: ' + dinhDangTien(phieuPhat.soTienDaNhan) + '\n';
+        thongTinPhat += 'Số tiền còn thiếu: ' + dinhDangTien(soTienPhat) + '\n';
+    } else {
+        thongTinPhat += 'Số tiền phạt: ' + dinhDangTien(soTienPhat) + '\n';
+    }
+    
     thongTinPhat += '━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
     thongTinPhat += 'Nhập số tiền khách đưa:';
     
@@ -603,10 +638,18 @@ function thanhToan(maPhat) {
     // Tính tiền thừa
     var tienThua = soTienNhan - soTienPhat;
     
-    // Cập nhật trạng thái phiếu phạt (thống nhất dùng "Đã thanh toán")
+    // Cập nhật trạng thái phiếu phạt
     dsPhat[viTri].trangThai = 'Đã thanh toán';
     dsPhat[viTri].ngayThanhToan = layNgayHomNay();
     dsPhat[viTri].soTienNhan = soTienNhan;
+    
+    // Nếu có tongTienGoc, cập nhật soTien thành tongTienGoc và xóa thông tin thanh toán một phần
+    if (phieuPhat.tongTienGoc) {
+        dsPhat[viTri].soTien = phieuPhat.tongTienGoc;
+        delete dsPhat[viTri].soTienDaNhan;
+        delete dsPhat[viTri].soTienConThieu;
+    }
+    
     localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
 
     // Thông báo thành công
@@ -615,8 +658,16 @@ function thanhToan(maPhat) {
     thongBao += 'Phiếu phạt: ' + phieuPhat.maPhat + '\n';
     thongBao += 'Độc giả: ' + phieuPhat.tenDG + '\n';
     thongBao += '━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-    thongBao += 'Số tiền phạt: ' + dinhDangTien(soTienPhat) + '\n';
-    thongBao += 'Số tiền nhận: ' + dinhDangTien(soTienNhan) + '\n';
+    
+    if (phieuPhat.tongTienGoc) {
+        thongBao += 'Tổng tiền phạt: ' + dinhDangTien(tongTienGoc) + '\n';
+        thongBao += 'Đã nhận trước đó: ' + dinhDangTien(phieuPhat.soTienDaNhan) + '\n';
+        thongBao += 'Số tiền vừa nhận: ' + dinhDangTien(soTienNhan) + '\n';
+    } else {
+        thongBao += 'Số tiền phạt: ' + dinhDangTien(soTienPhat) + '\n';
+        thongBao += 'Số tiền nhận: ' + dinhDangTien(soTienNhan) + '\n';
+    }
+    
     thongBao += '━━━━━━━━━━━━━━━━━━━━━━━━━\n';
     thongBao += 'Tiền thừa trả lại: ' + dinhDangTien(tienThua);
     

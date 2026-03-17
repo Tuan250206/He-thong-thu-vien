@@ -236,12 +236,12 @@ function taiDuLieu() {
             soSachDangMuon += p.danhSachSach.length;
         }
         if (p.trangThai === 'Quá hạn') soQuaHan++;
-        if (p.trangThai === 'Đã trả' && p.hanTra === chuoiHN) soTraHomNay++;
+        if (p.trangThai === 'Đã trả' && p.ngayTra === chuoiHN) soTraHomNay++;
     }
     
     var tongTienPhat = 0;
     for (i = 0; i < dsPhat.length; i++) {
-        if (dsPhat[i].trangThai === 'Chưa thu') tongTienPhat += dsPhat[i].soTien;
+        if (dsPhat[i].trangThai === 'Chưa thanh toán') tongTienPhat += parseFloat(dsPhat[i].soTien || 0);
     }
     
     document.getElementById('soSachDangMuon').textContent = soSachDangMuon;
