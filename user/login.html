@@ -176,60 +176,52 @@
     </div>
 
     <script>
-        // Kiểm tra nếu đã đăng nhập thì chuyển thẳng vào dashboard
-        window.onload = function () {
-            var currentUser = localStorage.getItem('currentUser');
-            if (currentUser) {
-                window.location.href = 'dashboard.html';
-            }
-        };
 
         // Hàm xử lý đăng nhập
-        function dangNhap() {
+function dangNhap() {
             var tenDangNhap  = document.getElementById('tenDangNhap').value.trim();
             var matKhau      = document.getElementById('matKhau').value;
             var hienThiLoi   = document.getElementById('thongBaoLoi');
 
-            // Ẩn thông báo lỗi cũ
             hienThiLoi.style.display = 'none';
 
-            // Kiểm tra nhập liệu đầy đủ
             if (!tenDangNhap || !matKhau) {
                 hienThiLoi.style.display = 'block';
                 hienThiLoi.textContent = '⚠ Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!';
                 return;
             }
 
-            // Lấy danh sách người dùng từ localStorage
-            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            // 1. Lấy danh sách tài khoản chung từ data.js (ngăn kéo 'admins')
+            var tatCaTaiKhoan = JSON.parse(localStorage.getItem('admins') || '[]');
 
-            // Tìm tài khoản khớp với thông tin nhập vào
-            var nguoiDungTimDuoc = null;
-            var i;
-            for (i = 0; i < users.length; i++) {
-                if (users[i].username === tenDangNhap && users[i].password === matKhau) {
-                    nguoiDungTimDuoc = users[i];
-                    break;
-                }
-            }
+            // 2. Tìm tài khoản khớp User, Pass VÀ phải có vai trò là "Thủ thư"
+           var nguoiDungTimDuoc = tatCaTaiKhoan.find(function(tk) {
+                var dungTaiKhoan = (tk.username === tenDangNhap && tk.password === matKhau);
+                
+                var laThuThu = (tk.vaiTro === 'Thủ thư' || tk.role === 'thuthu');
+                var laAdmin  = (tk.vaiTro === 'Admin' || tk.role === 'admin'); // Thêm thẻ bài Admin
+                
+                return dungTaiKhoan && (laThuThu || laAdmin);
+            });
 
             if (nguoiDungTimDuoc) {
-                // Lưu thông tin phiên đăng nhập vào localStorage
-                localStorage.setItem('currentUser',     nguoiDungTimDuoc.username);
+                // 3. Đăng nhập thành công -> Lưu phiên cho Thủ thư
+                // (Giữ nguyên key currentUser giống như bên trang sach-danh-sach.html đang dùng)
+                localStorage.setItem('currentUser', nguoiDungTimDuoc.username);
                 localStorage.setItem('currentUserInfo', JSON.stringify(nguoiDungTimDuoc));
 
-                // Chuyển hướng đến trang dashboard
                 window.location.href = 'dashboard.html';
             } else {
-                // Hiển thị thông báo lỗi
                 hienThiLoi.style.display = 'block';
-                hienThiLoi.textContent = '✖ Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại!';
-
-                // Xóa ô mật khẩu để nhập lại
+                hienThiLoi.textContent = '✖ Sai thông tin hoặc tài khoản không có quyền Thủ thư!';
                 document.getElementById('matKhau').value = '';
                 document.getElementById('matKhau').focus();
             }
         }
+            
+
+
     </script>
+    <script src="../quantri/data.js"></script>
 </body>
 </html>
