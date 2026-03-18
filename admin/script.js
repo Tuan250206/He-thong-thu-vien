@@ -1,4 +1,3 @@
-
 // ==========================================
 // PHẦN 1: DÙNG CHUNG (Đăng nhập, Đăng xuất)
 // ==========================================
@@ -406,9 +405,6 @@ function locLichSu() {
     var loai = document.getElementById('loaiPhieu').value;
     var tuNgay = document.getElementById('tuNgay').value;
     var denNgay = document.getElementById('denNgay').value;
-    
-    // 💡 Lưu ý: Mình giữ nguyên key localStorage của bạn. 
-    // Nếu Dashboard đang dùng 'danhSachPhieuNhap', bạn nhớ đồng nhất chỗ này nha!
     var phieuNhap = JSON.parse(localStorage.getItem('phieuNhapKho') || '[]');
     var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
     
@@ -490,17 +486,40 @@ function locLichSu() {
     document.getElementById('ketQuaLichSu').innerHTML = html;
     
     // Tổng kết
-    var tongKetHTML = '';
-    tongKetHTML += '<div style="font-size: 18px;">📊 Tổng kết:</div>';
-    tongKetHTML += '<div style="margin-top: 10px;">';
-    tongKetHTML += '<span style="color: green;">✅ Số phiếu nhập: ' + slPhieuNhap + ' | Tổng tiền: ' + tongNhap.toLocaleString('vi-VN') + 'đ</span>';
-    tongKetHTML += '</div>';
-    tongKetHTML += '<div style="margin-top: 5px;">';
-    tongKetHTML += '<span style="color: red;">❌ Số phiếu xuất: ' + slPhieuXuat + ' | Tổng tiền: ' + tongXuat.toLocaleString('vi-VN') + 'đ</span>';
-    tongKetHTML += '</div>';
-    tongKetHTML += '<div style="margin-top: 10px; font-size: 20px;">';
-    tongKetHTML += '💰 Biến động tồn kho: <span style="color: ' + (tongNhap >= tongXuat ? 'green' : 'red') + ';">' + (tongNhap - tongXuat).toLocaleString('vi-VN') + 'đ</span>';
-    tongKetHTML += '</div>';
+    var bienDong = tongNhap - tongXuat;
+    var mauBienDong = bienDong >= 0 ? '#28a745' : '#dc3545';
+
+    var tongKetHTML = `
+        <div class="summary-container">
+            <div class="summary-card import">
+                <div class="card-icon">📥</div>
+                <div class="card-info">
+                    <div class="card-label">NHẬP KHO</div>
+                    <div class="card-value">${slPhieuNhap} <small>Phiếu</small></div>
+                    <div class="card-sub">${tongNhap.toLocaleString('vi-VN')}đ</div>
+                </div>
+            </div>
+
+            <div class="summary-card export">
+                <div class="card-icon">📤</div>
+                <div class="card-info">
+                    <div class="card-label">XUẤT KHO</div>
+                    <div class="card-value">${slPhieuXuat} <small>Phiếu</small></div>
+                    <div class="card-sub">${tongXuat.toLocaleString('vi-VN')}đ</div>
+                </div>
+            </div>
+
+            <div class="summary-card balance">
+                <div class="card-icon">💰</div>
+                <div class="card-info">
+                    <div class="card-label">BIẾN ĐỘNG TỒN</div>
+                    <div class="card-value" style="color: ${mauBienDong}">${bienDong.toLocaleString('vi-VN')}đ</div>
+                    <div class="card-sub">Hiệu số Nhập - Xuất</div>
+                </div>
+            </div>
+        </div>
+    `;
+    
     document.getElementById('tongKet').innerHTML = tongKetHTML;
 }
 
@@ -1096,6 +1115,7 @@ function capNhatSachSua() {
         alert("Tên sách và tác giả không được để trống!");
         return;
     }
+    
     var theLoaiMoi = document.getElementById('theLoaiSua').value;
     if (theLoaiMoi === 'Khác') {
         theLoaiMoi = document.getElementById('theLoaiKhacSua').value.trim();
@@ -1104,6 +1124,7 @@ function capNhatSachSua() {
             return;
         }
     }
+    
     var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
     for (var i = 0; i < ds.length; i++) {
         if (ds[i].maSach === sachDangSuaHT.maSach) {
@@ -1112,11 +1133,22 @@ function capNhatSachSua() {
             ds[i].nxb = document.getElementById('nxbSua').value.trim();
             ds[i].namXB = parseInt(document.getElementById('namXBSua').value) || ds[i].namXB;
             ds[i].isbn = document.getElementById('isbnSua').value.trim();
-            ds[i].theLoai = theLoaiMoi; // Lưu thể loại đã xử lý (có sẵn hoặc tự gõ)
+            ds[i].theLoai = theLoaiMoi; 
             ds[i].soLuongTong = parseInt(document.getElementById('soLuongTongSua').value) || ds[i].soLuongTong;
             ds[i].soLuongCon = parseInt(document.getElementById('soLuongConSua').value) || ds[i].soLuongCon;
-            ds[i].giaNhap = parseInt(document.getElementById('giaNhapSua').value) || ds[i].giaNhap;
-            ds[i].giaBT = parseInt(document.getElementById('giaBTSua').value) || ds[i].giaBT;
+            
+            // --- XỬ LÝ LƯU GIÁ NHẬP & GIÁ BỒI THƯỜNG ---
+            var giaNhapMoi = parseInt(document.getElementById('giaNhapSua').value) || ds[i].giaNhap;
+            ds[i].giaNhap = giaNhapMoi;
+            
+            // Lấy giá trị từ ô Giá Bồi Thường, nếu ô này bị xóa rỗng thì tự động lấy Giá Nhập * 1.05
+            var giaBTMoi = parseInt(document.getElementById('giaBTSua').value);
+            if (isNaN(giaBTMoi)) {
+                giaBTMoi = Math.round(giaNhapMoi * 1.05);
+            }
+            ds[i].giaBT = giaBTMoi;
+            // ------------------------------------------
+
             ds[i].viTri = document.getElementById('viTriSua').value.trim();
             ds[i].moTa = document.getElementById('moTaSua').value.trim();
             break;
@@ -1151,20 +1183,20 @@ function huySuaSach() {
     document.getElementById('timMaSua').value = '';
 }
 // ==========================================
-// PHẦN 14: CHỨC NĂNG THÊM SÁCH
+// PHẦN: CHỨC NĂNG THÊM SÁCH
 // ==========================================
+
 function hienThiTheLoaiKhac(giaTri) {
     var inputKhac = document.getElementById('theLoaiKhacThem');
     if (giaTri === 'Khác') {
         inputKhac.style.display = 'block';
-        inputKhac.required = true; // Bắt buộc nhập
+        inputKhac.required = true; 
     } else {
         inputKhac.style.display = 'none';
         inputKhac.required = false;
-        inputKhac.value = ''; // Xóa rác
+        inputKhac.value = ''; 
     }
 }
-// ------------------------------
 
 function sinhMaSachMoi() {
     var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
@@ -1187,13 +1219,26 @@ function khoiTaoFormThemSach() {
     }
 }
 
+// Tự động tính giá bồi thường = Giá nhập + 5%
+function tinhGiaBoiThuong() {
+    var inputGiaNhap = document.getElementById('giaNhapThem').value;
+    var giaNhap = parseFloat(inputGiaNhap) || 0;
+    
+    // Cộng thêm 5%
+    var giaBT = giaNhap + (giaNhap * 0.05); 
+    
+    // Làm tròn số và gán vào ô Giá bồi thường
+    document.getElementById('giaBTThem').value = Math.round(giaBT);
+}
+
 function luuSachMoi() {
     var tenSach = document.getElementById('tenSachThem').value.trim();
     var tacGia = document.getElementById('tacGiaThem').value.trim();
     var nxb = document.getElementById('nxbThem').value.trim();
-    var soLuong = parseInt(document.getElementById('soLuongThem').value) || 0;
+    
     var giaNhap = parseInt(document.getElementById('giaNhapThem').value) || 0;
     var giaBT = parseInt(document.getElementById('giaBTThem').value) || 0;
+    
     var theLoai = document.getElementById('theLoaiThem').value;
     if (theLoai === 'Khác') {
         theLoai = document.getElementById('theLoaiKhacThem').value.trim();
@@ -1202,7 +1247,6 @@ function luuSachMoi() {
             return;
         }
     }
-    // ----------------------------------------------------
 
     var sach = {
         maSach: document.getElementById('maSachThem').value,
@@ -1210,23 +1254,24 @@ function luuSachMoi() {
         tacGia: tacGia,
         nxb: nxb,
         namXB: parseInt(document.getElementById('namXBThem').value) || new Date().getFullYear(),
-        theLoai: theLoai, // Lấy giá trị đã được xử lý ở trên
+        theLoai: theLoai, 
         isbn: document.getElementById('isbnThem').value.trim(),
         soTrang: parseInt(document.getElementById('soTrangThem').value) || 0,
         ngonNgu: document.getElementById('ngonNguThem').value,
-        soLuongTong: soLuong,
-        soLuongCon: soLuong, 
-        giaNhap: giaNhap,
+        giaNhap: giaNhap, 
         giaBT: giaBT,
-        viTri: document.getElementById('viTriThem').value.trim(),
-        moTa: document.getElementById('moTaThem').value.trim()
+        moTa: document.getElementById('moTaThem').value.trim(),
+        
+        // Mặc định số lượng bằng 0 khi mới tạo Master Data
+        soLuongTong: 0,
+        soLuongCon: 0
     };
 
     var ds = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
     ds.push(sach);
     localStorage.setItem('danhSachSach', JSON.stringify(ds));
 
-    alert('✅ Đã thêm sách mới thành công!\nMã sách: ' + sach.maSach);
+    alert('✅ Đã thêm thông tin đầu sách thành công!\nMã sách: ' + sach.maSach + '\n\nLưu ý: Bạn cần tạo Phiếu Nhập để cập nhật số lượng tồn kho.');
     
     // Xóa trắng form để nhập tiếp
     document.getElementById('tenSachThem').value = '';
@@ -1235,22 +1280,20 @@ function luuSachMoi() {
     document.getElementById('namXBThem').value = '';
     document.getElementById('isbnThem').value = '';
     document.getElementById('soTrangThem').value = '';
-    document.getElementById('soLuongThem').value = '';
     document.getElementById('giaNhapThem').value = '';
     document.getElementById('giaBTThem').value = '';
-    document.getElementById('viTriThem').value = '';
     document.getElementById('moTaThem').value = '';
     
-    // --- THÊM CHỖ NÀY: Trả Thể loại về mặc định sau khi lưu xong ---
+    // Reset select box
+    document.getElementById('ngonNguThem').value = 'Tiếng Việt';
     document.getElementById('theLoaiThem').value = 'CNTT';
     var inputKhac = document.getElementById('theLoaiKhacThem');
     if(inputKhac) {
         inputKhac.style.display = 'none';
         inputKhac.value = '';
     }
-    // ---------------------------------------------------------------
     
-    // Tạo mã mới cho cuốn sách tiếp theo
+    // Sinh mã mới cho lần nhập tiếp theo
     document.getElementById('maSachThem').value = sinhMaSachMoi();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1513,34 +1556,43 @@ function xoaSachKhoiPhieuXuat(index) {
 }
 
 function xacNhanLuuPhieuXuat() {
-    if (danhSachSachDaChonXuat.length === 0) { alert('Vui lòng chọn ít nhất 1 sách!'); return; }
-    if (!confirm('Xác nhận xuất kho? Số lượng tồn kho của các sách này sẽ bị giảm!')) return;
+    if (danhSachSachDaChonXuat.length === 0) { 
+        alert('Vui lòng chọn ít nhất 1 sách!'); 
+        return; 
+    }
+    if (!confirm('Xác nhận xuất kho? Số lượng Tổng và Số lượng Còn của các sách này sẽ bị trừ đi vĩnh viễn khỏi hệ thống!')) return;
     
     var phieuXuat = JSON.parse(localStorage.getItem('phieuXuatKho') || '[]');
+    var adminHienTai = localStorage.getItem('currentAdmin');
+    if (adminHienTai && adminHienTai.startsWith('{')) {
+        adminHienTai = JSON.parse(adminHienTai).hoTen || 'Admin';
+    }
+
     phieuXuat.push({
         maPhieu: document.getElementById('maPhieuXuat').innerText,
         ngayXuat: document.getElementById('ngayXuat').value,
         lyDo: document.getElementById('lyDoXuat').value,
         ghiChu: document.getElementById('ghiChuXuat').value,
         danhSachSach: danhSachSachDaChonXuat,
-        nguoiXuat: localStorage.getItem('currentAdmin') || 'Admin'
+        nguoiXuat: adminHienTai
     });
     localStorage.setItem('phieuXuatKho', JSON.stringify(phieuXuat));
-    
-    // Cập nhật tồn kho
     var dsSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
+    
     danhSachSachDaChonXuat.forEach(itemXuat => {
         var sInKho = dsSach.find(s => s.maSach === itemXuat.maSach);
         if (sInKho) {
-            sInKho.soLuongCon = Math.max(0, parseInt(sInKho.soLuongCon) - itemXuat.soLuong);
+            var slXuat = parseInt(itemXuat.soLuong);
+            sInKho.soLuongCon = Math.max(0, parseInt(sInKho.soLuongCon) - slXuat);
+            sInKho.soLuongTong = Math.max(0, parseInt(sInKho.soLuongTong) - slXuat);
         }
     });
     localStorage.setItem('danhSachSach', JSON.stringify(dsSach));
+    // ---------------------------------
     
     alert('✅ Xuất kho thành công!');
     window.location.href = 'xuat-kho-danh-sach.html';
 }
-
 // ==========================================
 // PHẦN 4: BỘ ĐIỀU CHUYỂN (ROUTER CHẠY CODE)
 // ==========================================

@@ -5,38 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gia hạn mượn sách - Thư viện</title>
 <link rel="stylesheet" href="common.css">
-<style>
-.page-title { background: white; padding: 14px 20px; margin-bottom: 18px; border-radius: 4px; border-left: 4px solid #2196F3; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-.page-title h2 { font-size: 17px; color: #333; }
-.card { background: white; padding: 20px; margin-bottom: 18px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-.card h3 { font-size: 15px; color: #2196F3; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #E3F2FD; }
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
-.form-group input { padding: 8px 11px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 300px; }
-.form-group input:focus { outline: none; border-color: #2196F3; }
-.btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
-.btn-primary { background: #2196F3; color: white; }
-.btn-primary:hover { background: #1976D2; }
-.btn-success { background: #4CAF50; color: white; }
-.btn-success:hover { background: #388E3C; }
-.btn-gray { background: #757575; color: white; }
-.btn-gray:hover { background: #616161; }
-.info-box { background: #FFFDE7; border: 1px solid #F9A825; border-radius: 4px; padding: 12px 16px; font-size: 13px; margin-bottom: 15px; }
-.info-box p { margin-bottom: 5px; }
-.error-box { background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 13px; }
-.gian-han-box { background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 4px; padding: 15px 18px; margin: 15px 0; }
-.gian-han-box .row-info { overflow: hidden; margin-bottom: 10px; }
-.gian-han-box .row-info:last-child { margin-bottom: 0; }
-.gian-han-box .label-col { float: left; width: 200px; font-weight: bold; color: #1565C0; font-size: 13px; line-height: 26px; }
-.gian-han-box .value-col { margin-left: 200px; font-size: 14px; line-height: 26px; }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: bold; }
-.badge-ok { background: #C8E6C9; color: #1B5E20; }
-.badge-warn { background: #FFF9C4; color: #827717; }
-.badge-danger { background: #FFCDD2; color: #B71C1C; }
-.ngay-moi { color: #1565C0; font-weight: bold; font-size: 15px; }
-.note { font-size: 12px; color: #888; margin-top: 5px; }
-.hidden { display: none; }
-</style>
 </head>
 <body>
 
@@ -44,66 +12,63 @@
     <h1>📚 Hệ Thống Thư Viện</h1>
     <div class="user-info">
         Xin chào! <strong id="tenNguoiDung">Nhân viên</strong>
-        &nbsp;|&nbsp;<a href="../index.html">Đăng xuất</a>
+        &nbsp;|&nbsp;<a href="../index.html" onclick="return dangXuat()">Đăng xuất</a>
     </div>
 </div>
 
 <div class="sidebar">
     <div class="menu-nhom">Nghiệp vụ</div>
-    <a href="dashboard.html" class="menu-item">
-        <span class="menu-icon">🏠</span>Trang chủ
-    </a>
-    <a href="cho-muon.html" class="menu-item">
-        <span class="menu-icon">📋</span>Cho mượn
-    </a>
-    <a href="tra-sach.html" class="menu-item">
-        <span class="menu-icon">↩️</span>Trả sách
-    </a>
-    <a href="gia-han.html" class="menu-item active">
-        <span class="menu-icon">⏰</span>Gia hạn
-    </a>
-    <a href="xu-ly-phat.html" class="menu-item">
-        <span class="menu-icon">💰</span>Xử lý phạt
-    </a>
-    <a href="dat-cho.html" class="menu-item">
-        <span class="menu-icon">🔖</span>Đặt chỗ
-    </a>
-    <a href="danh-sach-dat-cho.html" class="menu-item">
-        <span class="menu-icon">📋</span>DS đặt chỗ
-    </a>
+    <a href="dashboard.html" class="menu-item"><span class="menu-icon">🏠</span>Trang chủ</a>
+    <a href="cho-muon.html" class="menu-item"><span class="menu-icon">📋</span>Cho mượn</a>
+    <a href="tra-sach.html" class="menu-item"><span class="menu-icon">↩️</span>Trả sách</a>
+    <a href="gia-han.html" class="menu-item active"><span class="menu-icon">⏰</span>Gia hạn</a>
+    <a href="xu-ly-phat.html" class="menu-item"><span class="menu-icon">💰</span>Xử lý phạt</a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item"><span class="menu-icon">📄</span>Phiếu mượn</a>
+    <a href="dat-cho.html" class="menu-item"><span class="menu-icon">🔖</span>Đặt chỗ</a>
+    <a href="danh-sach-dat-cho.html" class="menu-item"><span class="menu-icon">📋</span>DS đặt chỗ</a>
 
     <div class="menu-nhom">Quản lý</div>
-    <a href="doc-gia-danh-sach.html" class="menu-item">
-        <span class="menu-icon">👥</span>Độc giả
-    </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
-    <a href="sach-danh-sach.html" class="menu-item">
-        <span class="menu-icon">📚</span>Sách
-    </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
-    </a>
+    <a href="doc-gia-danh-sach.html" class="menu-item"><span class="menu-icon">👥</span>Độc giả</a>
+    <a href="sach-danh-sach.html" class="menu-item"><span class="menu-icon">📚</span>Sách</a>
 
     <div class="menu-nhom">Báo cáo</div>
-    <a href="lich-su.html" class="menu-item">
-        <span class="menu-icon">📋</span>Lịch sử
-    </a>
-    <a href="thong-ke.html" class="menu-item">
-        <span class="menu-icon">📊</span>Thống kê
-    </a>
+    <a href="lich-su.html" class="menu-item"><span class="menu-icon">📋</span>Lịch sử</a>
+    <a href="thong-ke.html" class="menu-item"><span class="menu-icon">📊</span>Thống kê</a>
 </div>
 
 <div class="content">
     <div class="page-title"><h2>⏰ Gia hạn mượn sách</h2></div>
 
+    <div class="card" id="cardDanhSachPhieu">
+        <h3>📋 Danh sách phiếu mượn hiện hành</h3>
+        <div class="form-group">
+            <label>Tìm kiếm nhanh:</label>
+            <input type="text" id="filterInput" placeholder="Nhập tên độc giả hoặc mã phiếu..." onkeyup="locPhieu_GH()">
+        </div>
+        <div class="quick-select-wrapper">
+            <div class="scroll-area">
+                <table class="table-quick">
+                    <thead>
+                        <tr>
+                            <th>Mã Phiếu</th>
+                            <th>Độc giả</th>
+                            <th>Hạn trả</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align:center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsPhieuHienHanh"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
-        <h3>🔍 Tìm phiếu mượn</h3>
+        <h3>🔍 Tìm phiếu mượn thủ công</h3>
         <div class="form-group">
             <label for="maPhieuInput">Mã phiếu mượn:</label>
-            <input type="text" id="maPhieuInput" placeholder="Nhập mã phiếu (VD: PM17...)..." onkeydown="if(event.keyCode===13) timPhieuGiaHan()">
-            <button class="btn btn-primary" onclick="timPhieuGiaHan()" style="margin-left:8px;">🔍 Tìm</button>
+            <input type="text" id="maPhieuInput" placeholder="Nhập mã phiếu (VD: PM17...)..." onkeydown="if(event.keyCode===13) timPhieuGiaHan_GH()">
+            <button class="btn btn-primary" onclick="timPhieuGiaHan_GH()" style="margin-left:8px;">🔍 Tìm</button>
         </div>
         <div id="ketQuaTim"></div>
     </div>
@@ -116,189 +81,21 @@
     </div>
 </div>
 
-<script>
-var phieuHienTai = null;
+<div id="modalThanhToanPhat" class="modal">
+    <div class="modal-content">
+        <h3 style="color: #C62828;">💰 Thanh toán phạt quá hạn</h3>
+        <p id="txtSoTienModal" style="font-weight: bold; font-size: 18px; margin: 10px 0; color: #D32F2F;"></p>
+        <div class="qr-container">
+            <img src="../img/QR.jpg" alt="QR Ngân Hàng">
+            <p style="font-size: 12px; color: #666; margin-top: 10px;">Vui lòng quét mã để nộp phạt quá hạn trước khi trả sách</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" onclick="xacNhanNopPhat_GH()">✅ Đã thu tiền</button>
+            <button class="btn btn-gray" onclick="dongModal_GH()">Hủy</button>
+        </div>
+    </div>
+</div>
 
-window.onload = function() {
-    var user = localStorage.getItem('currentUser') || 'Nhân viên';
-    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
-    var tenHienThi = userInfo.hoTen || user;
-    document.getElementById('tenNguoiDung').textContent = tenHienThi;
-};
-
-function layNgayHomNay() {
-    var d = new Date();
-    var thang = String(d.getMonth() + 1).padStart(2, '0');
-    var ngay = String(d.getDate()).padStart(2, '0');
-    return d.getFullYear() + '-' + thang + '-' + ngay;
-}
-
-function tinhNgaySau(ngayStr, soNgay) {
-    var d = new Date(ngayStr + 'T00:00:00');
-    d.setDate(d.getDate() + soNgay);
-    var thang = String(d.getMonth() + 1).padStart(2, '0');
-    var ngay = String(d.getDate()).padStart(2, '0');
-    return d.getFullYear() + '-' + thang + '-' + ngay;
-}
-
-function dinhDangNgay(str) {
-    if (!str) return '---';
-    var p = str.split('-');
-    if (p.length !== 3) return str;
-    return p[2] + '/' + p[1] + '/' + p[0];
-}
-
-function tinhSoNgay(ngay1Str, ngay2Str) {
-    var d1 = new Date(ngay1Str + 'T00:00:00');
-    var d2 = new Date(ngay2Str + 'T00:00:00');
-    return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
-}
-
-function hienThiLoi(idEl, msg) {
-    document.getElementById(idEl).innerHTML = '<div class="error-box">⚠️ ' + msg + '</div>';
-}
-
-function timPhieuGiaHan() {
-    var maPhieu = document.getElementById('maPhieuInput').value.trim();
-    var elKetQua = document.getElementById('ketQuaTim');
-    elKetQua.innerHTML = '';
-    document.getElementById('cardGiaHan').className = 'card hidden';
-    phieuHienTai = null;
-
-    if (!maPhieu) {
-        hienThiLoi('ketQuaTim', 'Vui lòng nhập mã phiếu mượn!');
-        return;
-    }
-
-    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    var phieu = null;
-    for (var i = 0; i < dsPhieuMuon.length; i++) {
-        if (dsPhieuMuon[i].maPhieu === maPhieu) {
-            phieu = dsPhieuMuon[i];
-            break;
-        }
-    }
-
-    if (!phieu) {
-        hienThiLoi('ketQuaTim', 'Không tìm thấy phiếu mượn với mã: <strong>' + maPhieu + '</strong>');
-        return;
-    }
-
-    if (phieu.trangThai === 'Đã trả') {
-        hienThiLoi('ketQuaTim', 'Phiếu <strong>' + maPhieu + '</strong> đã được trả, không thể gia hạn!');
-        return;
-    }
-
-    phieuHienTai = phieu;
-    hienThiCardGiaHan(phieu);
-    document.getElementById('cardGiaHan').className = 'card';
-}
-
-function hienThiCardGiaHan(phieu) {
-    var homNay = layNgayHomNay();
-    var soNgayQuaHan = tinhSoNgay(phieu.hanTra, homNay);
-    var quaHan = soNgayQuaHan > 0;
-    var soLanGiaHan = parseInt(phieu.soLanGiaHan) || 0;
-
-    var badgeClass = soLanGiaHan === 0 ? 'badge-ok' : (soLanGiaHan === 1 ? 'badge-warn' : 'badge-danger');
-    var soLanHtml = '<span class="badge ' + badgeClass + '">' + soLanGiaHan + '/2 lần gia hạn</span>';
-
-    var hanTraHtml = quaHan ? dinhDangNgay(phieu.hanTra) + ' <span style="color:#D32F2F;">(Quá hạn ' + soNgayQuaHan + ' ngày)</span>' : dinhDangNgay(phieu.hanTra) + ' <span style="color:#388E3C;">(Còn hạn)</span>';
-
-    document.getElementById('thongTinPhieu').innerHTML = '<div class="info-box">'
-        + '<p><strong>Mã phiếu:</strong> ' + phieu.maPhieu + '</p>'
-        + '<p><strong>Độc giả:</strong> ' + phieu.tenDG + ' (' + phieu.maDG + ')</p>'
-        + '<p><strong>Ngày mượn:</strong> ' + dinhDangNgay(phieu.ngayMuon) + ' &nbsp;|&nbsp; <strong>Hạn trả hiện tại:</strong> ' + hanTraHtml + '</p>'
-        + '<p><strong>Số lần đã gia hạn:</strong> ' + soLanHtml + '</p>'
-        + '<p><strong>Số sách:</strong> ' + phieu.danhSachSach.length + ' cuốn</p></div>';
-
-    var khuGiaHan = document.getElementById('khuGiaHan');
-    var khuNut = document.getElementById('khuNutGiaHan');
-
-    if (soLanGiaHan >= 2) {
-        khuGiaHan.innerHTML = '<div class="error-box">🚫 Phiếu này đã được gia hạn <strong>' + soLanGiaHan + ' lần</strong> (tối đa 2 lần). Không thể gia hạn thêm!</div>';
-        khuNut.innerHTML = '<button class="btn btn-gray" onclick="resetTrang()">🔄 Tìm phiếu khác</button>';
-        return;
-    }
-
-    if (quaHan) {
-        khuGiaHan.innerHTML = '<div class="error-box">⚠️ Phiếu mượn đã <strong>quá hạn ' + soNgayQuaHan + ' ngày</strong>. Không thể gia hạn khi đã quá hạn! Vui lòng thực hiện trả sách và đóng phạt.</div>';
-        khuNut.innerHTML = '<button class="btn btn-gray" onclick="resetTrang()">🔄 Tìm phiếu khác</button> <a href="tra-sach.html" class="btn btn-primary" style="text-decoration:none;margin-left:10px;">↩️ Đến trang Trả sách</a>';
-        return;
-    }
-
-    khuGiaHan.innerHTML = '<div class="gian-han-box">'
-        + '<div class="row-info"><div class="label-col">Hạn trả hiện tại:</div><div class="value-col"><strong>' + dinhDangNgay(phieu.hanTra) + '</strong></div></div>'
-        + '<div class="row-info"><div class="label-col">Số ngày gia hạn thêm:</div><div class="value-col">'
-        + '<select id="soNgayGiaHan" onchange="capNhatNgayMoi()" style="width:180px;padding:6px;border:1px solid #90CAF9;border-radius:4px;">'
-        + '<option value="7">7 ngày</option><option value="14" selected>14 ngày</option></select></div></div>'
-        + '<div class="row-info"><div class="label-col">Hạn trả mới:</div><div class="value-col ngay-moi" id="hienThiNgayMoi">---</div></div>'
-        + '<div class="row-info"><div class="label-col">Lần gia hạn này là:</div><div class="value-col"><strong>Lần ' + (soLanGiaHan + 1) + '/2</strong>'
-        + (soLanGiaHan + 1 === 2 ? ' <span style="color:#E65100;">(Lần cuối được gia hạn)</span>' : '') + '</div></div></div>'
-        + '<p class="note">* Sau khi gia hạn, hạn trả sẽ được tính từ hạn trả cũ cộng thêm số ngày chọn.</p>';
-
-    khuNut.innerHTML = '<button class="btn btn-success" onclick="xacNhanGiaHan()">✅ Xác nhận gia hạn</button> <button class="btn btn-gray" onclick="resetTrang()" style="margin-left:10px;">🔄 Hủy</button>';
-    capNhatNgayMoi();
-}
-
-function capNhatNgayMoi() {
-    if (!phieuHienTai) return;
-    var selectEl = document.getElementById('soNgayGiaHan');
-    var hienThiEl = document.getElementById('hienThiNgayMoi');
-    if (!selectEl || !hienThiEl) return;
-    var soNgay = parseInt(selectEl.value) || 14;
-    var ngayMoi = tinhNgaySau(phieuHienTai.hanTra, soNgay);
-    hienThiEl.textContent = dinhDangNgay(ngayMoi) + ' (+' + soNgay + ' ngày)';
-}
-
-function xacNhanGiaHan() {
-    if (!phieuHienTai) {
-        alert('Lỗi: Chưa chọn phiếu mượn!');
-        return;
-    }
-    var selectEl = document.getElementById('soNgayGiaHan');
-    if (!selectEl) {
-        alert('Lỗi: Không tìm thấy lựa chọn số ngày!');
-        return;
-    }
-
-    var soNgay = parseInt(selectEl.value) || 14;
-    var hanTraMoi = tinhNgaySau(phieuHienTai.hanTra, soNgay);
-    var soLanGiaHan = parseInt(phieuHienTai.soLanGiaHan) || 0;
-
-    var xacNhan = confirm('XÁC NHẬN GIA HẠN\n\nPhiếu: ' + phieuHienTai.maPhieu + '\nĐộc giả: ' + phieuHienTai.tenDG + '\nHạn trả cũ: ' + dinhDangNgay(phieuHienTai.hanTra) + '\nGia hạn thêm: ' + soNgay + ' ngày\nHạn trả mới: ' + dinhDangNgay(hanTraMoi) + '\nĐây là lần gia hạn thứ: ' + (soLanGiaHan + 1) + '/2');
-    if (!xacNhan) return;
-
-    var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
-    var capNhatOK = false;
-
-    for (var i = 0; i < dsPhieuMuon.length; i++) {
-        if (dsPhieuMuon[i].maPhieu === phieuHienTai.maPhieu) {
-            dsPhieuMuon[i].hanTraCu = dsPhieuMuon[i].hanTra;
-            dsPhieuMuon[i].hanTra = hanTraMoi;
-            dsPhieuMuon[i].soLanGiaHan = soLanGiaHan + 1;
-            capNhatOK = true;
-            break;
-        }
-    }
-
-    if (!capNhatOK) {
-        alert('Lỗi: Không thể cập nhật phiếu mượn!');
-        return;
-    }
-
-    localStorage.setItem('danhSachPhieuMuon', JSON.stringify(dsPhieuMuon));
-    alert('✅ GIA HẠN THÀNH CÔNG!\n\nPhiếu: ' + phieuHienTai.maPhieu + '\nĐộc giả: ' + phieuHienTai.tenDG + '\nHạn trả mới: ' + dinhDangNgay(hanTraMoi) + '\nSố lần gia hạn: ' + (soLanGiaHan + 1) + '/2\n' + (soLanGiaHan + 1 >= 2 ? '\n⚠️ Đây là lần gia hạn cuối cùng!' : ''));
-    resetTrang();
-}
-
-function resetTrang() {
-    phieuHienTai = null;
-    document.getElementById('maPhieuInput').value = '';
-    document.getElementById('ketQuaTim').innerHTML = '';
-    document.getElementById('cardGiaHan').className = 'card hidden';
-    document.getElementById('maPhieuInput').focus();
-}
-</script>
+<script src="script.js"></script>
 </body>
 </html>

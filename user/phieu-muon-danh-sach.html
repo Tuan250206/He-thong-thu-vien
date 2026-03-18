@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xử lý phạt - Thư viện</title>
+<title>Danh Sách Phiếu Mượn - Thư Viện</title>
 <link rel="stylesheet" href="common.css">
 </head>
 <body>
@@ -22,8 +22,8 @@
     <a href="cho-muon.html" class="menu-item"><span class="menu-icon">📋</span>Cho mượn</a>
     <a href="tra-sach.html" class="menu-item"><span class="menu-icon">↩️</span>Trả sách</a>
     <a href="gia-han.html" class="menu-item"><span class="menu-icon">⏰</span>Gia hạn</a>
-    <a href="xu-ly-phat.html" class="menu-item active"><span class="menu-icon">💰</span>Xử lý phạt</a>
-    <a href="phieu-muon-danh-sach.html" class="menu-item"><span class="menu-icon">📄</span>Phiếu mượn</a>
+    <a href="xu-ly-phat.html" class="menu-item"><span class="menu-icon">💰</span>Xử lý phạt</a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item active"><span class="menu-icon">📄</span>Phiếu mượn</a>
     <a href="dat-cho.html" class="menu-item"><span class="menu-icon">🔖</span>Đặt chỗ</a>
     <a href="danh-sach-dat-cho.html" class="menu-item"><span class="menu-icon">📋</span>DS đặt chỗ</a>
 
@@ -37,31 +37,43 @@
 </div>
 
 <div class="content">
-    <div class="page-title"><h2>💰 Xử lý phạt</h2></div>
+    <div class="page-title"><h2>📄 Danh Sách Phiếu Mượn</h2></div>
 
     <div class="card">
-        <h3>🔍 Tìm kiếm và lọc phiếu phạt</h3>
+        <h3>🔍 Tìm kiếm và lọc phiếu</h3>
         <div class="filter-bar cf">
-            <input type="text" id="tuKhoa_XLP" placeholder="Tìm theo mã phạt, mã ĐG hoặc tên độc giả..." onkeydown="if(event.keyCode===13) locVaHienThi_XLP()" />
-            <select id="locTrangThai_XLP" onchange="locVaHienThi_XLP()">
+            <input type="text" id="tuKhoa_DSPM" placeholder="Tìm theo mã phiếu, mã ĐG hoặc tên độc giả..." onkeydown="if(event.keyCode===13) timKiemPhieu_DSPM()" />
+            <select id="locTrangThai_DSPM" onchange="timKiemPhieu_DSPM()">
                 <option value="">📂 Tất cả trạng thái</option>
-                <option value="Chưa thu">💳 Chưa thu</option>
-                <option value="Đã thanh toán">✅ Đã thanh toán</option>
+                <option value="Đang mượn">📖 Đang mượn</option>
+                <option value="Quá hạn">⚠️ Quá hạn</option>
+                <option value="Đã trả">✅ Đã trả</option>
             </select>
-            <button class="btn btn-primary" onclick="locVaHienThi_XLP()">🔍 Lọc</button>
+            <button class="btn btn-primary" onclick="timKiemPhieu_DSPM()">🔍 Tìm kiếm</button>
         </div>
 
-        <div class="count-info" id="lblSoLuong_XLP">Đang tải...</div>
-    </div>
+        <div class="count-info" id="lblSoLuong_DSPM">Đang tải...</div>
 
-    <div class="card">
-        <h3>📋 Danh sách phiếu phạt</h3>
         <div class="scroll-area">
-            <div id="bangPhat">
-                <div class="empty-state">Đang tải dữ liệu...</div>
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:45px">STT</th>
+                        <th style="width:100px">Mã phiếu</th>
+                        <th style="width:90px">Mã ĐG</th>
+                        <th>Tên độc giả</th>
+                        <th>Sách mượn</th>
+                        <th style="width:100px">Ngày mượn</th>
+                        <th style="width:100px">Hạn trả</th>
+                        <th style="width:140px">Trạng thái</th>
+                        <th style="width:160px; text-align:center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="bangPhieuMuon">
+                    <tr><td colspan="9" class="no-data">Đang tải dữ liệu...</td></tr>
+                </tbody>
+            </table>
         </div>
-        <div class="tong-ket" id="tongKet_XLP"></div>
     </div>
 </div>
 

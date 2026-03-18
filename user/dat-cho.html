@@ -5,37 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Đặt chỗ sách - Hệ thống thư viện</title>
 <link rel="stylesheet" href="common.css">
-<style>
-.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
-.step-box { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 20px; margin-bottom: 20px; }
-.step-box h3 { font-size: 16px; color: #1565C0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #e3f2fd; }
-.input-row { margin-bottom: 12px; overflow: hidden; }
-.input-row label { display: block; float: left; width: 130px; padding-top: 7px; font-weight: bold; color: #555; }
-.input-row input, .input-row select { float: left; width: 220px; padding: 7px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-.input-row .btn-tim { float: left; margin-left: 8px; padding: 7px 16px; background: #2196F3; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
-.input-row .btn-tim:hover { background: #1976D2; }
-.info-box { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 4px; padding: 12px 15px; margin-top: 10px; display: none; }
-.info-box table { width: 100%; border-collapse: collapse; }
-.info-box td { padding: 4px 8px; font-size: 13px; }
-.info-box td:first-child { font-weight: bold; color: #555; width: 140px; }
-.warning-box { background: #fff3e0; border: 1px solid #ffcc02; border-radius: 4px; padding: 10px 14px; margin-top: 8px; color: #e65100; font-size: 13px; display: none; }
-.warning-box::before { content: "⚠️ "; }
-.confirm-row { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 20px; margin-bottom: 20px; display: none; }
-.confirm-row h3 { font-size: 16px; color: #1565C0; margin-bottom: 15px; }
-.btn-xacnhan { padding: 10px 28px; background: #4CAF50; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 10px; }
-.btn-xacnhan:hover { background: #388E3C; }
-.btn-reset { padding: 10px 20px; background: #9E9E9E; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-left: 10px; margin-top: 10px; }
-.btn-reset:hover { background: #757575; }
-.tag-available { color: #388E3C; font-weight: bold; }
-.tag-unavailable { color: #d32f2f; font-weight: bold; }
-.clearfix::after { content: ""; display: table; clear: both; }
-</style>
 </head>
 <body>
 
 <div class="header">
-  <h1>📚 Hệ thống Thư viện</h1>
-  <div class="user-info">Xin chào! <strong id="tenNguoiDung">--</strong><a onclick="dangXuat()">Đăng xuất</a></div>
+    <h1>📚 Hệ Thống Thư Viện</h1>
+    <div class="user-info">
+        Xin chào! <strong id="tenNguoiDung">--</strong>
+        &nbsp;|&nbsp;<a onclick="dangXuat()">Đăng xuất</a>
+    </div>
 </div>
 
 <div class="sidebar">
@@ -55,6 +33,9 @@
     <a href="xu-ly-phat.html" class="menu-item">
         <span class="menu-icon">💰</span>Xử lý phạt
     </a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item">
+        <span class="menu-icon">📄</span>Phiếu mượn
+    </a>
     <a href="dat-cho.html" class="menu-item active">
         <span class="menu-icon">🔖</span>Đặt chỗ
     </a>
@@ -66,14 +47,8 @@
     <a href="doc-gia-danh-sach.html" class="menu-item">
         <span class="menu-icon">👥</span>Độc giả
     </a>
-    <a href="doc-gia-them.html" class="menu-item">
-        <span class="menu-icon">➕</span>Thêm ĐG
-    </a>
     <a href="sach-danh-sach.html" class="menu-item">
         <span class="menu-icon">📚</span>Sách
-    </a>
-    <a href="sach-tim-kiem.html" class="menu-item">
-        <span class="menu-icon">🔍</span>Tìm sách
     </a>
 
     <div class="menu-nhom">Báo cáo</div>
@@ -86,275 +61,81 @@
 </div>
 
 <div class="content">
-  <div class="page-title">📌 Đặt chỗ sách</div>
+    <div class="page-title"><h2>🔖 Đặt chỗ sách</h2></div>
 
-  <div class="step-box">
-    <h3>Bước 1: Tìm độc giả</h3>
-    <div class="input-row clearfix">
-      <label>Mã độc giả:</label>
-      <input type="text" id="inputMaDG" placeholder="Nhập mã độc giả..." onkeypress="enterDocGia(event)" />
-      <button class="btn-tim" onclick="timDocGia()">🔍 Tìm</button>
-    </div>
-    <div class="info-box" id="infoDG">
-      <table>
-        <tr><td>Mã độc giả:</td><td id="dg-ma">--</td></tr>
-        <tr><td>Họ tên:</td><td id="dg-ten">--</td></tr>
-        <tr><td>Lớp:</td><td id="dg-lop">--</td></tr>
-        <tr><td>Khoa:</td><td id="dg-khoa">--</td></tr>
-        <tr><td>Email:</td><td id="dg-email">--</td></tr>
-        <tr><td>Trạng thái:</td><td id="dg-trangThai">--</td></tr>
-      </table>
-    </div>
-  </div>
+    <div class="card" id="buoc1">
+        <h3><span class="card-step-num">1</span>Chọn độc giả</h3>
+        <div class="form-group">
+            <label for="maDGInput">Nhập mã hoặc chọn trực tiếp từ danh sách:</label>
+            <input type="text" id="maDGInput" placeholder="Gõ mã ĐG..." onkeydown="if(event.keyCode===13) timDocGia()">
+            <button class="btn btn-primary" onclick="timDocGia()" style="margin-left:8px;">🔍 Tìm</button>
+        </div>
 
-  <div class="step-box">
-    <h3>Bước 2: Tìm sách cần đặt</h3>
-    <div class="input-row clearfix">
-      <label>Mã sách:</label>
-      <input type="text" id="inputMaSach" placeholder="Nhập mã sách..." onkeypress="enterSach(event)" />
-      <button class="btn-tim" onclick="timSach()">🔍 Tìm</button>
+        <div class="quick-select-wrapper">
+            <div class="scroll-area">
+                <table class="table-quick">
+                    <thead>
+                        <tr>
+                            <th>Mã ĐG</th>
+                            <th>Họ và tên</th>
+                            <th style="text-align:center">Chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsDocGiaNhanh"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="ketQuaDocGia"></div>
     </div>
-    <div class="info-box" id="infoSach">
-      <table>
-        <tr><td>Mã sách:</td><td id="sach-ma">--</td></tr>
-        <tr><td>Tên sách:</td><td id="sach-ten">--</td></tr>
-        <tr><td>Tác giả:</td><td id="sach-tacGia">--</td></tr>
-        <tr><td>Thể loại:</td><td id="sach-theLoai">--</td></tr>
-        <tr><td>NXB:</td><td id="sach-nxb">--</td></tr>
-        <tr><td>SL tổng:</td><td id="sach-slTong">--</td></tr>
-        <tr><td>SL còn:</td><td id="sach-slCon">--</td></tr>
-      </table>
-    </div>
-    <div class="warning-box" id="warnSach">Sách này hiện còn sẵn trên kệ. Bạn có thể mượn trực tiếp thay vì đặt chỗ.</div>
-  </div>
 
-  <div class="confirm-row" id="confirmBox">
-    <h3>Bước 3: Xác nhận thông tin đặt chỗ</h3>
-    <div class="input-row clearfix">
-      <label>Độc giả:</label>
-      <span id="confirm-docGia" style="line-height:32px; color:#1565C0; font-weight:bold;"></span>
+    <div class="card hidden" id="buoc2">
+        <h3><span class="card-step-num">2</span>Chọn sách cần đặt chỗ</h3>
+        
+        <p class="note">Nhấn nút "Đặt chỗ" để chọn sách muốn đặt.</p>
+        
+        <div class="quick-select-wrapper" style="border-color: #FF9800;">
+            <div class="scroll-area">
+                <table class="table-quick table-sach-chon">
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tác giả</th>
+                            <th>Kho</th>
+                            <th style="text-align:center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dsSachNhanh"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="loiSach" style="margin-top: 15px;"></div>
     </div>
-    <div class="input-row clearfix">
-      <label>Sách đặt:</label>
-      <span id="confirm-sach" style="line-height:32px; color:#1565C0; font-weight:bold;"></span>
+
+    <div class="card hidden" id="buoc3">
+        <h3><span class="card-step-num">3</span>Xác nhận đặt chỗ</h3>
+        
+        <div class="info-box">
+            <p><strong>Độc giả:</strong> <span id="confirm-docGia">--</span></p>
+            <p><strong>Sách đặt:</strong> <span id="confirm-sach">--</span></p>
+        </div>
+
+        <div class="date-box" style="margin-top: 15px;">
+            <p><strong>Ngày đặt:</strong> <span id="hienThiNgayDat">---</span></p>
+            <p style="font-size:12px;color:#1565C0;">Hạn lấy sách mặc định: 7 ngày kể từ hôm nay</p>
+        </div>
+
+        <div class="form-group">
+            <label for="hanLayInput">Hạn lấy sách:</label>
+            <input type="date" id="hanLayInput">
+        </div>
+
+        <button class="btn btn-success" onclick="xacNhanDatCho()">✅ Xác nhận đặt chỗ</button>
+        <button class="btn btn-primary" onclick="resetTrang()" style="margin-left:10px;background:#757575;">🔄 Nhập mới</button>
     </div>
-    <div class="input-row clearfix">
-      <label>Hạn lấy sách:</label>
-      <input type="date" id="inputHanLay" />
-    </div>
-    <div>
-      <button class="btn-xacnhan" onclick="datChoSach()">✅ Xác nhận đặt chỗ</button>
-      <button class="btn-reset" onclick="datLai()">🔄 Làm lại</button>
-    </div>
-  </div>
 </div>
 
-<script>
-var docGiaDaChon = null;
-var sachDaChon = null;
-
-window.onload = function() {
-  var user = localStorage.getItem('currentUser') || 'Admin';
-  var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
-  var tenHienThi = userInfo.hoTen || user;
-  document.getElementById('tenNguoiDung').textContent = tenHienThi;
-  var ngayMacDinh = layNgayMacDinh(7);
-  document.getElementById('inputHanLay').value = ngayMacDinh;
-};
-
-function layNgayMacDinh(soNgay) {
-  var d = new Date();
-  d.setDate(d.getDate() + soNgay);
-  var thang = d.getMonth() + 1;
-  var ngay = d.getDate();
-  return d.getFullYear() + '-' + (thang < 10 ? '0' + thang : thang) + '-' + (ngay < 10 ? '0' + ngay : ngay);
-}
-
-function enterDocGia(e) {
-  if (e.keyCode === 13) timDocGia();
-}
-
-function enterSach(e) {
-  if (e.keyCode === 13) timSach();
-}
-
-function timDocGia() {
-  var maDG = document.getElementById('inputMaDG').value.trim();
-  if (!maDG) {
-    alert('Vui lòng nhập mã độc giả!');
-    return;
-  }
-
-  var danhSach = JSON.parse(localStorage.getItem('danhSachDocGia') || '[]');
-  var docGia = null;
-  for (var i = 0; i < danhSach.length; i++) {
-    if (danhSach[i].maDG === maDG) {
-      docGia = danhSach[i];
-      break;
-    }
-  }
-
-  if (!docGia) {
-    alert('Không tìm thấy độc giả với mã: ' + maDG);
-    document.getElementById('infoDG').style.display = 'none';
-    docGiaDaChon = null;
-    capNhatConfirmBox();
-    return;
-  }
-
-  if (docGia.trangThai === 'Khóa' || docGia.trangThai === 'Ngừng hoạt động') {
-    alert('Độc giả này đang bị khóa, không thể đặt chỗ!');
-    document.getElementById('infoDG').style.display = 'none';
-    docGiaDaChon = null;
-    capNhatConfirmBox();
-    return;
-  }
-
-  document.getElementById('dg-ma').innerText = docGia.maDG;
-  document.getElementById('dg-ten').innerText = docGia.hoTen;
-  document.getElementById('dg-lop').innerText = docGia.lop || '--';
-  document.getElementById('dg-khoa').innerText = docGia.khoa || '--';
-  document.getElementById('dg-email').innerText = docGia.email || '--';
-  document.getElementById('dg-trangThai').innerText = docGia.trangThai || 'Hoạt động';
-  document.getElementById('infoDG').style.display = 'block';
-
-  docGiaDaChon = docGia;
-  capNhatConfirmBox();
-}
-
-function timSach() {
-  var maSach = document.getElementById('inputMaSach').value.trim();
-  if (!maSach) {
-    alert('Vui lòng nhập mã sách!');
-    return;
-  }
-
-  var danhSach = JSON.parse(localStorage.getItem('danhSachSach') || '[]');
-  var sach = null;
-  for (var i = 0; i < danhSach.length; i++) {
-    if (danhSach[i].maSach === maSach) {
-      sach = danhSach[i];
-      break;
-    }
-  }
-
-  if (!sach) {
-    alert('Không tìm thấy sách với mã: ' + maSach);
-    document.getElementById('infoSach').style.display = 'none';
-    document.getElementById('warnSach').style.display = 'none';
-    sachDaChon = null;
-    capNhatConfirmBox();
-    return;
-  }
-
-  var slCon = sach.soLuongCon !== undefined ? sach.soLuongCon : 0;
-  document.getElementById('sach-ma').innerText = sach.maSach;
-  document.getElementById('sach-ten').innerText = sach.tenSach;
-  document.getElementById('sach-tacGia').innerText = sach.tacGia || '--';
-  document.getElementById('sach-theLoai').innerText = sach.theLoai || '--';
-  document.getElementById('sach-nxb').innerText = sach.nxb || '--';
-  document.getElementById('sach-slTong').innerText = sach.soLuongTong || 0;
-
-  var slConEl = document.getElementById('sach-slCon');
-  if (slCon > 0) {
-    slConEl.innerHTML = '<span class="tag-available">' + slCon + ' (còn sẵn)</span>';
-  } else {
-    slConEl.innerHTML = '<span class="tag-unavailable">' + slCon + ' (hết sách)</span>';
-  }
-
-  document.getElementById('infoSach').style.display = 'block';
-
-  if (slCon > 0) {
-    document.getElementById('warnSach').style.display = 'block';
-  } else {
-    document.getElementById('warnSach').style.display = 'none';
-  }
-
-  sachDaChon = sach;
-  capNhatConfirmBox();
-}
-
-function capNhatConfirmBox() {
-  var confirmBox = document.getElementById('confirmBox');
-  if (docGiaDaChon && sachDaChon) {
-    document.getElementById('confirm-docGia').innerText = docGiaDaChon.maDG + ' - ' + docGiaDaChon.hoTen;
-    document.getElementById('confirm-sach').innerText = sachDaChon.maSach + ' - ' + sachDaChon.tenSach;
-    confirmBox.style.display = 'block';
-  } else {
-    confirmBox.style.display = 'none';
-  }
-}
-
-function datChoSach() {
-  if (!docGiaDaChon) {
-    alert('Vui lòng tìm độc giả trước!');
-    return;
-  }
-  if (!sachDaChon) {
-    alert('Vui lòng tìm sách cần đặt trước!');
-    return;
-  }
-
-  var hanLay = document.getElementById('inputHanLay').value;
-  if (!hanLay) {
-    alert('Vui lòng nhập hạn lấy sách!');
-    return;
-  }
-
-  var hom_nay = new Date();
-  hom_nay.setHours(0, 0, 0, 0);
-  var ngayHanLay = new Date(hanLay);
-  if (ngayHanLay < hom_nay) {
-    alert('Hạn lấy sách không được là ngày trong quá khứ!');
-    return;
-  }
-
-  var maDatCho = 'DC' + Date.now();
-
-  var banGhiMoi = {
-    maDatCho: maDatCho,
-    maDG: docGiaDaChon.maDG,
-    tenDG: docGiaDaChon.hoTen,
-    maSach: sachDaChon.maSach,
-    tenSach: sachDaChon.tenSach,
-    ngayDat: layNgayHienTai(),
-    hanLaySach: hanLay,
-    trangThai: 'Chờ lấy'
-  };
-
-  var danhSachDatCho = JSON.parse(localStorage.getItem('danhSachDatCho') || '[]');
-  danhSachDatCho.push(banGhiMoi);
-  localStorage.setItem('danhSachDatCho', JSON.stringify(danhSachDatCho));
-
-  alert('✅ Đặt chỗ thành công!\n\nMã đặt chỗ: ' + maDatCho + '\nĐộc giả: ' + docGiaDaChon.hoTen + '\nSách: ' + sachDaChon.tenSach + '\nHạn lấy: ' + hanLay);
-  datLai();
-}
-
-function layNgayHienTai() {
-  var d = new Date();
-  var thang = d.getMonth() + 1;
-  var ngay = d.getDate();
-  return d.getFullYear() + '-' + (thang < 10 ? '0' + thang : thang) + '-' + (ngay < 10 ? '0' + ngay : ngay);
-}
-
-function datLai() {
-  docGiaDaChon = null;
-  sachDaChon = null;
-  document.getElementById('inputMaDG').value = '';
-  document.getElementById('inputMaSach').value = '';
-  document.getElementById('infoDG').style.display = 'none';
-  document.getElementById('infoSach').style.display = 'none';
-  document.getElementById('warnSach').style.display = 'none';
-  document.getElementById('confirmBox').style.display = 'none';
-  document.getElementById('inputHanLay').value = layNgayMacDinh(7);
-}
-
-function dangXuat() {
-  if (confirm('Bạn có muốn đăng xuất không?')) {
-    localStorage.removeItem('currentUser');
-    window.location.href = '../index.html';
-  }
-}
-</script>
+<script src="script.js"></script>
 </body>
 </html>
