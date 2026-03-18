@@ -20,6 +20,7 @@ Nhờ đó, hệ thống nâng cao hiệu quả quản lý, giảm thiểu sai s
 - **Tra cứu thông tin:** Tìm kiếm sách theo từ khóa; xem nhanh trạng thái, thông tin chi tiết từng tài liệu.
 - **Thống kê và tổng hợp số liệu:** Tổng hợp số liệu mượn trả, tồn kho, vi phạm, top sách/độc giả, hỗ trợ xuất báo cáo quản lý.
 - **Quản trị hệ thống:** Tạo, sửa, xóa tài khoản nhân viên và phân quyền sử dụng phần mềm.
+- **Quản lý nhà cung cấp:** Thêm, sửa, xóa thông tin nhà cung cấp.
 - **Giao diện trực quan:** Xây dựng bằng HTML, CSS, JavaScript; thân thiện với người dùng, dễ thao tác.
 
 ---
