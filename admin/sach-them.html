@@ -6,7 +6,7 @@
     <title>Thêm sách - Quản lý kho</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="khoiTaoFormThemSach()">
     <div id="header">
         <h1>🏢 Hệ Thống Quản Lý Kho - ADMIN</h1>
         <div class="userInfo">
@@ -27,11 +27,10 @@
         <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
         <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
         <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
-         <hr style="border-top: 1px solid #ccc; margin: 10px 0;"> <a href="tai-khoan.html">👥 Quản lý tài khoản</a> 
     </div>
     
     <div id="content">
-        <h2>➕ Thêm sách mới vào kho</h2>
+        <h2>➕ Thêm thông tin sách mới</h2>
         
         <form class="section" onsubmit="luuSachMoi(); return false;">
             <div class="form-row">
@@ -98,25 +97,14 @@
                 </div>
             </div>
             
-            <div class="form-row" style="background: #f0fdf4; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+            <div class="form-row" style="background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
                 <div class="col2">
-                    <label style="color: #16a34a;">Số lượng nhập ban đầu <span class="required">*</span></label>
-                    <input type="number" id="soLuongThem" placeholder="Ví dụ: 10" min="1" required>
+                    <label>Giá nhập mặc định (VNĐ) <span class="required">*</span></label>
+                    <input type="number" id="giaNhapThem" placeholder="Ví dụ: 80000" min="0" required oninput="tinhGiaBoiThuong()">
                 </div>
                 <div class="col2">
-                    <label>Vị trí kệ</label>
-                    <input type="text" id="viTriThem" placeholder="Ví dụ: A-2-15">
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="col2">
-                    <label>Giá nhập (VNĐ) <span class="required">*</span></label>
-                    <input type="number" id="giaNhapThem" placeholder="Ví dụ: 80000" min="0" required>
-                </div>
-                <div class="col2">
-                    <label>Giá bồi thường (VNĐ) <span class="required">*</span></label>
-                    <input type="number" id="giaBTThem" placeholder="Ví dụ: 120000" min="0" required>
+                    <label>Giá bồi thường (+5%) (VNĐ) <span class="required">*</span></label>
+                    <input type="number" id="giaBTThem" placeholder="Hệ thống tự tính..." readonly style="background: #fee2e2; font-weight: bold; color: #b91c1c; cursor: not-allowed;">
                 </div>
             </div>
             
@@ -124,7 +112,7 @@
             <textarea id="moTaThem" placeholder="Mô tả nội dung, tình trạng sách..." rows="3"></textarea>
             
             <div style="margin-top: 20px;">
-                <button type="submit" style="padding: 12px 25px; font-size: 15px;">💾 Lưu sách vào kho</button>
+                <button type="submit" style="padding: 12px 25px; font-size: 15px;">💾 Lưu thông tin sách</button>
                 <button type="button" class="btn-danger" style="padding: 12px 25px; font-size: 15px; margin-left: 10px;" onclick="window.location.href='dashboard.html'">❌ Hủy bỏ</button>
             </div>
         </form>

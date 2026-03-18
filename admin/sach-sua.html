@@ -27,7 +27,7 @@
         <a href="ncc-danh-sach.html">🏭 Nhà cung cấp</a>
         <a href="lich-su-nhap-xuat.html">📋 Lịch sử</a>
         <a href="thong-ke-ton-kho.html">📊 Thống kê</a>
-         <hr style="border-top: 1px solid #ccc; margin: 10px 0;"> <a href="tai-khoan.html">👥 Quản lý tài khoản</a> 
+    
     </div>
     
     <div id="content">
@@ -80,14 +80,26 @@
             </div>
             
             <div class="form-row">
-                <div class="col2"><label>Số lượng tổng</label><input type="number" id="soLuongTongSua"></div>
-                <div class="col2"><label>Số lượng còn</label><input type="number" id="soLuongConSua"></div>
-            </div>
+    <div class="col2">
+        <label>Số lượng tổng</label>
+        <input type="number" id="soLuongTongSua" readonly style="background: #e2e8f0; color: #64748b; cursor: not-allowed;">
+    </div>
+    <div class="col2">
+        <label>Số lượng còn</label>
+        <input type="number" id="soLuongConSua" readonly style="background: #e2e8f0; color: #64748b; cursor: not-allowed;">
+    </div>
+</div>
             
-            <div class="form-row">
-                <div class="col2"><label>Giá nhập (đ)</label><input type="number" id="giaNhapSua"></div>
-                <div class="col2"><label>Giá bồi thường (đ)</label><input type="number" id="giaBTSua"></div>
-            </div>
+           <div class="form-row">
+    <div class="col2">
+        <label>Giá nhập (đ)</label>
+        <input type="number" id="giaNhapSua" oninput="if(this.value) { document.getElementById('giaBTSua').value = Math.round(this.value * 1.05); } else { document.getElementById('giaBTSua').value = ''; }">
+    </div>
+    <div class="col2">
+        <label>Giá bồi thường (đ) <span style="font-weight: normal; font-size: 12px; color: #888; font-style: italic;">(Giá gốc + 5%)</span></label>
+        <input type="number" id="giaBTSua">
+    </div>
+</div>
             
             <label>Vị trí kệ</label>
             <input type="text" id="viTriSua" placeholder="Ví dụ: A-1-2">
@@ -103,7 +115,7 @@
         </div>
 
         <div class="section">
-            <h3>Danh sách sách trong kho (Click để sửa)</h3>
+            <h3>Danh sách sách trong kho </h3>
             <table>
                 <thead>
                     <tr>

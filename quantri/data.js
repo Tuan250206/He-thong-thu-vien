@@ -13,7 +13,7 @@ const DU_LIEU_MAU = {
     // ==========================================
     // SIÊU DỮ LIỆU MẪU (36 CUỐN SÁCH) - KHO FULL 100%
     // ==========================================
-sach: [
+    sach: [
         // --- NHÓM 1: CÔNG NGHỆ THÔNG TIN & WEB ---
         { maSach: "S001", tenSach: "Lập trình Python cơ bản", tacGia: "Nguyễn Văn A", nxb: "NXB Trẻ", namXB: 2023, theLoai: "CNTT", soLuongTong: 50, soLuongCon: 50, giaNhap: 100000, giaBT: 105000, viTri: "A-1-1", danhMucChinh: "Công nghệ kỹ thuật", danhMucPhu: "Lập trình", tuKhoa: "python, cơ bản, code", ddc: "005.133" },
         { maSach: "S002", tenSach: "Cấu trúc dữ liệu và giải thuật", tacGia: "Lê Văn B", nxb: "NXB Giáo Dục", namXB: 2022, theLoai: "CNTT", soLuongTong: 30, soLuongCon: 30, giaNhap: 120000, giaBT: 126000, viTri: "A-1-2", danhMucChinh: "Công nghệ kỹ thuật", danhMucPhu: "Thuật toán", tuKhoa: "ctdl, gt, c++", ddc: "005.1" },
@@ -92,24 +92,63 @@ sach: [
         { ngay: "2026-01-31", nguoi: "admin", soSach: 10 },
         { ngay: "2026-02-28", nguoi: "admin", soSach: 20 },
         { ngay: "2026-03-01", nguoi: "thukho", soSach: 36 }
-    ]
+    ],
+    // ==========================================
+    // DỮ LIỆU MẪU ĐỘC GIẢ (5 NGƯỜI) - MÃ THẺ ĐỊNH DẠNG THE_DC...
+    // ==========================================
+   docGia: [
+        { maDG: "DG001", hoTen: "Nguyễn Thị Hoa", ngaySinh: "1995-08-20", gioiTinh: "Nữ", cccd: "079195012345", ngheNghiep: "Giáo viên", noiLamViec: "THPT Nguyễn Thượng Hiền", email: "hoanguyen.gv@gmail.com", sdt: "0901234567", diaChi: "123 Lê Lợi, Q.1, TP.HCM", maThe: "THE_DC001", ngayCapThe: "2026-01-10", thoiHan: 12, ngayHetHan: "2027-01-10", phiThe: 120000, trangThai: "Hoạt động" },
+        { maDG: "DG002", hoTen: "Lê Minh Tuấn", ngaySinh: "2003-05-12", gioiTinh: "Nam", cccd: "079203001122", ngheNghiep: "Sinh viên", noiLamViec: "Đại học Bách Khoa TP.HCM", email: "tuan.le@hcmut.edu.vn", sdt: "0912345678", diaChi: "Ký túc xá ĐHQG, Dĩ An", maThe: "THE_DC002", ngayCapThe: "2026-02-15", thoiHan: 6, ngayHetHan: "2026-08-15", phiThe: 70000, trangThai: "Hoạt động" },
+        { maDG: "DG003", hoTen: "Trần Mai Lan", ngaySinh: "2007-11-05", gioiTinh: "Nữ", cccd: "079307009988", ngheNghiep: "Học sinh", noiLamViec: "THPT Lê Hồng Phong", email: "mailan.07@gmail.com", sdt: "0923456789", diaChi: "456 Điện Biên Phủ, Q.10, TP.HCM", maThe: "THE_DC003", ngayCapThe: "2026-03-01", thoiHan: 12, ngayHetHan: "2027-03-01", phiThe: 120000, trangThai: "Hoạt động" },
+        { maDG: "DG004", hoTen: "Phạm Quang Dũng", ngaySinh: "1988-02-28", gioiTinh: "Nam", cccd: "079088005544", ngheNghiep: "Kỹ sư IT", noiLamViec: "Công ty Phần mềm FPT", email: "dungpq.it@fpt.com.vn", sdt: "0934567890", diaChi: "789 Nguyễn Văn Linh, Bình Thạnh", maThe: "THE_DC004", ngayCapThe: "2025-03-10", thoiHan: 12, ngayHetHan: "2026-03-10", phiThe: 120000, trangThai: "Khóa", lyDoKhoa: "Làm mất 2 cuốn sách chưa đền", ngayKhoa: "2026-03-12" },
+        { maDG: "DG005", hoTen: "Đỗ Bảo Trâm", ngaySinh: "2000-09-15", gioiTinh: "Nữ", cccd: "079200004433", ngheNghiep: "Nhân viên văn phòng", noiLamViec: "Ngân hàng VCB", email: "tramdo.vcb@gmail.com", sdt: "0945678901", diaChi: "12 Pasteur, Q.3, TP.HCM", maThe: "THE_DC005", ngayCapThe: "2026-03-18", thoiHan: 24, ngayHetHan: "2028-03-18", phiThe: 200000, trangThai: "Hoạt động" },
+        { maDG: "DG006", hoTen: "Vũ Đức Trí", ngaySinh: "1992-04-04", gioiTinh: "Nam", cccd: "079092001155", ngheNghiep: "Kiến trúc sư", noiLamViec: "Công ty Thiết kế Xanh", email: "ductri.arch@gmail.com", sdt: "0987654321", diaChi: "22 Nguyễn Đình Chiểu, Q.1", maThe: "THE_DC006", ngayCapThe: "2026-01-05", thoiHan: 12, ngayHetHan: "2027-01-05", phiThe: 120000, trangThai: "Hoạt động" },
+        { maDG: "DG007", hoTen: "Đặng Kim Oanh", ngaySinh: "1985-12-20", gioiTinh: "Nữ", cccd: "079085002266", ngheNghiep: "Bác sĩ", noiLamViec: "Bệnh viện Chợ Rẫy", email: "kimoanh.dr@gmail.com", sdt: "0909112233", diaChi: "301 Hồng Bàng, Q.5", maThe: "THE_DC007", ngayCapThe: "2026-02-20", thoiHan: 24, ngayHetHan: "2028-02-20", phiThe: 200000, trangThai: "Hoạt động" },
+        { maDG: "DG008", hoTen: "Bùi Xuân Phát", ngaySinh: "2004-07-19", gioiTinh: "Nam", cccd: "079204003377", ngheNghiep: "Sinh viên", noiLamViec: "Đại học Khoa học Tự nhiên", email: "xuanphat04@gmail.com", sdt: "0933445566", diaChi: "Ký túc xá 135B Trần Hưng Đạo", maThe: "THE_DC008", ngayCapThe: "2026-03-15", thoiHan: 3, ngayHetHan: "2026-06-15", phiThe: 40000, trangThai: "Hoạt động" },
+        { maDG: "DG009", hoTen: "Hồ Quỳnh Hương", ngaySinh: "1978-10-10", gioiTinh: "Nữ", cccd: "079078004488", ngheNghiep: "Nội trợ", noiLamViec: "Ở nhà", email: "quynhhuong78@gmail.com", sdt: "0944556677", diaChi: "Chung cư Hoàng Anh Gia Lai, Q.7", maThe: "THE_DC009", ngayCapThe: "2025-02-01", thoiHan: 12, ngayHetHan: "2026-02-01", phiThe: 120000, trangThai: "Khóa", lyDoKhoa: "Thẻ đã hết hạn", ngayKhoa: "2026-02-02" },
+        { maDG: "DG010", hoTen: "Ngô Quang Đại", ngaySinh: "1998-03-25", gioiTinh: "Nam", cccd: "079198005599", ngheNghiep: "Nhà báo", noiLamViec: "Tòa soạn Báo Tuổi Trẻ", email: "quangdai.press@gmail.com", sdt: "0955667788", diaChi: "60A Hoàng Văn Thụ, Phú Nhuận", maThe: "THE_DC010", ngayCapThe: "2026-01-20", thoiHan: 6, ngayHetHan: "2026-07-20", phiThe: 70000, trangThai: "Hoạt động" },
+        { maDG: "DG011", hoTen: "Trịnh Thúy Quỳnh", ngaySinh: "2002-11-30", gioiTinh: "Nữ", cccd: "079202006600", ngheNghiep: "Sinh viên", noiLamViec: "Đại học Sài Gòn", email: "thuyquynh.sgu@gmail.com", sdt: "0966778899", diaChi: "273 An Dương Vương, Q.5", maThe: "THE_DC011", ngayCapThe: "2026-03-05", thoiHan: 12, ngayHetHan: "2027-03-05", phiThe: 120000, trangThai: "Hoạt động" },
+        { maDG: "DG012", hoTen: "Đinh Hữu Phước", ngaySinh: "2008-01-15", gioiTinh: "Nam", cccd: "079308007711", ngheNghiep: "Học sinh", noiLamViec: "THCS Bạch Đằng", email: "huuphuoc08@gmail.com", sdt: "0977889900", diaChi: "102 Lê Văn Sỹ, Q.3", maThe: "THE_DC012", ngayCapThe: "2026-03-10", thoiHan: 3, ngayHetHan: "2026-06-10", phiThe: 40000, trangThai: "Hoạt động" },
+        { maDG: "DG013", hoTen: "Lý Thu Thảo", ngaySinh: "1990-06-06", gioiTinh: "Nữ", cccd: "079190008822", ngheNghiep: "Kế toán", noiLamViec: "Công ty TNHH ABC", email: "thuthao.acc@gmail.com", sdt: "0988990011", diaChi: "45 Phạm Văn Đồng, Gò Vấp", maThe: "THE_DC013", ngayCapThe: "2026-02-10", thoiHan: 12, ngayHetHan: "2027-02-10", phiThe: 120000, trangThai: "Hoạt động" },
+        { maDG: "DG014", hoTen: "Châu Tấn Phát", ngaySinh: "1995-09-09", gioiTinh: "Nam", cccd: "079195009933", ngheNghiep: "Designer", noiLamViec: "Freelance", email: "tanphat.design@gmail.com", sdt: "0999001122", diaChi: "88 Nguyễn Thị Minh Khai, Q.3", maThe: "THE_DC014", ngayCapThe: "2025-10-15", thoiHan: 6, ngayHetHan: "2026-04-15", phiThe: 70000, trangThai: "Hoạt động" },
+        { maDG: "DG015", hoTen: "Tạ Quang Thắng", ngaySinh: "1980-05-05", gioiTinh: "Nam", cccd: "079080001234", ngheNghiep: "Giảng viên", noiLamViec: "Đại học Kinh Tế", email: "quangthang.ueh@gmail.com", sdt: "0911223344", diaChi: "59C Nguyễn Đình Chiểu, Q.3", maThe: "THE_DC015", ngayCapThe: "2026-01-01", thoiHan: 24, ngayHetHan: "2028-01-01", phiThe: 200000, trangThai: "Khóa", lyDoKhoa: "Làm ồn trong thư viện nhiều lần", ngayKhoa: "2026-03-01" },
+        { maDG: "DG016", hoTen: "Lâm Khả Ái", ngaySinh: "2005-08-08", gioiTinh: "Nữ", cccd: "079205005678", ngheNghiep: "Sinh viên", noiLamViec: "Đại học Văn Lang", email: "khaai.vlu@gmail.com", sdt: "0922334455", diaChi: "Hẻm 69 D2, Bình Thạnh", maThe: "THE_DC016", ngayCapThe: "2026-03-12", thoiHan: 12, ngayHetHan: "2027-03-12", phiThe: 120000, trangThai: "Hoạt động" },
+        { maDG: "DG017", hoTen: "Phan Văn Đức", ngaySinh: "1996-04-11", gioiTinh: "Nam", cccd: "079196008765", ngheNghiep: "Vận động viên", noiLamViec: "Sân vận động Thống Nhất", email: "vanduc.sport@gmail.com", sdt: "0933445577", diaChi: "138 Đào Duy Từ, Q.10", maThe: "THE_DC017", ngayCapThe: "2026-02-05", thoiHan: 6, ngayHetHan: "2026-08-05", phiThe: 70000, trangThai: "Hoạt động" },
+        { maDG: "DG018", hoTen: "Mai Phương Thúy", ngaySinh: "1988-08-06", gioiTinh: "Nữ", cccd: "079088009876", ngheNghiep: "Kinh doanh tự do", noiLamViec: "Shop thời trang MPT", email: "phuongthuy.shop@gmail.com", sdt: "0944556688", diaChi: "Vinhomes Central Park, Bình Thạnh", maThe: "THE_DC018", ngayCapThe: "2026-01-25", thoiHan: 24, ngayHetHan: "2028-01-25", phiThe: 200000, trangThai: "Hoạt động" },
+        { maDG: "DG019", hoTen: "Lương Xuân Trường", ngaySinh: "1995-04-28", gioiTinh: "Nam", cccd: "079195001357", ngheNghiep: "Trưởng phòng Sales", noiLamViec: "Công ty Bất động sản", email: "xuantruong.sales@gmail.com", sdt: "0955667799", diaChi: "Khu dân cư Him Lam, Q.7", maThe: "THE_DC019", ngayCapThe: "2026-03-08", thoiHan: 12, ngayHetHan: "2027-03-08", phiThe: 120000, trangThai: "Hoạt động" },
+        { maDG: "DG020", hoTen: "Đào Mỹ Linh", ngaySinh: "2001-12-12", gioiTinh: "Nữ", cccd: "079201002468", ngheNghiep: "Nhân viên Ngân hàng", noiLamViec: "Sacombank", email: "mylinh.bank@gmail.com", sdt: "0966778800", diaChi: "266 Nam Kỳ Khởi Nghĩa, Q.3", maThe: "THE_DC020", ngayCapThe: "2026-02-28", thoiHan: 3, ngayHetHan: "2026-05-28", phiThe: 40000, trangThai: "Hoạt động" }
+    ],
 };
 
-// ==========================================
-// TỰ ĐỘNG NẠP DỮ LIỆU VÀO LOCALSTORAGE KHI LOAD FILE NÀY
-// ==========================================
-
-// Nếu bạn muốn ép dữ liệu kho luôn reset về mẫu mỗi khi load lại trang thì để những dòng này:
-localStorage.setItem('danhSachSach', JSON.stringify(DU_LIEU_MAU.sach));
-localStorage.setItem('danhSachNCC', JSON.stringify(DU_LIEU_MAU.ncc));
-localStorage.setItem('phieuNhapKho', JSON.stringify(DU_LIEU_MAU.phieuNhap));
-localStorage.setItem('phieuXuatKho', JSON.stringify(DU_LIEU_MAU.phieuXuat));
-localStorage.setItem('lichSuKiemKe', JSON.stringify(DU_LIEU_MAU.kiemKe));
-
-// ==========================================
+// ========================================================
 // TỰ ĐỘNG NẠP DỮ LIỆU VÀO LOCALSTORAGE (CHỈ NẠP LẦN ĐẦU)
-// ==========================================
+// - BẢO VỆ DỮ LIỆU: Nếu đã có dữ liệu thì KHÔNG GHI ĐÈ
+// ========================================================
+
+// 1. Kiểm tra và nạp dữ liệu Kho sách & Phiếu nhập xuất
+if (!localStorage.getItem('danhSachSach')) {
+    localStorage.setItem('danhSachSach', JSON.stringify(DU_LIEU_MAU.sach));
+    localStorage.setItem('danhSachNCC', JSON.stringify(DU_LIEU_MAU.ncc));
+    localStorage.setItem('phieuNhapKho', JSON.stringify(DU_LIEU_MAU.phieuNhap));
+    localStorage.setItem('phieuXuatKho', JSON.stringify(DU_LIEU_MAU.phieuXuat));
+    localStorage.setItem('lichSuKiemKe', JSON.stringify(DU_LIEU_MAU.kiemKe));
+    console.log("✅ Đã khởi tạo dữ liệu KHO SÁCH lần đầu!");
+}
+
+// 2. Kiểm tra và nạp danh sách Tài khoản nhân viên
 if (!localStorage.getItem('admins')) {
     localStorage.setItem('admins', JSON.stringify(DU_LIEU_MAU.admins));
-    console.log("Đã khởi tạo dữ liệu tài khoản mẫu!");
+    console.log("✅ Đã khởi tạo dữ liệu TÀI KHOẢN mẫu!");
+}
+
+// 3. Khởi tạo sẵn các mảng rỗng (nếu chưa có) để tránh lỗi ở các trang khác
+if (!localStorage.getItem('danhSachDocGia') || JSON.parse(localStorage.getItem('danhSachDocGia')).length === 0) {
+    localStorage.setItem('danhSachDocGia', JSON.stringify(DU_LIEU_MAU.docGia));
+    console.log("✅ Đã khởi tạo dữ liệu ĐỘC GIẢ mẫu!");
+}
+if (!localStorage.getItem('danhSachPhieuMuon')) {
+    localStorage.setItem('danhSachPhieuMuon', JSON.stringify([]));
+}
+if (!localStorage.getItem('danhSachPhat')) {
+    localStorage.setItem('danhSachPhat', JSON.stringify([]));
 }

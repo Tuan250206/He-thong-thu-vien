@@ -59,13 +59,27 @@ tr:hover td { background:#f9f9f9; }
 
 .tem-sach { border:2px solid #333; padding:15px; margin:10px; width:250px; display:inline-block; text-align:center; background:#fff; }
 
+/* Giới hạn kích thước mã vạch không bị tràn ra khỏi khung tem 250px */
+.tem-sach svg {
+    max-width: 100%;
+    height: auto;
+    margin-top: 5px;
+}
+
 @media print {
     /* Ẩn tất cả menu, nút bấm khi in */
-    #sidebar, #header, button, p, h2, #tableSach { display: none !important; }
-    #content { margin-left: 0; padding: 0; margin-top: 0; }
-    body { background: white; }
+    #sidebar, #header, button, p, h2, #tableSach, h3 { display: none !important; }
+    #content { margin-left: 0 !important; padding: 0 !important; margin-top: 0 !important; width: 100% !important; position: absolute; top: 0; left: 0; }
+    body { background: white; margin: 0; padding: 0; }
+    
     /* Chỉ hiển thị khu vực tem */
-    #previewTem { display: block !important; }
+    #previewTem { display: block !important; margin: 0; padding: 0; }
+    
+    /* Căn chỉnh lại tem khi in lên giấy */
+    .tem-sach {
+        margin: 5px !important; /* Thu nhỏ khoảng cách giữa các tem để in được nhiều hơn */
+        page-break-inside: avoid; /* QUAN TRỌNG: Chống cắt đôi tem giữa 2 trang giấy */
+    }
 }
 /* ===========================
    CSS DÀNH RIÊNG CHO KIỂM KÊ
@@ -76,19 +90,18 @@ tr:hover td { background:#f9f9f9; }
 .content input[type="text"], .content input[type="date"], .content input[type="number"] { padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
 
 .required { color: #ef4444; margin-left: 3px; font-weight: bold; }
-/* CSS cho hộp gợi ý tìm kiếm (Đã chỉnh nền trắng nổi bật) */
 .suggestion-box {
     position: absolute;
-    top: 75px; /* Điều chỉnh lại khoảng cách này nếu nó bị đè lên ô input */
+    top: 75px; 
     left: 0;
-    width: 300px; /* Chiều rộng bằng ô input */
-    background-color: #ffffff !important; /* Ép nền trắng tinh */
-    border: 1px solid #4CAF50; /* Viền màu xanh lá */
+    width: 300px; 
+    background-color: #ffffff !important;
+    border: 1px solid #4CAF50; 
     border-radius: 4px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15); /* Tạo bóng đổ 3D để khối nổi lên */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15); 
     max-height: 250px;
     overflow-y: auto;
-    z-index: 9999; /* Đảm bảo luôn nằm trên cùng, không bị các phần tử khác che */
+    z-index: 9999; 
 }
 
 /* Chỉnh từng dòng gợi ý bên trong */
@@ -111,4 +124,129 @@ tr:hover td { background:#f9f9f9; }
     background-color: #e8f5e9 !important; /* Đổi màu nền thành xanh lá cực nhạt */
     color: #16a34a; /* Đổi màu chữ thành xanh đậm */
     font-weight: bold;
+}
+/* =========================================
+   CSS CHO KHU VỰC LỌC LỊCH SỬ (MỚI THÊM)
+========================================= */
+.filter-box {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 15px; 
+    background-color: #f8f9fa; 
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    align-items: flex-end; 
+}
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    flex: 1; 
+}
+.filter-group label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #333;
+    font-size: 14px;
+}
+.filter-group input,
+.filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+}
+.filter-group input:focus,
+.filter-group select:focus {
+    border-color: #4CAF50;
+}
+.filter-actions {
+    display: flex;
+    gap: 10px;
+}
+/* Container chứa 3 thẻ */
+.summary-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Style chung cho thẻ */
+.summary-card {
+    flex: 1;
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-top: 4px solid #ccc;
+}
+
+/* Icon bên trái thẻ */
+.card-icon {
+    font-size: 30px;
+    margin-right: 15px;
+}
+
+/* Nội dung bên phải thẻ */
+.card-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.card-value {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px 0;
+}
+
+.card-value small {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.card-sub {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Màu sắc theo trạng thái */
+.summary-card.import { border-top-color: #28a745; }
+.summary-card.export { border-top-color: #dc3545; }
+.summary-card.balance { border-top-color: #ffc107; }
+
+/* Tinh chỉnh khoảng cách cho form thêm/sửa sách */
+#content .section {
+    padding: 10px 20px; /* Giảm padding của khung bao quanh */
+}
+
+#content .form-row {
+    margin-bottom: 8px !important; /* Thu hẹp khoảng cách giữa các hàng */
+}
+
+#content label {
+    margin-bottom: 3px !important; /* Nhãn sát vào ô nhập hơn */
+    font-size: 14px;
+}
+
+#content input, 
+#content select, 
+#content textarea {
+    padding: 6px 10px !important; /* Ô nhập mỏng hơn, tiết kiệm diện tích */
+}
+
+#content h2, #content h3 {
+    margin-top: 5px;
+    margin-bottom: 10px; /* Thu gọn tiêu đề */
+}
+
+#content .form-row[style*="background"] {
+    padding: 5px 10px !important; /* Thu nhỏ ô highlight màu xanh */
+    margin-top: 5px;
 }
