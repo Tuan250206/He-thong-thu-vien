@@ -85,8 +85,8 @@ function hienThiDanhSachTK(data) {
         
         let trangThaiHTML = tk.trangThai === 'Hoạt động' ? '🟢 Hoạt động' : '🔴 Đã khóa';
         let nutThaoTac = tk.trangThai === 'Hoạt động' 
-            ? `<button type="button" onclick="xoaTK(${tk.id || index})" class="btn-danger">Khóa</button>`
-            : `<button type="button" onclick="moKhoaTK(${tk.id || index})" style="background: #00BCD4; border: none; padding: 8px 16px; color: white; cursor: pointer;">Mở</button>`;
+            ? `<button type="button" onclick="xoaTK(${tk.id || index})" class="btn-danger btn-action">Khóa</button>`
+            : `<button type="button" onclick="moKhoaTK(${tk.id || index})" class="btn-action" style="background: #00BCD4; border: none; padding: 8px 16px; color: white; cursor: pointer;">Mở</button>`;
 
         let tr = document.createElement('tr');
         tr.innerHTML = `
@@ -96,7 +96,7 @@ function hienThiDanhSachTK(data) {
             <td style="${mauQuyen}">${tk.vaiTro || tk.role || 'Chưa phân quyền'}</td>
             <td>${trangThaiHTML}</td>
             <td style="text-align: center;">
-                <button type="button" onclick="suaTK(${tk.id || index})" style="background: #f0ad4e; border: none; padding: 8px 16px; color: white; cursor: pointer; margin-right: 5px;">Sửa</button>
+                <button type="button" onclick="suaTK(${tk.id || index})" class="btn-action" style="background: #f0ad4e; border: none; padding: 8px 16px; color: white; cursor: pointer; margin-right: 5px;">Sửa</button>
                 ${nutThaoTac}
             </td>
         `;

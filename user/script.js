@@ -1182,7 +1182,8 @@ function xacNhanNopPhat_GH() {
         maPhat: maPhat, maDG: phieuHienTai_GH.maDG, tenDG: phieuHienTai_GH.tenDG,
         loaiVP: 'Quá hạn', soTien: tienPhatHienTai_GH, ngayPhat: homNay,
         trangThai: 'Đã thanh toán', ngayThanhToan: homNay,
-        ghiChu: 'Phiếu ' + phieuHienTai_GH.maPhieu + ' quá hạn ' + soNgayQuaHan + ' ngày'
+        ghiChu: 'Phiếu ' + phieuHienTai_GH.maPhieu + ' quá hạn ' + soNgayQuaHan + ' ngày',
+        createdAt: Date.now()
     });
     
     localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
@@ -1228,12 +1229,25 @@ function resetTrang_GH() {
 function xayDungGiaoDich_LS() {
     var dsPhieuMuon = JSON.parse(localStorage.getItem('danhSachPhieuMuon') || '[]');
     var dsPhat = JSON.parse(localStorage.getItem('danhSachPhat') || '[]');
+    // Fix dữ liệu phạt cũ chưa có createdAt
+    var needUpdate = false;
+    dsPhat.forEach(p => {
+        if (!p.createdAt) {
+            // Ưu tiên lấy từ ngày phạt, nếu không có thì lấy Date.now()
+            p.createdAt = p.ngayPhat ? Date.parse(p.ngayPhat) || Date.now() : Date.now();
+            needUpdate = true;
+        }
+    });
+    if (needUpdate) {
+        localStorage.setItem('danhSachPhat', JSON.stringify(dsPhat));
+    }
     var tatCa = [];
 
     for (var i = 0; i < dsPhieuMuon.length; i++) {
         var pm = dsPhieuMuon[i];
         var chiTiet = '';
         if (pm.danhSachSach && pm.danhSachSach.length > 0) {
+            // Mặc định không thêm '(Mất sách)'.
             var tenSach = pm.danhSachSach.map(s => s.tenSach || s.maSach);
             chiTiet = tenSach.join(', ');
         }
@@ -1243,11 +1257,28 @@ function xayDungGiaoDich_LS() {
 
         // Trả
         if (pm.danhSachSach && pm.danhSachSach.length > 0) {
-            var tatCaSachDaTra = pm.danhSachSach.every(s => s.daTra === true);
-            if (tatCaSachDaTra && pm.ngayTraThucTe) {
-                tatCa.push({ ngay: pm.ngayTraThucTe, loai: 'Trả', maGD: pm.maPhieu || '--', maDG: pm.maDG || '--', tenDG: pm.tenDG || '--', chiTiet: chiTiet || 'Phiếu trả', soTien: null, createdAt: pm.createdAtTra || Date.now() });
-            }
-        }
+    var tatCaSachDaTra = pm.danhSachSach.every(s => s.daTra === true);
+    if (tatCaSachDaTra && pm.ngayTraThucTe) {
+        // Lấy createdAtTra mới nhất trong các sách
+        var maxCreatedAtTra = Math.max(...pm.danhSachSach.map(s => s.createdAtTra || 0));
+        // Bổ sung '(Mất sách)' vào tên sách nếu có
+        var chiTietTra = pm.danhSachSach.map(s => {
+            let label = s.tenSach || s.maSach;
+            if (s.tinhTrangKhiTra === 'Mất') label += ' <b style="color:#d8000c">(Mất sách)</b>';
+            return label;
+        }).join(', ');
+        tatCa.push({ 
+            ngay: pm.ngayTraThucTe, 
+            loai: 'Trả', 
+            maGD: pm.maPhieu || '--', 
+            maDG: pm.maDG || '--', 
+            tenDG: pm.tenDG || '--', 
+            chiTiet: chiTietTra || 'Phiếu trả', 
+            soTien: null, 
+            createdAt: maxCreatedAtTra || pm.createdAtTra || Date.now() 
+        });
+    }
+}
 
         // Gia hạn
         if (pm.loaiGiaHan && pm.ngayGiaHan) {
@@ -1264,7 +1295,10 @@ function xayDungGiaoDich_LS() {
     }
 
     tatCa.forEach(item => { if (!item.createdAt) item.createdAt = item.ngay ? Date.parse(item.ngay) : Date.now(); });
-    tatCa.sort((a, b) => b.createdAt - a.createdAt);
+    tatCa.sort((a, b) => {
+        // Chỉ sort giảm dần theo createdAt, giao dịch mới nhất luôn lên đầu
+        return b.createdAt - a.createdAt;
+    });
 
     return tatCa;
 }
@@ -1943,7 +1977,7 @@ function xacNhanTraMotPhan_TS(soTienDaNhan, tienConThieu) {
             var ttEl = document.getElementById('tt_' + idx);
 
             if (cbEl && cbEl.checked) {
-                s.daTra = true; s.ngayTraThucTe = homNay; s.tinhTrangKhiTra = ttEl.value;
+                s.daTra = true; s.ngayTraThucTe = homNay; s.tinhTrangKhiTra = ttEl.value; s.createdAtTra = Date.now();
 
                 var soTienPhat = 0; var loaiViPham = '';
                 if (ttEl.value === 'Rách') { soTienPhat = soNgayQuaHan * 2000 + 15000; loaiViPham = 'Hư hỏng'; }
@@ -2012,7 +2046,7 @@ function xacNhanTra_TS(daThuTien) {
             var ttEl = document.getElementById('tt_' + idx);
 
             if (cbEl && cbEl.checked) {
-                s.daTra = true; s.ngayTraThucTe = homNay; s.tinhTrangKhiTra = ttEl.value;
+                s.daTra = true; s.ngayTraThucTe = homNay; s.tinhTrangKhiTra = ttEl.value; s.createdAtTra = Date.now();
 
                 var soTienPhat = 0; var loaiViPham = '';
                 if (ttEl.value === 'Rách') { soTienPhat = soNgayQuaHan * 2000 + 15000; loaiViPham = 'Hư hỏng'; }

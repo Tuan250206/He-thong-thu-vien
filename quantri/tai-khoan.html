@@ -6,10 +6,32 @@
     <title>Quản Trị Hệ Thống - Đăng Nhập</title>
     <link rel="stylesheet" href="style.css">
     <style>
+                .btn-action {
+                    min-width: 70px;
+                    max-width: 100px;
+                    padding-left: 0;
+                    padding-right: 0;
+                    text-align: center;
+                    display: inline-block;
+                }
         input[type="password"], input[type="email"] { 
             width: 98%; padding: 7px; margin: 3px 0; border: 1px solid #ddd; font-size: 13px; 
         }
-        .search-box { padding: 8px; width: 250px; border: 1px solid #ddd; font-size: 13px; }
+        .search-box { padding: 7px 10px; width: 170px; max-width: 100%; border: 1px solid #ddd; font-size: 14px; height: 38px; box-sizing: border-box; }
+
+        .search-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 0 24px;
+            border: none;
+            height: 38px;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-btn:hover { background: #388E3C; }
     </style>
 </head>
 <body>
@@ -90,9 +112,9 @@
         <div class="section">
             <div style="overflow: hidden; margin-bottom: 15px;">
                 <h3 style="float: left; border: none; padding: 0; margin: 0; line-height: 35px;">📋 Danh sách tài khoản hệ thống</h3>
-                <div style="float: right;">
+                <div style="float: right; display: flex; align-items: center; gap: 8px;">
                     <input type="text" id="timKiemTK" class="search-box" placeholder="Tìm tên hoặc username...">
-                    <button type="button" onclick="timKiem()" style="margin-right: 0;">🔍 Tìm</button>
+                    <button type="button" onclick="timKiem()" class="search-btn">🔍 Tìm</button>
                 </div>
             </div>
 

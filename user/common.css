@@ -741,3 +741,40 @@ tbody tr:hover { background: #e3f2fd; }
 .tong-chua .so-tien { color: #C62828; }
 .tong-da .so-tien { color: #2E7D32; }
 .tong-ket-item .nhan { font-size: 12px; color: #666; font-weight: bold; }
+.clearfix {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+.stat-box {
+    flex: 1;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 18px 0 14px 0;
+    text-align: center;
+    min-width: 160px;
+}
+.stat-xanh { border-top: 4px solid #2196F3; }
+.stat-la   { border-top: 4px solid #4CAF50; }
+.stat-cam  { border-top: 4px solid #FF9800; }
+.stat-do   { border-top: 4px solid #f44336; }
+.stat-icon { font-size: 32px; margin-bottom: 6px; }
+.stat-so   { font-size: 28px; font-weight: bold; margin-bottom: 2px; color: #2196F3; }
+.stat-nhan { font-size: 13px; color: #888; }
+.stat-la .stat-so   { color: #4CAF50; }
+.stat-cam .stat-so  { color: #FF9800; }
+.stat-do .stat-so   { color: #f44336; }
+.btn-danger {
+    background: #f44336;
+    color: white;
+    font-size: 14px;      /* Tăng cỡ chữ cho đều */
+    padding: 8px 18px;    /* Tăng padding cho to như các nút khác */
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-left: 8px;     /* Nếu muốn cách nút bên cạnh */
+}
+.btn-danger:hover {
+    background: #D32F2F;
+}
