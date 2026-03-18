@@ -5,109 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tìm Kiếm Sách - Thư Viện</title>
 <link rel="stylesheet" href="common.css">
-<style>
-.page-title { font-size: 22px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #2196F3; }
-.card { background: white; border-radius: 5px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-.section-label { font-size: 15px; font-weight: bold; color: #1565C0; margin-bottom: 15px; padding-bottom: 6px; border-bottom: 1px solid #BBDEFB; }
-.form-row { overflow: hidden; margin-bottom: 14px; }
-.form-col { float: left; width: 50%; padding-right: 15px; }
-.form-col:last-child { padding-right: 0; }
-.form-col label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 13px; }
-.form-col select {
-    width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; outline: none; background: white;
-}
-.form-col select:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
-.year-group { overflow: hidden; }
-.year-group input { float: left; width: 45%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; outline: none; }
-.year-group input:focus { border-color: #2196F3; box-shadow: 0 0 3px rgba(33,150,243,0.3); }
-.year-group span { float: left; width: 10%; text-align: center; line-height: 38px; color: #888; font-weight: bold; }
-.btn-row { margin-top: 20px; }
-.btn { padding: 8px 18px; border: none; border-radius: 3px; cursor: pointer; font-size: 14px; margin-right: 8px; }
-.btn-blue { background: #2196F3; color: white; }
-.btn-blue:hover { background: #1976D2; }
-.btn-grey { background: #9E9E9E; color: white; }
-.btn-grey:hover { background: #757575; }
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 700px; }
-table thead tr { background: #2196F3; color: white; }
-table th { padding: 10px 8px; text-align: left; font-size: 13px; white-space: nowrap; }
-table td { padding: 8px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
-table tbody tr:hover { background: #e3f2fd; }
-table tbody tr:nth-child(even) { background: #fafafa; }
-table tbody tr:nth-child(even):hover { background: #e3f2fd; }
-.no-data { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
-.count-info { font-size: 13px; color: #666; margin-bottom: 10px; background: #E3F2FD; padding: 8px 12px; border-radius: 4px; }
-.badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; white-space: nowrap; }
-.badge-co-sach { background: #E8F5E9; color: #2E7D32; border: 1px solid #81C784; }
-.badge-het-sach { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
-.btn-sm { padding: 4px 10px; font-size: 12px; }
-.btn-teal { background: #009688; color: white; text-decoration: none; }
-.btn-teal:hover { background: #00796B; }
-.cf::after { content: ""; display: table; clear: both; }
-.btn-orange {
-    background: #FF9800;
-    color: white;
-}
-.btn-orange:hover {
-    background: #F57C00;
-}
-</style>
 </head>
 <body>
 
 <div class="header">
     <h1>📚 HỆ THỐNG QUẢN LÝ THƯ VIỆN</h1>
     <div class="user-info">
-        <span id="lblNguoiDung">👤 Khách</span>
+        <span id="tenNguoiDung">👤 Khách</span>
         <a href="../index.html" onclick="return dangXuat()">🚪 Đăng xuất</a>
     </div>
 </div>
 
 <div class="sidebar">
     <div class="menu-nhom">Nghiệp vụ</div>
-    <a href="dashboard.html" class="menu-item">
-        <span class="menu-icon">🏠</span>Trang chủ
-    </a>
-    <a href="cho-muon.html" class="menu-item">
-        <span class="menu-icon">📋</span>Cho mượn
-    </a>
-    <a href="tra-sach.html" class="menu-item">
-        <span class="menu-icon">↩️</span>Trả sách
-    </a>
-    <a href="gia-han.html" class="menu-item">
-        <span class="menu-icon">⏰</span>Gia hạn
-    </a>
-    <a href="xu-ly-phat.html" class="menu-item">
-        <span class="menu-icon">💰</span>Xử lý phạt
-    </a>
-    <a href="phieu-muon-danh-sach.html" class="menu-item">
-        <span class="menu-icon">📄</span>Phiếu mượn
-    </a>
-    <a href="dat-cho.html" class="menu-item">
-        <span class="menu-icon">🔖</span>Đặt chỗ
-    </a>
-    <a href="danh-sach-dat-cho.html" class="menu-item">
-        <span class="menu-icon">📋</span>DS đặt chỗ
-    </a>
+    <a href="dashboard.html" class="menu-item"><span class="menu-icon">🏠</span>Trang chủ</a>
+    <a href="cho-muon.html" class="menu-item"><span class="menu-icon">📋</span>Cho mượn</a>
+    <a href="tra-sach.html" class="menu-item"><span class="menu-icon">↩️</span>Trả sách</a>
+    <a href="gia-han.html" class="menu-item"><span class="menu-icon">⏰</span>Gia hạn</a>
+    <a href="xu-ly-phat.html" class="menu-item"><span class="menu-icon">💰</span>Xử lý phạt</a>
+    <a href="phieu-muon-danh-sach.html" class="menu-item"><span class="menu-icon">📄</span>Phiếu mượn</a>
+    <a href="dat-cho.html" class="menu-item"><span class="menu-icon">🔖</span>Đặt chỗ</a>
+    <a href="danh-sach-dat-cho.html" class="menu-item"><span class="menu-icon">📋</span>DS đặt chỗ</a>
 
     <div class="menu-nhom">Quản lý</div>
-    <a href="doc-gia-danh-sach.html" class="menu-item">
-        <span class="menu-icon">👥</span>Độc giả
-    </a>
-    <a href="sach-danh-sach.html" class="menu-item">
-        <span class="menu-icon">📚</span>Sách
-    </a>
+    <a href="doc-gia-danh-sach.html" class="menu-item"><span class="menu-icon">👥</span>Độc giả</a>
+    <a href="sach-danh-sach.html" class="menu-item"><span class="menu-icon">📚</span>Sách</a>
+    
     <div class="menu-nhom">Báo cáo</div>
-    <a href="lich-su.html" class="menu-item">
-        <span class="menu-icon">📋</span>Lịch sử
-    </a>
-    <a href="thong-ke.html" class="menu-item">
-        <span class="menu-icon">📊</span>Thống kê
-    </a>
+    <a href="lich-su.html" class="menu-item"><span class="menu-icon">📋</span>Lịch sử</a>
+    <a href="thong-ke.html" class="menu-item"><span class="menu-icon">📊</span>Thống kê</a>
 </div>
 
 <div class="content">
-    <div class="page-title">🔍 Tìm Kiếm Sách Nâng Cao</div>
+    <div class="page-title"><h2>🔍 Tìm Kiếm Sách Nâng Cao</h2></div>
 
     <div class="card">
         <div class="section-label">🔎 Điều kiện tìm kiếm</div>
@@ -115,24 +45,18 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
         <div class="form-row cf">
             <div class="form-col">
                 <label>Tác giả</label>
-                <select id="tacGia">
-                    <option value="">-- Tất cả tác giả --</option>
-                </select>
+                <select id="tacGia"><option value="">-- Tất cả tác giả --</option></select>
             </div>
             <div class="form-col">
                 <label>Nhà xuất bản</label>
-                <select id="nxb">
-                    <option value="">-- Tất cả NXB --</option>
-                </select>
+                <select id="nxb"><option value="">-- Tất cả NXB --</option></select>
             </div>
         </div>
 
         <div class="form-row cf">
             <div class="form-col">
                 <label>Thể loại</label>
-                <select id="theLoai">
-                    <option value="">-- Tất cả thể loại --</option>
-                </select>
+                <select id="theLoai"><option value="">-- Tất cả thể loại --</option></select>
             </div>
             <div class="form-col">
                 <label>Năm xuất bản</label>
@@ -144,16 +68,19 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
             </div>
         </div>
 
-        <div class="btn-row">
-            <button class="btn btn-blue" onclick="timKiem()">🔍 Tìm kiếm</button>
-            <button class="btn btn-orange" onclick="datLai()">🔄 Đặt lại</button>
-            <a href="sach-danh-sach.html" class="btn btn-grey" style="text-decoration:none">← Quay lại danh sách</a>
+        <div class="btn-row" style="margin-top: 20px;">
+            <button class="btn btn-blue" onclick="timKiem_TK()">🔍 Tìm kiếm</button>
+            <button class="btn btn-orange" onclick="datLai_TK()">🔄 Đặt lại</button>
+            
+            <a href="sach-danh-sach.html" class="btn-back-modern">
+                <span style="margin-right: 8px; font-size: 16px;">⬅</span> Quay lại danh sách
+            </a>
         </div>
     </div>
 
     <div class="card">
         <div class="section-label">📋 Kết quả tìm kiếm</div>
-        <div class="count-info" id="lblSoLuong">Chưa có kết quả. Vui lòng chọn điều kiện và nhấn Tìm kiếm.</div>
+        <div class="count-info" id="lblSoLuong_TK">Chưa có kết quả. Vui lòng chọn điều kiện và nhấn Tìm kiếm.</div>
 
         <div class="table-wrap">
             <table>
@@ -171,7 +98,7 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
                         <th style="width:80px">Hành động</th>
                     </tr>
                 </thead>
-                <tbody id="bangKetQua">
+                <tbody id="bangKetQua_TK">
                     <tr><td colspan="10" class="no-data">Chưa có kết quả tìm kiếm</td></tr>
                 </tbody>
             </table>
@@ -179,171 +106,6 @@ table tbody tr:nth-child(even):hover { background: #e3f2fd; }
     </div>
 </div>
 
-<script>
-function kiemTraDangNhap() {
-    var nguoiDung = localStorage.getItem('currentUser');
-    if (!nguoiDung) {
-        alert('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!');
-        window.location.href = '../index.html';
-        return false;
-    }
-    var userInfo = JSON.parse(localStorage.getItem('currentUserInfo') || '{}');
-    var tenHienThi = userInfo.hoTen || nguoiDung;
-    document.getElementById('lblNguoiDung').innerHTML = '👤 ' + tenHienThi;
-    return true;
-}
-
-function layDanhSachSach() {
-    var data = localStorage.getItem('danhSachSach');
-    if (!data) return [];
-    try { return JSON.parse(data); }
-    catch (e) { return []; }
-}
-
-// Load dữ liệu vào combobox
-function taiDuLieuCombobox() {
-    var danhSach = layDanhSachSach();
-    
-    // Tác giả
-    var dsTacGia = {};
-    var dsNXB = {};
-    var dsTheLoai = {};
-    
-    for (var i = 0; i < danhSach.length; i++) {
-        if (danhSach[i].tacGia) dsTacGia[danhSach[i].tacGia] = true;
-        if (danhSach[i].nxb) dsNXB[danhSach[i].nxb] = true;
-        if (danhSach[i].theLoai) dsTheLoai[danhSach[i].theLoai] = true;
-    }
-    
-    // Fill Tác giả
-    var selTacGia = document.getElementById('tacGia');
-    var htmlTacGia = '<option value="">-- Tất cả tác giả --</option>';
-    var arrTacGia = [];
-    for (var tg in dsTacGia) arrTacGia.push(tg);
-    arrTacGia.sort();
-    for (var j = 0; j < arrTacGia.length; j++) {
-        htmlTacGia += '<option value="' + arrTacGia[j] + '">' + arrTacGia[j] + '</option>';
-    }
-    selTacGia.innerHTML = htmlTacGia;
-    
-    // Fill NXB
-    var selNXB = document.getElementById('nxb');
-    var htmlNXB = '<option value="">-- Tất cả NXB --</option>';
-    var arrNXB = [];
-    for (var n in dsNXB) arrNXB.push(n);
-    arrNXB.sort();
-    for (var k = 0; k < arrNXB.length; k++) {
-        htmlNXB += '<option value="' + arrNXB[k] + '">' + arrNXB[k] + '</option>';
-    }
-    selNXB.innerHTML = htmlNXB;
-    
-    // Fill Thể loại
-    var selTheLoai = document.getElementById('theLoai');
-    var htmlTheLoai = '<option value="">-- Tất cả thể loại --</option>';
-    var arrTheLoai = [];
-    for (var tl in dsTheLoai) arrTheLoai.push(tl);
-    arrTheLoai.sort();
-    for (var m = 0; m < arrTheLoai.length; m++) {
-        htmlTheLoai += '<option value="' + arrTheLoai[m] + '">' + arrTheLoai[m] + '</option>';
-    }
-    selTheLoai.innerHTML = htmlTheLoai;
-}
-
-function timKiem() {
-    var tacGia = document.getElementById('tacGia').value;
-    var nxb = document.getElementById('nxb').value;
-    var theLoai = document.getElementById('theLoai').value;
-    var namTu = document.getElementById('namTu').value;
-    var namDen = document.getElementById('namDen').value;
-    
-    var danhSach = layDanhSachSach();
-    var ketQua = [];
-    
-    for (var i = 0; i < danhSach.length; i++) {
-        var s = danhSach[i];
-        var khop = true;
-        
-        if (tacGia && s.tacGia !== tacGia) khop = false;
-        if (nxb && s.nxb !== nxb) khop = false;
-        if (theLoai && s.theLoai !== theLoai) khop = false;
-        
-        if (namTu && parseInt(s.namXB) < parseInt(namTu)) khop = false;
-        if (namDen && parseInt(s.namXB) > parseInt(namDen)) khop = false;
-        
-        if (khop) ketQua.push(s);
-    }
-    
-    hienThiKetQua(ketQua);
-}
-
-function hienThiKetQua(ketQua) {
-    var lblSoLuong = document.getElementById('lblSoLuong');
-    var bang = document.getElementById('bangKetQua');
-    
-    if (ketQua.length === 0) {
-        lblSoLuong.innerHTML = '⚠️ Không tìm thấy sách nào phù hợp với điều kiện';
-        bang.innerHTML = '<tr><td colspan="10" class="no-data">Không có kết quả phù hợp</td></tr>';
-        return;
-    }
-    
-    lblSoLuong.innerHTML = '✅ Tìm thấy <strong>' + ketQua.length + '</strong> cuốn sách';
-    
-    var html = '';
-    for (var i = 0; i < ketQua.length; i++) {
-        var s = ketQua[i];
-        var soLuongCon = parseInt(s.soLuongCon) || 0;
-        var soLuongTong = parseInt(s.soLuongTong) || 0;
-        
-        var trangThai = '';
-        var badgeClass = '';
-        
-        if (soLuongCon > 0) {
-            trangThai = '✅ Còn sách';
-            badgeClass = 'badge-co-sach';
-        } else {
-            trangThai = '❌ Hết sách';
-            badgeClass = 'badge-het-sach';
-        }
-        
-        html += '<tr>';
-        html += '<td>' + (i + 1) + '</td>';
-        html += '<td><strong>' + (s.maSach || '') + '</strong></td>';
-        html += '<td>' + (s.tenSach || '') + '</td>';
-        html += '<td>' + (s.tacGia || '') + '</td>';
-        html += '<td>' + (s.nxb || '') + '</td>';
-        html += '<td>' + (s.theLoai || '') + '</td>';
-        html += '<td>' + (s.namXB || '') + '</td>';
-        html += '<td style="text-align:center;">' + soLuongCon + '/' + soLuongTong + '</td>';
-        html += '<td><span class="badge ' + badgeClass + '">' + trangThai + '</span></td>';
-        html += '<td><a href="sach-chi-tiet.html?ma=' + encodeURIComponent(s.maSach) + '" class="btn btn-sm btn-teal">👁 Xem</a></td>';
-        html += '</tr>';
-    }
-    
-    bang.innerHTML = html;
-}
-
-function datLai() {
-    document.getElementById('tacGia').value = '';
-    document.getElementById('nxb').value = '';
-    document.getElementById('theLoai').value = '';
-    document.getElementById('namTu').value = '';
-    document.getElementById('namDen').value = '';
-    
-    document.getElementById('lblSoLuong').innerHTML = 'Chưa có kết quả. Vui lòng chọn điều kiện và nhấn Tìm kiếm.';
-    document.getElementById('bangKetQua').innerHTML = '<tr><td colspan="10" class="no-data">Chưa có kết quả tìm kiếm</td></tr>';
-}
-
-function dangXuat() {
-    if (confirm('Bạn có muốn đăng xuất không?')) {
-        localStorage.removeItem('currentUser');
-        window.location.href = '../index.html';
-    }
-    return false;
-}
-
-if (kiemTraDangNhap()) {
-    taiDuLieuCombobox();
-}
-</script>
+<script src="script.js"></script>
 </body>
 </html>

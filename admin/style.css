@@ -167,3 +167,86 @@ tr:hover td { background:#f9f9f9; }
     display: flex;
     gap: 10px;
 }
+/* Container chứa 3 thẻ */
+.summary-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Style chung cho thẻ */
+.summary-card {
+    flex: 1;
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-top: 4px solid #ccc;
+}
+
+/* Icon bên trái thẻ */
+.card-icon {
+    font-size: 30px;
+    margin-right: 15px;
+}
+
+/* Nội dung bên phải thẻ */
+.card-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.card-value {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px 0;
+}
+
+.card-value small {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.card-sub {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Màu sắc theo trạng thái */
+.summary-card.import { border-top-color: #28a745; }
+.summary-card.export { border-top-color: #dc3545; }
+.summary-card.balance { border-top-color: #ffc107; }
+
+/* Tinh chỉnh khoảng cách cho form thêm/sửa sách */
+#content .section {
+    padding: 10px 20px; /* Giảm padding của khung bao quanh */
+}
+
+#content .form-row {
+    margin-bottom: 8px !important; /* Thu hẹp khoảng cách giữa các hàng */
+}
+
+#content label {
+    margin-bottom: 3px !important; /* Nhãn sát vào ô nhập hơn */
+    font-size: 14px;
+}
+
+#content input, 
+#content select, 
+#content textarea {
+    padding: 6px 10px !important; /* Ô nhập mỏng hơn, tiết kiệm diện tích */
+}
+
+#content h2, #content h3 {
+    margin-top: 5px;
+    margin-bottom: 10px; /* Thu gọn tiêu đề */
+}
+
+#content .form-row[style*="background"] {
+    padding: 5px 10px !important; /* Thu nhỏ ô highlight màu xanh */
+    margin-top: 5px;
+}
