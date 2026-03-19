@@ -541,26 +541,26 @@ function khoiTaoDuLieu() {
     }
 }
 
-// function dangNhap() {
-//     var username = document.getElementById('username').value.trim();
-//     var password = document.getElementById('password').value;
-//     var admins = JSON.parse(localStorage.getItem('admins') || '[]');
-//     var found = null;
+function dangNhap() {
+    var username = document.getElementById('username').value.trim();
+    var password = document.getElementById('password').value;
+    var admins = JSON.parse(localStorage.getItem('admins') || '[]');
+    var found = null;
     
-//     for (var i = 0; i < admins.length; i++) {
-//         if (admins[i].username === username && admins[i].password === password) {
-//             found = admins[i];
-//             break;
-//         }
-//     }
+    for (var i = 0; i < admins.length; i++) {
+        if (admins[i].username === username && admins[i].password === password) {
+            found = admins[i];
+            break;
+        }
+    }
     
-//     if (found) {
-//         localStorage.setItem('currentAdmin', username);
-//         window.location.href = 'dashboard.html';
-//     } else {
-//         document.getElementById('errMsg').style.display = 'block';
-//     }
-// }
+    if (found) {
+        localStorage.setItem('currentAdmin', username);
+        window.location.href = 'dashboard.html';
+    } else {
+        document.getElementById('errMsg').style.display = 'block';
+    }
+}
 // ==========================================
 // PHẦN 9: CHỨC NĂNG NHÀ CUNG CẤP
 // ==========================================
